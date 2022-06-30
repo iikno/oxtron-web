@@ -1,0 +1,136 @@
+{
+    "General":{
+        "button-save" : "Save changes",
+        "button-loading" : "Loading...",
+        "input-search" : "Search...",
+        "message-success": "The action has been carried out successfully",
+        "message-error": "An unexpected error has ocurred",
+        "message-ask-title": "Are you sure?",
+        "message-ask-text": "You won't be able to revert this!",
+        "message-ask-confirm": "Yes, delete it!",
+        "message-ask-cancel": "Cancel"
+    },
+    "Account":{
+
+    },
+    "Activities":{
+        "title": "Activity Log",
+        "button-all": "All",
+        "button-consult": "Consult",
+        "button-create": "Create",
+        "button-edit": "Edit",
+        "button-delete": "Eliminate",
+        "input-search": "Search...",
+        "column-user" : "User",
+        "column-module": "Module",
+        "column-action": "Action",
+        "column-date": "Date",
+        "column-details": "Details"
+    },
+    "Billing":{
+
+    },
+    "Dashboard":{
+        
+    },
+    "Home":{
+
+    },
+    "PrintMenu":{
+
+    },
+    "RecipeBook":{
+
+    },
+    
+    "Users":{
+        "title": "Users",
+        "form-title": "User Details",
+        "name": "Name",
+        "surname": "Lastname 1",
+        "lastname": "Lastname 2",
+        "email": "Email",
+        "password": "Password",
+        "phone": "Phone Number",
+        "kind-person": "User Type",
+        "role": "Role",
+        "street": "Street",
+        "street-number": "Location Number",
+        "apartment-number": "Apartment Number",
+        "suburb": "Suburb",
+        "city": "City",
+        "state": "State",
+        "country": "Country",
+        "postal-code": "Postal Code",
+        "company": "Company",
+        "branch-office": "Branch Office",
+        "company-size": "Company Size",
+        "form-save": "Save",
+        "button-next": "Next",
+        "button-prev": "Prev",
+        "add-user-name": "Add name",
+        "add-lastname1": "Add lastname 1",
+        "add-lastname2": "Add lastname 2",
+        "add-email": "Add email",
+        "add-phone": "Add phone number",
+        "add-user-type": "Select user type",
+        "add-postal-code": "Add postal code",
+        "add-suburb": "Add suburb",
+        "add-city": "Add city",
+        "add-state": "Add state",
+        "add-country": "Add country",
+        "add-street": "Add street",
+        "add-apartment-number": "Add apartment number",
+        "add-location-number": "Add location number",
+        "add-company": "Add company",
+        "add-branch-office": "Add branch office",
+        "add-company-size": "Select company size",
+        "add-number": "Add a number",
+        "add-valid-email": "Add a valid email address",
+        "delete-title": "Delete",
+        "delete-text": "Do you want delete this user?",
+        "cancel-button": "Cancel",
+        "delete-button": "Delete",
+        "edit-title": "Edit",
+        "edit-text": "Do you want edit this user?",
+        "edit-button": "Edit",
+        "active-title": "Activate",
+        "deactivate-title": "Deactivate",
+        "active-text": "Do you want activate this user?",
+        "deactivate-text": "Do you want deactivate this user?",
+        "active-button": "Activate",
+        "deactive-button": "Deactivate"
+    },
+    "UserTypes":{
+        "title": "User Types",
+        "column-user-type": "User Types",
+        "column-actions": "Actions",
+        "modal-name": "Name",
+        "modal-description": "Write the name of the user type."
+    },
+    "WeekMenu":{
+        "title": "Week Menu Planner",
+        "column-monday": "Monday",
+        "column-tuesday": "Tuesday",
+        "column-wednesday": "Wednesday",
+        "column-thursday": "Thursday",
+        "column-friday": "Friday",
+        "column-saturday": "Saturday",
+        "column-sunday": "Sunday"
+
+    },
+    "Menu":{
+        "languaje": "Español",
+        "exit": "Log Out",
+        "size": "Minimize",
+        "buttonDashboard": "Dashboard",
+        "activities": "Activities",
+        "userTypes": "User Types",
+        "weekMenu": "Week Menu",
+        "printMenu": "Print Menu",
+        "recipeBook": "Recipe Book",
+        "users": "Users",
+        "account": "Account",
+        "billing": "Billing" 
+    }
+}

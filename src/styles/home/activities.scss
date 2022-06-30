@@ -1,0 +1,21 @@
+
+
+#activities{
+    .activities_actions{
+        .activities_action{
+            background-color: #1e2023;
+        
+            &:hover{
+                background-color: #3c3f43;
+            }
+        }
+
+        .activities_action.active{
+            background-color: #3c3f43;
+        }
+    }
+
+    .cursor-pointer{
+        cursor: pointer;
+    }
+}

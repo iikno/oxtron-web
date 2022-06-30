@@ -1,0 +1,15 @@
+.card-user{
+    cursor: pointer;    
+    width: 15rem;
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
+}
+
+.card-user:hover{
+    box-shadow: 0 0 5px rgb(0, 0, 0, 0.5);
+}
+
+.contenedor-cards{
+    width: 100%;
+    height: 65vh;
+    overflow-y: auto;
+}
