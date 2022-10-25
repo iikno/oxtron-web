@@ -1,10 +1,10 @@
 import React from 'react';
-import Base from '../Base/Base';
+import Traducir from '../../../i18n/Traducir';
+import Base from '../../base/Base';
 
 const Dashboard = () => {
     return (
-        <Base>
-            Hola
+        <Base titulo={Traducir("dashboard.titulo")}>
         </Base>
     );
 };
