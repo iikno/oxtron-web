@@ -35,7 +35,7 @@ const Login = () => {
                             </fieldset>
                             <fieldset className='mb-3'>
                                 <label htmlFor="password">Password</label>
-                                <Field id="password" name="password" className="form-control" />
+                                <Field id="password" name="password" className="form-control" type="password"/>
                                 <ErrorMessage className='text-danger' name="password" component="div"/>
                             </fieldset>
                             <Button type='submit'>Continuar</Button>

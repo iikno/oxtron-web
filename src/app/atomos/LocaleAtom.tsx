@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
-import { enUS } from 'rsuite/esm/locales';
+import enUS from 'rsuite/locales/en_US';
 import { LOCALES } from '../../i18n/Locales';
 
 const { persistAtom } = recoilPersist()

@@ -11,6 +11,10 @@ export default{
 
         'general.menuSuperior.idioma': "Idioma",
         
-        'dashboard.titulo': "Panel central"
+        'dashboard.titulo': "Panel central",
+
+        'actividades.titulo': "Actividades",
+        'actividades.periodoTiempo': "Periodo de tiempo",
+        'actividades.cliente': "Cliente"
     }    
 }

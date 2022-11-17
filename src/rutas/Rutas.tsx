@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { SesionAtom } from '../app/atomos/SesionAtom';
+import Actividades from '../app/modulos/Actividades/Actividades';
 import Dashboard from '../app/modulos/Dashboard/Dashboard';
 import Login from '../app/modulos/Login/Login';
 
@@ -22,6 +23,7 @@ const Rutas = () => {
                     <Route path='/*' element={
                         <Routes>
                             <Route index path='dashboard' element={<Dashboard/>}/>
+                            <Route path='actividades' element={<Actividades/>}/>
 
                             <Route path='*' element={<>404</>}/>
                         </Routes>

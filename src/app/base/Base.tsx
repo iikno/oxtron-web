@@ -2,9 +2,9 @@ import React from 'react';
 import './Base.scss'
 
 import {$noFoto} from '../../configs/Env'
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { ObtenerSesion } from '../../@iikno/clases/LocalSession';
-import { Button, Col, Container, Content, Header, Nav, Navbar, Row, Sidebar, Sidenav } from 'rsuite';
+import { Button, Col, Container, Content, Grid, Header, Nav, Navbar, Row, Sidebar, Sidenav } from 'rsuite';
 
 import DashboardIcon from '@rsuite/icons/Dashboard';
 import ScatterIcon from '@rsuite/icons/Scatter';
@@ -18,12 +18,13 @@ import Traducir from '../../i18n/Traducir';
 import { useSetRecoilState } from 'recoil';
 import { LocaleAtom } from '../atomos/LocaleAtom';
 import { LOCALES } from '../../i18n/Locales';
-import enUS from '../../i18n/textos/en-US';
+import { enUS } from 'rsuite/esm/locales';
 import { esES } from 'rsuite/esm/locales';
 
 const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
     const sesion = ObtenerSesion();
     const setLenguaje = useSetRecoilState(LocaleAtom);
+    const path = useLocation().pathname;
 
     if (sesion.IdUsuario !== "IdUsuario") 
         return (<>
@@ -36,12 +37,12 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                     className='vh-100 bg-primary'
                     >
                         <Sidenav.Header className='p-4 text-center'>
-                            <img src={Logo} height="70px" />
+                            <img src={Logo} height="70px" alt='logo'/>
                         </Sidenav.Header>
                         <Sidenav className='vh-100 pt-4' expanded={true} defaultOpenKeys={['3']} appearance="subtle">
                             <Sidenav.Body>
                             <Nav>
-                                <Nav.Item active>
+                                <Nav.Item active={(path === "/dashboard") ? true : false} href='/dashboard'>
                                     <div className='text-center'>
                                         <DashboardIcon style={{
                                             fontSize:"1.5em"
@@ -51,7 +52,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                         </span>
                                     </div>
                                 </Nav.Item>
-                                <Nav.Item active>
+                                <Nav.Item active={(path === "/actividades") ? true : false} href='/actividades'>
                                     <div className='text-center'>
                                         <ScatterIcon style={{
                                             fontSize:"1.5em"
@@ -61,7 +62,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                         </span>
                                     </div>
                                 </Nav.Item>
-                                <Nav.Item active>
+                                <Nav.Item active={(path === "/planificador") ? true : false} href='/planificador'>
                                     <div className='text-center'>
                                         <CalendarIcon style={{
                                             fontSize:"1.5em"
@@ -71,7 +72,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                         </span>
                                     </div>
                                 </Nav.Item>
-                                <Nav.Item active>
+                                <Nav.Item active={(path === "/recetario") ? true : false} href='/recetario'>
                                     <div className='text-center'>
                                         <TextImageIcon style={{
                                             fontSize:"1.5em"
@@ -81,7 +82,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                         </span>
                                     </div>
                                 </Nav.Item>
-                                <Nav.Item active>
+                                <Nav.Item active={(path === "/usuarios") ? true : false} href='/usuarios'>
                                     <div className='text-center'>
                                         <PeoplesIcon style={{
                                             fontSize:"1.5em"
@@ -91,7 +92,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                         </span>
                                     </div>
                                 </Nav.Item>
-                                <Nav.Item active>
+                                <Nav.Item active={(path === "/reportes") ? true : false} href='/reportes'>
                                     <div className='text-center'>
                                         <ParagraphIcon style={{
                                             fontSize:"1.5em"
@@ -148,7 +149,9 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                         </Navbar>
                     </Header>
                     <Content className='p-5'>
-                        {children}
+                        <Grid fluid>
+                            {children}
+                        </Grid>
                     </Content>
                     </Container>
                 </Container>
