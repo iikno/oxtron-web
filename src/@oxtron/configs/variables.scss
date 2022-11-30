@@ -1,0 +1,20 @@
+@font-face {
+    font-family: "titulo";
+    src: url(../assets/fonts/Geometos.ttf);
+}
+
+$blanco: white;
+$primario: #020024;
+$secundario: #003d92;
+$iikno:#1e2f39;
+$sidebarBG: #363740;
+$bodyBG:#F7F8FC;
+
+/* Personalización Bootstrap*/
+
+$theme-colors: (
+    "primary": $primario,
+    "secondary": $secundario
+);
+
+@import "~bootstrap/scss/bootstrap.scss";

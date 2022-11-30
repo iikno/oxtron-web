@@ -1,0 +1,40 @@
+@import '../base/commons.scss';
+
+.SideBarMenuCardView{
+    text-align: center;
+
+    .profile{
+        padding: 10px;
+        box-sizing: border-box;
+        max-width: 128px;
+        min-height: 50px;
+    }
+
+    .profileInfo{
+        overflow: hidden;
+        height: 80px;
+
+        @include transition(height);
+
+        &.collapsed{
+            opacity: 0;
+            height: 0;
+        }
+
+        .name{
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .url{
+            a{
+                color: blueviolet;
+                text-decoration: none;
+
+                &:hover{
+                    color: white;
+                }
+            }
+        }
+    }
+}

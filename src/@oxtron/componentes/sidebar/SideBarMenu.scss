@@ -1,0 +1,37 @@
+@use '@oxtron/configs/variables.scss';
+@import '../base/commons.scss';
+
+.SideBarMenu{
+    background-color: variables.$sidebarBG;
+    color: white;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &.expanded{
+        width: 300px;
+    }
+
+    &.collapsed{
+        width:68px;
+    }
+    
+    @include transition(width);
+
+    .menuButton{
+        display: flex;
+        justify-content: flex-end;
+
+        .hamburgerIcon{
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            color: white;
+            padding: 10px;
+            width: 68px;
+        }
+    }
+}

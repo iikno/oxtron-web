@@ -8879,6 +8879,11 @@ react-fit@^1.4.0:
     prop-types "^15.6.0"
     tiny-warning "^1.0.0"
 
+react-icons@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.6.0.tgz#f83eda179af5d02c047449a20b702c858653d397"
+  integrity sha512-rR/L9m9340yO8yv1QT1QurxWQvWpbNHqVX0fzMln2HEb9TEIrQRGsqiNFQfiv9/JEUbyHmHPlNTB2LWm2Ttz0g==
+
 react-intl@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-6.2.1.tgz#976a44f86a58270d1e498d09636b0ece63ad0344"
@@ -9066,6 +9071,11 @@ readdirp@~3.6.0:
   integrity sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==
   dependencies:
     picomatch "^2.2.1"
+
+recoil-nexus@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/recoil-nexus/-/recoil-nexus-0.4.0.tgz#3d69b197a6006d287ee4457dd774eb98950dc5be"
+  integrity sha512-4ZgTXy+e5WvO54qh6Oir4LAYNevuxVxldyCTovevMVjU7fM/UO9t7RzY26G3tKGlHbFaECL3l25Kezl9ZLos6g==
 
 recoil-persist@^4.2.0:
   version "4.2.0"

@@ -1,0 +1,23 @@
+@use "@oxtron/configs/variables.scss";
+@import './commons.scss';
+
+.bodyContainer{
+    font-family: "inter";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    overflow-y: auto;
+    background-color: variables.$bodyBG;
+
+    @include transition(left);
+
+    &.collapsed{
+        left: 68px;
+    }
+
+    &.expanded{
+        left: 300px;
+    }
+}

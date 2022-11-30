@@ -1,0 +1,14 @@
+@import '@oxtron/configs/variables.scss';
+
+footer{
+    background-color: $iikno;
+    a{
+        color: #cfcfcf;
+        text-decoration: none;
+
+        &:hover{
+            color: white;
+            text-decoration: none;
+        }
+    }
+}

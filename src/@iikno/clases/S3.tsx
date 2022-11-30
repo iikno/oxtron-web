@@ -1,6 +1,6 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { arch } from 'os';
-import { $AWS_REGION, $S3_BUCKET, $S3_KEY, $S3_SECRET } from '../../configs/Env';
+import { $AWS_REGION, $S3_BUCKET, $S3_KEY, $S3_SECRET } from '../../@oxtron/configs/Env';
 
 const cliente = new S3({
     region: $AWS_REGION,
