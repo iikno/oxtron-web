@@ -14,7 +14,7 @@ import { enUS } from 'rsuite/esm/locales';
 import { esES } from 'rsuite/esm/locales';
 import Footer from '@iikno/componentes/Footer';
 
-import { CiCalendarDate, CiForkAndKnife } from "react-icons/ci";
+import { CiCalendarDate, CiForkAndKnife, CiFries } from "react-icons/ci";
 import { Col, Row } from 'react-bootstrap';
 import Traducir from '@oxtron/i18n/Traducir';
 import { useEffect } from 'react';
@@ -76,7 +76,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                         </Tooltip>
                                     }>
                                         <Button appearance='subtle'>
-                                            <CiForkAndKnife size={"2em"}/>
+                                            <CiFries size={"2em"}/>
                                         </Button>
                                     </Whisper>
                                     <Divider vertical/>

@@ -35,9 +35,17 @@ const Dashboard = () => {
     }, [])
 
     useEffect(() => {
-        ObtenerDashboard(cliente, fechas, false).then((respuesta:any) => {
+        ObtenerDashboard(cliente, fechas, false).then((respuesta:DashboardInterface) => {
             setDashboard(respuesta);
-            console.log(respuesta)
+            console.log(respuesta);
+            let acf = 0;
+            respuesta.CO2Diario.map((co2Dia, index) => {
+                acf += co2Dia.sumaCO2;
+            })
+
+            setACF(acf/respuesta.CO2Diario.length | 0);
+            setMS(respuesta.PlatillosSemanales.length | 0);
+            setTCO(acf/1000 | 0);
         })
     },[fechas, cliente])
 
@@ -56,7 +64,10 @@ const Dashboard = () => {
                 <Col>
                     <Stack spacing={6} alignItems={"center"} justifyContent={"flex-end"}>
                         {Traducir('dashboard.periodoTiempo')}
-                        <DateRangePicker isoWeek placement="bottomEnd" 
+                        <DateRangePicker isoWeek placement="bottomEnd"
+                                        oneTap showOneCalendar
+                                        hoverRange="week" 
+                                        ranges={[]}
                                         value={fechas} 
                                         onChange={setFechas} 
                                         format={"dd/MM/yyyy"}/>
@@ -109,10 +120,10 @@ const Dashboard = () => {
                     </Row>
                     <Row>
                         <Col xs="12" sm="6" className='mb-3'>
-                            <Indicador2 data={95.29} title={"Hamburguesa Cajún"} subtitle={"Highest impact meal"}/>
+                            <Indicador2 data={dashboard.MayorMenorCO2General[0].PlatilloMayorCO2.EmisionCarbono || 0} title={dashboard.MayorMenorCO2General[0].PlatilloMayorCO2.Nombre || ""} subtitle={Traducir('dashboard.meal.highImpact')}/>
                         </Col>
                         <Col xs="12" sm="6" className='mb-3'>
-                            <Indicador2 data={95.29} title={"Spaguetti a la bolognesa"} subtitle={"Lowest impact meal"}/>
+                            <Indicador2 data={dashboard.MayorMenorCO2General[0].PlatilloMenorCO2.EmisionCarbono || 0} title={dashboard.MayorMenorCO2General[0].PlatilloMenorCO2.Nombre || ""} subtitle={Traducir('dashboard.meal.lowImpact')}/>
                         </Col>
                     </Row>
                 </>

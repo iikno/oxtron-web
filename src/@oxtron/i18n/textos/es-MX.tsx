@@ -24,6 +24,8 @@ export default{
         'dashboard.MS.subtitle': 'Durante el periodo seleccionado',
         'dashboard.TCO': "Toneladas de",
         'dashboard.TCO.subtitle': 'Total calculado en',
+        'dashboard.meal.highImpact': 'Platillo con mayor impacto',
+        'dashboard.meal.lowImpact': 'Platillo con menor impacto',
 
         'actividades.titulo': "Actividades",
         'actividades.periodoTiempo': "Periodo de tiempo",

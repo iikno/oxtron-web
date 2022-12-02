@@ -24,6 +24,8 @@ export default{
         'dashboard.MS.subtitle': 'During the time period',
         'dashboard.TCO': "Carbon footprint",
         'dashboard.TCO.subtitle': 'Total mesured on',
+        'dashboard.meal.highImpact': 'Highest impact meal',
+        'dashboard.meal.lowImpact': 'Lowest impact meal',
 
         'actividades.titulo': "Activities",
         'actividades.periodoTiempo': "Time period",
