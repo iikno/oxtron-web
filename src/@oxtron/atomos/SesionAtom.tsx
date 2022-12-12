@@ -11,7 +11,7 @@ export const SesionAtom = atom<SesionInterface>({
         Nombre:"Nombre",
         ApellidoPaterno:"ApellidoPaterno",
         ApellidoMaterno:"ApellidoMaterno",
-        Correo:"Correo",
+        Correo:"correo",
         Password:"Password",
         Telefono:"Telefono",
         Foto:"root/fotos/2022-10-07T17:04:23.384Z.png",
@@ -29,7 +29,8 @@ export const SesionAtom = atom<SesionInterface>({
         TamañoCompañia:0,
         IdUltimaActividad:"IdUltimaActividad",
         Status:"ACTIVO",
-        NombreCompletoRol:"NombreCompletoRol"
+        NombreCompletoRol:"NombreCompletoRol",
+        token: "jwt"
     },
     effects_UNSTABLE: [persistAtom],
 })

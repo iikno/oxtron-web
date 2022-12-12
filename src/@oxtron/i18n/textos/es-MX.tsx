@@ -30,5 +30,13 @@ export default{
         'actividades.titulo': "Actividades",
         'actividades.periodoTiempo': "Periodo de tiempo",
         'actividades.cliente': "Cliente",
+
+        'usuarios.titulo': "Usuarios",
+        'usuarios.titulo.Foto': "Foto",
+        'usuarios.titulo.Nombre': "Nombre",
+        'usuarios.titulo.Correo': "Correo",
+        'usuarios.titulo.Status': "Status",
+
+        
     }    
 }

@@ -3,6 +3,9 @@ import { Error } from "@iikno/clases/Alertas";
 import { Peticion } from "@oxtron/configs/Peticion";
 import { SesionInterface } from "@oxtron/Interfaces/SesionInterface.d";
 import { LogInInterface } from "@oxtron/Interfaces/LogInInterface.d";
+import { getRecoil } from "recoil-nexus";
+import { SesionAtom } from "@oxtron/atomos/SesionAtom";
+import { ObtenerSesion } from "@iikno/clases/LocalSession";
 
 export const valoresIniciales:LogInInterface = {
     usuario: "",
@@ -29,7 +32,9 @@ export const IniciarSesion = async (valores:LogInInterface, setSesion:SetterOrUp
             PASSWORD:valores.password
         }
     }).then((resultado:any) => {
-        setSesion(resultado.data[0])
+        setSesion(resultado.data);
+        var aux = getRecoil(SesionAtom);
+        var aux2 = ObtenerSesion();
 
         window.location.assign('/dashboard')
     }).catch((error) => {
