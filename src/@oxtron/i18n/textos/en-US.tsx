@@ -36,5 +36,13 @@ export default{
         'usuarios.titulo.Nombre': "Name",
         'usuarios.titulo.Correo': "Mail",
         'usuarios.titulo.Status': "Status",
+
+        'recetario.titulo': "Recipe Book",
+        'recetario.titulo.Nombre': "Name",
+        'recetario.titulo.Descripcion': "Description",
+        'recetario.titulo.Tipo': "Type",
+        'recetario.titulo.Emision': "CO2",
+        'recetario.barraBusqueda': "Search",
+        'recetario.nuevaReceta': "New Recipe",
     }    
 }
