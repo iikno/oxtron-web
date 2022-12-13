@@ -1,11 +1,11 @@
 import { SesionInterface } from "@oxtron/Interfaces/SesionInterface.d";
-import { useResetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { getRecoil } from "recoil-nexus";
 import { SesionAtom } from "../../@oxtron/atomos/SesionAtom";
 
 export const ObtenerSesion = ():SesionInterface => {
     let sesion = getRecoil(SesionAtom)
-
+   // let sesion = useRecoilValue(SesionAtom);
     return sesion;
 }
 

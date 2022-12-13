@@ -1,4 +1,5 @@
 export interface UsuariosInterface{
+    idUsuario: string
     nombre: string
     apellidoPaterno: string
     apellidoMaterno: string
