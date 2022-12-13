@@ -1,6 +1,8 @@
-import { ObtenerSesion } from "@iikno/clases/LocalSession";
+import { ObtenerSesion} from "@iikno/clases/LocalSession";
+import { SesionAtom } from "@oxtron/atomos/SesionAtom";
 import { Peticion } from "@oxtron/configs/Peticion"
 import moment from "moment";
+import { getRecoil } from "recoil-nexus";
 
 export const ObtenerClientes = async(REFRESH = true) => {
     const sesion = ObtenerSesion();
@@ -12,7 +14,6 @@ export const ObtenerClientes = async(REFRESH = true) => {
         },
         headers: {Authorization: 'Bearer '+sesion.token}
     }).then((respuesta:any) => {
-        console.log(respuesta);
         return respuesta.data;
     })
 }
