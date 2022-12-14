@@ -1,13 +1,13 @@
 import { ObtenerSesion} from "@iikno/clases/LocalSession";
 import { Alerta_Error, Alterta_Exito } from "@oxtron/componentes/alerts/alertas";
 import { Peticion } from "@oxtron/configs/Peticion";
-import { UsuariosInterface } from "@oxtron/Interfaces/UsuariosInterface";
+import { ClientesInterface } from "@oxtron/Interfaces/ClientesInterface";
 import { resolve } from "path";
 import Swal from "sweetalert2";
 
 
-export const valoresIniciales:UsuariosInterface = {
-    idUsuario: "",
+export const valoresIniciales:ClientesInterface = {
+    idCliente: "",
     nombre: "",
     apellidoPaterno: "",
     apellidoMaterno: "",
@@ -22,15 +22,18 @@ export const valoresIniciales:UsuariosInterface = {
     municipio: "",
     estado: "",
     pais: "",
+    empresa: "",
+    sucursal: "",
+    tamañoCompañia: ""
 }
 
 
 
-export const ObtenerUsuarios = async(REFRESH = true) => {
+export const ObtenerClientes = async(REFRESH = true) => {
     const sesion = ObtenerSesion();
     
 
-    return await Peticion.get("/Usuarios/ObtenerUsuarios", {
+    return await Peticion.get("/Clientes/ObtenerClientes", {
         headers: {Authorization: 'Bearer '+sesion.token},
         params: {
             USUARIO: sesion.Correo,
@@ -41,7 +44,7 @@ export const ObtenerUsuarios = async(REFRESH = true) => {
     })
 }
 
-export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean) => {
+export const FormularioCliente = async (valores:ClientesInterface, edit:boolean) => {
     console.log(valores);
     const sesion = ObtenerSesion();
 
@@ -54,13 +57,16 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
     if(!edit){
         const Data = {
             USUARIO:sesion.Correo,
-            USUARIO_NUEVO:{
+            CLIENTE:{
                 Nombre: valores.nombre,
                 ApellidoPaterno: valores.apellidoPaterno,
                 ApellidoMaterno: valores.apellidoMaterno,
                 Correo: valores.correo,
                 Telefono: valores.telefono,
-                Foto: valores.foto
+                Foto: valores.foto,
+                Empresa: valores.empresa,
+                Sucursal: valores.sucursal,
+                TamanioCompania: valores.tamañoCompañia
             },
             DIRECCION: {
                 Calle: valores.calle,
@@ -72,25 +78,28 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
                 Estado: valores.estado,
                 Pais: valores.pais
             }}        
-        await Peticion.post('/Usuarios/AltaUsuario',
+        await Peticion.post('/Clientes/AltaCliente',
         Data,
         config
         ).then((resultado:any) => {
-            window.location.assign('/usuarios')
+            window.location.assign('/clientes')
         }).catch((error) => {
             Error(error)
         })
     }else{
         const Data = {
             USUARIO:sesion.Correo,
-            USUARIO_MODIFICADO:{
-                IdUsuario: valores.idUsuario,
+            CLIENTE:{
+                IdCliente: valores.idCliente,
                 Nombre: valores.nombre,
                 ApellidoPaterno: valores.apellidoPaterno,
                 ApellidoMaterno: valores.apellidoMaterno,
                 Correo: valores.correo,
                 Telefono: valores.telefono,
-                Foto: valores.foto
+                Foto: valores.foto,
+                Empresa: valores.empresa,
+                Sucursal: valores.sucursal,
+                TamanioCompania: valores.tamañoCompañia
             },
             DIRECCION: {
                 Calle: valores.calle,
@@ -102,12 +111,12 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
                 Estado: valores.estado,
                 Pais: valores.pais
             }}
-        await Peticion.put('/Usuarios/ModificarUsuario',
+        await Peticion.put('/Clientes/ModificarCliente',
         Data,
         config
         ).then((resultado:any) => {
             Alterta_Exito()
-            window.location.assign('/usuarios')
+            window.location.assign('/clientes')
         }).catch((error) => {
             Alerta_Error()
             Error(error)
@@ -116,17 +125,17 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
     
 }
 
-export const handleEdit = (async (IdUsuario:string) =>{ 
+export const handleEdit = (async (IdCliente:string) =>{ 
     const sesion = ObtenerSesion();
     new Promise(async (resolve, reject) =>{
-        await Peticion.get('/Usuarios/ObtenerDetallesUsuario',
+        await Peticion.get('/Clientes/ObtenerDetallesCliente',
             {
                 headers: {
                     Authorization: 'Bearer '+sesion.token
                 },
                 params:{
                     USUARIO: sesion.Correo,
-                    ID_USUARIO: IdUsuario,
+                    ID_CLIENTE: IdCliente,
                     REFRESH: false
                 }
             }
@@ -134,11 +143,14 @@ export const handleEdit = (async (IdUsuario:string) =>{
 
             resolve(resultado);
             const row = resultado.data;
-            valoresIniciales.idUsuario = row.IdUsuario;
+            valoresIniciales.idCliente = row.IdCliente;
             valoresIniciales.nombre = row.Nombre;
             valoresIniciales.apellidoPaterno = row.ApellidoPaterno;
             valoresIniciales.apellidoMaterno = row.ApellidoMaterno;
             valoresIniciales.correo = row.Correo;
+            valoresIniciales.empresa = row.Empresa;
+            valoresIniciales.sucursal = row.Sucursal;
+            valoresIniciales.tamañoCompañia = row.TamanioCompania;
             valoresIniciales.telefono = row.Telefono;
             valoresIniciales.calle = row.Calle;
             valoresIniciales.noExterior = row.NoExterior;
@@ -156,7 +168,7 @@ export const handleEdit = (async (IdUsuario:string) =>{
     
 })
 
-export const SuspenderUsuario = async(IdUsuario:string) => {
+export const SuspenderCliente = async(IdCliente:string) => {
     const sesion = ObtenerSesion();
     
     Swal.fire({
@@ -169,10 +181,10 @@ export const SuspenderUsuario = async(IdUsuario:string) => {
         confirmButtonText: 'Continuar'
       }).then(async (result) => {
         if (result.isConfirmed) {
-            await Peticion.put('/Usuarios/SuspenderUsuario',
+            await Peticion.put('/Clientes/SuspenderCliente',
             {
                 USUARIO: sesion.Correo,
-                ID_USUARIO: IdUsuario
+                ID_CLIENTE: IdCliente
             },
             {
                 headers: {
@@ -182,7 +194,7 @@ export const SuspenderUsuario = async(IdUsuario:string) => {
             ).then((resultado:any) => {
                 Alterta_Exito()
 
-                window.location.assign('/usuarios')
+                window.location.assign('/clientes')
             }).catch((error) => {
                 Alerta_Error()
                 Error(error)
@@ -192,7 +204,7 @@ export const SuspenderUsuario = async(IdUsuario:string) => {
       })    
 }
 
-export const EliminarUsuario = async(IdUsuario:string) =>{
+export const EliminarCliente = async(IdCliente:string) =>{
     const sesion = ObtenerSesion();
 
     Swal.fire({
@@ -205,20 +217,20 @@ export const EliminarUsuario = async(IdUsuario:string) =>{
         confirmButtonText: 'Yes, delete it!'
       }).then(async (result) => {
         if (result.isConfirmed) {
-            await Peticion.delete('/Usuarios/EliminarUsuario',
+            await Peticion.delete('/Clientes/EliminarCliente',
             {
                 headers: {
                     Authorization: 'Bearer '+sesion.token
                 },
                 params:{
                     USUARIO: sesion.Correo,
-                    ID_USUARIO: IdUsuario
+                    ID_CLIENTE: IdCliente
                 }
             }
             ).then((resultado:any) => {
                 Alterta_Exito()
 
-                window.location.assign('/usuarios')
+                window.location.assign('/clientes')
             }).catch((error) => {
                 Alerta_Error()
                 Error(error)

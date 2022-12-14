@@ -29,6 +29,11 @@ export const SideBarMenuItems:SideBarMenuItem[] = [
         url: "/usuarios"
     },{
         id: "6",
+        label: "general.menu.customers",
+        icon: CiUser,
+        url: "/clientes"
+    },{
+        id: "7",
         label: "general.menu.reports",
         icon: CiViewList,
         url: "/reportes"

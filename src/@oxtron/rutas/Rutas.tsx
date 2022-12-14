@@ -5,6 +5,7 @@ import { SesionAtom } from '../atomos/SesionAtom';
 import Dashboard from '../../app/Dashboard/Dashboard';
 import Login from '../../app/Login/Login';
 import Usuarios from 'app/Usuarios/Usuarios';
+import Clientes from 'app/Clientes/Clientes';
 
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
@@ -24,6 +25,7 @@ const Rutas = () => {
                         <Routes>
                             <Route index path='dashboard' element={<Dashboard/>}/>
                             <Route index path='usuarios' element={<Usuarios/>}/>
+                            <Route index path='clientes' element={<Clientes/>}/>
                             <Route path='*' element={<>404</>}/>
                         </Routes>
                     }/>
