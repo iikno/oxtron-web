@@ -60,16 +60,13 @@ export default{
         'usuarios.titulo.Nombre': "Name",
         'usuarios.titulo.Correo': "Mail",
         'usuarios.titulo.Status': "Status",
-        'usuarios.boton.nuevoUsuario': "New user",
-        'usuarios.modal.titulo': "User",
-        
-        'clientes.titulo': "Customers",
-        'clientes.titulo.Foto': "Photo",
-        'clientes.titulo.Nombre': "Name",
-        'clientes.titulo.Correo': "Mail",
-        'clientes.titulo.Status': "Status",
-        'clientes.boton.nuevoCliente': "New customer",
-        'clientes.modal.titulo': "Customer",
 
+        'recetario.titulo': "Recipe Book",
+        'recetario.titulo.Nombre': "Name",
+        'recetario.titulo.Descripcion': "Description",
+        'recetario.titulo.Tipo': "Type",
+        'recetario.titulo.Emision': "CO2",
+        'recetario.barraBusqueda': "Search",
+        'recetario.nuevaReceta': "New Recipe",
     }    
 }

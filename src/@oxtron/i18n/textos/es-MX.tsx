@@ -74,6 +74,13 @@ export default{
         
 
 
-        
+        'recetario.titulo': "Recetario",
+        'recetario.titulo.Nombre': "Nombre",
+        'recetario.titulo.Descripcion': "Descripción",
+        'recetario.titulo.Tipo': "Tipo",
+        'recetario.titulo.Emision': "Emisión",
+        'recetario.barraBusqueda': "Buscar",
+        'recetario.nuevaReceta': "Nueva Receta",
+
     }    
 }
