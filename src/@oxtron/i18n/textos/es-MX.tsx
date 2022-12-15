@@ -54,6 +54,10 @@ export default{
         'modal.titulo.municipio': "Municipio",
         'modal.titulo.estado': "Estado",
         'modal.titulo.pais': "País",
+        'modal.titulo.empresa': "Empresa",
+        'modal.titulo.sucursal': "Sucursal",
+        'modal.titulo.tamañoCompañia': "Tamaño de compañia",
+
 
         'usuarios.titulo': "Usuarios",
         'usuarios.titulo.Foto': "Foto",

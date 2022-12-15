@@ -2,6 +2,7 @@ export const $base_uri = 'https://iunlq92o86.execute-api.us-east-1.amazonaws.com
 
 export const $noFoto = 'https://oxtron-pub-files.s3.amazonaws.com/no-foto.jpg';
 export const $baseS3 = 'https://oxtron-web.s3.amazonaws.com/';
+export const $noFotoPNG = 'no-image.png';
 
 export const $AWS_REGION = "us-east-1";
 export const $AWS_VERSION = "latest";

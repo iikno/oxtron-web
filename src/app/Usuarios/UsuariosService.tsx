@@ -1,10 +1,10 @@
 import { ObtenerSesion} from "@iikno/clases/LocalSession";
+import { SubirArchivo } from "@iikno/clases/S3";
+import { ValidarImg } from "@iikno/clases/Utils";
 import { Alerta_Error, Alterta_Exito } from "@oxtron/componentes/alerts/alertas";
 import { Peticion } from "@oxtron/configs/Peticion";
 import { UsuariosInterface } from "@oxtron/Interfaces/UsuariosInterface";
-import { resolve } from "path";
 import Swal from "sweetalert2";
-
 
 export const valoresIniciales:UsuariosInterface = {
     idUsuario: "",
@@ -24,11 +24,28 @@ export const valoresIniciales:UsuariosInterface = {
     pais: "",
 }
 
+export const LimpiarCampos = () => {
+    valoresIniciales.idUsuario= "";
+    valoresIniciales.nombre= "";
+    valoresIniciales.apellidoPaterno= "";
+    valoresIniciales.apellidoMaterno= "";
+    valoresIniciales.correo= "";
+    valoresIniciales.telefono= "";
+    valoresIniciales.foto= "";
+    valoresIniciales.calle= "";
+    valoresIniciales.noExterior= "";
+    valoresIniciales.noInterior= "";
+    valoresIniciales.colonia= "";
+    valoresIniciales.codigoPostal= "";
+    valoresIniciales.municipio= "";
+    valoresIniciales.estado= "";
+    valoresIniciales.pais= "";
+
+}
 
 
-export const ObtenerUsuarios = async(REFRESH = true) => {
+export const ObtenerUsuarios = async(REFRESH:boolean) => {
     const sesion = ObtenerSesion();
-    
 
     return await Peticion.get("/Usuarios/ObtenerUsuarios", {
         headers: {Authorization: 'Bearer '+sesion.token},
@@ -41,8 +58,9 @@ export const ObtenerUsuarios = async(REFRESH = true) => {
     })
 }
 
-export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean) => {
+export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean, imagen:any, usuarios:any) => {
     console.log(valores);
+    
     const sesion = ObtenerSesion();
 
     const config = {
@@ -52,6 +70,10 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
     }
 
     if(!edit){
+        if((valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
+            SubirArchivo(imagen, valores.idUsuario+"/"+valores.foto);
+        }
+
         const Data = {
             USUARIO:sesion.Correo,
             USUARIO_NUEVO:{
@@ -60,7 +82,7 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
                 ApellidoMaterno: valores.apellidoMaterno,
                 Correo: valores.correo,
                 Telefono: valores.telefono,
-                Foto: valores.foto
+                Foto: (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)?valores.idUsuario+"/"+valores.foto:""
             },
             DIRECCION: {
                 Calle: valores.calle,
@@ -72,15 +94,24 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
                 Estado: valores.estado,
                 Pais: valores.pais
             }}        
-        await Peticion.post('/Usuarios/AltaUsuario',
+        return await Peticion.post('/Usuarios/AltaUsuario',
         Data,
         config
         ).then((resultado:any) => {
-            window.location.assign('/usuarios')
+            Alterta_Exito();
+            usuarios = ObtenerUsuarios(false);
+            return usuarios;
         }).catch((error) => {
-            Error(error)
+            Alerta_Error();
+            Error(error);
+            return usuarios;
         })
     }else{
+        const direccion = valores.idUsuario+"/Fotos/"+valores.foto;
+        if( (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
+            SubirArchivo(imagen, direccion, true);
+        }      
+        
         const Data = {
             USUARIO:sesion.Correo,
             USUARIO_MODIFICADO:{
@@ -90,7 +121,7 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
                 ApellidoMaterno: valores.apellidoMaterno,
                 Correo: valores.correo,
                 Telefono: valores.telefono,
-                Foto: valores.foto
+                Foto: direccion
             },
             DIRECCION: {
                 Calle: valores.calle,
@@ -106,60 +137,55 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean)
         Data,
         config
         ).then((resultado:any) => {
-            Alterta_Exito()
-            window.location.assign('/usuarios')
+            Alterta_Exito();
         }).catch((error) => {
-            Alerta_Error()
-            Error(error)
+            Alerta_Error();
+            Error(error);
         })
     }
     
 }
 
-export const handleEdit = (async (IdUsuario:string) =>{ 
+export const handleEdit = ((IdUsuario:string) =>{ 
     const sesion = ObtenerSesion();
-    new Promise(async (resolve, reject) =>{
-        await Peticion.get('/Usuarios/ObtenerDetallesUsuario',
-            {
-                headers: {
-                    Authorization: 'Bearer '+sesion.token
-                },
-                params:{
-                    USUARIO: sesion.Correo,
-                    ID_USUARIO: IdUsuario,
-                    REFRESH: false
-                }
-            }
-            ).then((resultado:any) => {
-
-            resolve(resultado);
-            const row = resultado.data;
-            valoresIniciales.idUsuario = row.IdUsuario;
-            valoresIniciales.nombre = row.Nombre;
-            valoresIniciales.apellidoPaterno = row.ApellidoPaterno;
-            valoresIniciales.apellidoMaterno = row.ApellidoMaterno;
-            valoresIniciales.correo = row.Correo;
-            valoresIniciales.telefono = row.Telefono;
-            valoresIniciales.calle = row.Calle;
-            valoresIniciales.noExterior = row.NoExterior;
-            valoresIniciales.noInterior = row.NoInterior;
-            valoresIniciales.colonia = row.Colonia;
-            valoresIniciales.codigoPostal = row.CodigoPostal;
-            valoresIniciales.municipio = row.Municipio;
-            valoresIniciales.estado = row.Estado;
-            valoresIniciales.pais = row.Pais;
-            }).catch((error) => {
-                Alerta_Error()
-                Error(error)
-            })      
-    })
-    
+    return Peticion.get('/Usuarios/ObtenerDetallesUsuario',
+    {
+        headers: {
+            Authorization: 'Bearer '+sesion.token
+        },
+        params:{
+            USUARIO: sesion.Correo,
+            ID_USUARIO: IdUsuario,
+            REFRESH: false
+        }
+    }
+    ).then((resultado:any) => {
+        const row = resultado.data;
+        valoresIniciales.idUsuario = row.IdUsuario;
+        valoresIniciales.nombre = row.Nombre;
+        valoresIniciales.apellidoPaterno = row.ApellidoPaterno;
+        valoresIniciales.apellidoMaterno = row.ApellidoMaterno;
+        valoresIniciales.correo = row.Correo;
+        valoresIniciales.telefono = row.Telefono;
+        valoresIniciales.foto = row.Foto;
+        valoresIniciales.calle = row.Calle;
+        valoresIniciales.noExterior = row.NoExterior;
+        valoresIniciales.noInterior = row.NoInterior;
+        valoresIniciales.colonia = row.Colonia;
+        valoresIniciales.codigoPostal = row.CodigoPostal;
+        valoresIniciales.municipio = row.Municipio;
+        valoresIniciales.estado = row.Estado;
+        valoresIniciales.pais = row.Pais;
+    }).catch((error) => {
+        Alerta_Error()
+        Error(error)
+    })          
 })
 
-export const SuspenderUsuario = async(IdUsuario:string) => {
+export const SuspenderUsuario = (IdUsuario:string) => {
     const sesion = ObtenerSesion();
     
-    Swal.fire({
+    return Swal.fire({
         title: '¿Quiere continuar?',
         text: "Esta por cambiar el status del usuario",
         icon: 'warning',
@@ -167,9 +193,9 @@ export const SuspenderUsuario = async(IdUsuario:string) => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Continuar'
-      }).then(async (result) => {
+      }).then((result) => {
         if (result.isConfirmed) {
-            await Peticion.put('/Usuarios/SuspenderUsuario',
+            return Peticion.put('/Usuarios/SuspenderUsuario',
             {
                 USUARIO: sesion.Correo,
                 ID_USUARIO: IdUsuario
@@ -179,14 +205,11 @@ export const SuspenderUsuario = async(IdUsuario:string) => {
                     Authorization: 'Bearer '+sesion.token
                 }
             }
-            ).then((resultado:any) => {
-                Alterta_Exito()
-
-                window.location.assign('/usuarios')
+            ).then(() => {
+                Alterta_Exito();
             }).catch((error) => {
-                Alerta_Error()
                 Error(error)
-
+                Alerta_Error();
             })         
         }
       })    
@@ -195,7 +218,7 @@ export const SuspenderUsuario = async(IdUsuario:string) => {
 export const EliminarUsuario = async(IdUsuario:string) =>{
     const sesion = ObtenerSesion();
 
-    Swal.fire({
+    return Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
         icon: 'warning',
@@ -203,9 +226,9 @@ export const EliminarUsuario = async(IdUsuario:string) =>{
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
-      }).then(async (result) => {
+      }).then((result) => {
         if (result.isConfirmed) {
-            await Peticion.delete('/Usuarios/EliminarUsuario',
+            return Peticion.delete('/Usuarios/EliminarUsuario',
             {
                 headers: {
                     Authorization: 'Bearer '+sesion.token
@@ -215,10 +238,8 @@ export const EliminarUsuario = async(IdUsuario:string) =>{
                     ID_USUARIO: IdUsuario
                 }
             }
-            ).then((resultado:any) => {
+            ).then(() => {
                 Alterta_Exito()
-
-                window.location.assign('/usuarios')
             }).catch((error) => {
                 Alerta_Error()
                 Error(error)
@@ -227,3 +248,16 @@ export const EliminarUsuario = async(IdUsuario:string) =>{
         }
     })
 }
+
+export const buscarEnUsuarios = (texto, usuarios) => {
+    texto = texto.toLocaleLowerCase().trim()
+    
+    usuarios = usuarios.filter((usuario) => {
+        return usuario.NombreCompleto.toLocaleLowerCase().includes(texto) || 
+               usuario.Correo.toLocaleLowerCase().includes(texto) || 
+               usuario.Status.toLocaleLowerCase().includes(texto) 
+    })
+
+    return usuarios
+}
+

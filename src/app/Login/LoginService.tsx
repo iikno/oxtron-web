@@ -33,8 +33,6 @@ export const IniciarSesion = async (valores:LogInInterface, setSesion:SetterOrUp
         }
     }).then((resultado:any) => {
         setSesion(resultado.data);
-        var aux = getRecoil(SesionAtom);
-        var aux2 = ObtenerSesion();
 
         window.location.assign('/dashboard')
     }).catch((error) => {
