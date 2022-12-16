@@ -24,6 +24,8 @@ export default{
         'boton.cancelar': "Cancel",
         'boton.guardar': "Save",
 
+        'buscar.titulo': "Search",
+
         'dashboard.titulo': "Dashboard",
         'dashboard.periodoTiempo': "Time period",
         'dashboard.cliente': "Customer",
@@ -42,8 +44,8 @@ export default{
 
         'modal.titulo.foto': "Photo",
         'modal.titulo.nombre': "Name",
-        'modal.titulo.apellidoPaterno': "Last name",
-        'modal.titulo.apellidoMaterno': "Apellido materno",
+        'modal.titulo.apellidoPaterno': "First last name",
+        'modal.titulo.apellidoMaterno': "Second last name",
         'modal.titulo.correo': "Email",
         'modal.titulo.telefono': "Phone",
         'modal.titulo.calle': "Street",
@@ -51,12 +53,15 @@ export default{
         'modal.titulo.noInterior': "Suite number",
         'modal.titulo.colonia': "Suburb",
         'modal.titulo.codigoPostal': "Postal code",
-        'modal.titulo.municipio': "Municipality",
+        'modal.titulo.municipio': "City",
         'modal.titulo.estado': "State",
         'modal.titulo.pais': "Country",
         'modal.titulo.empresa': "Company",
         'modal.titulo.sucursal': "Branch office",
         'modal.titulo.tamañoCompañia': "Company size",
+        'modal.titulo.tab.datosPersonales': "Personal information",
+        'modal.titulo.tab.direccion': "Address",
+
 
         'usuarios.titulo': "Users",
         'usuarios.titulo.Foto': "Photo",

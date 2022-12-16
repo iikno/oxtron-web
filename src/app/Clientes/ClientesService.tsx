@@ -155,7 +155,7 @@ export const FormularioCliente = async (valores:ClientesInterface, edit:boolean,
     
 }
 
-export const handleEdit = ((IdCliente:string) =>{ 
+export const ObtenerDetallesCliente = ((IdCliente:string) =>{ 
     const sesion = ObtenerSesion();
     return Peticion.get('/Clientes/ObtenerDetallesCliente',
     {

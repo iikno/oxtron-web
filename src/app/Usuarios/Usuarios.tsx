@@ -173,7 +173,7 @@ const Usuarios = () => {
                                         </Col>
                                         <Col md={7}>
                                             <Tabs defaultActiveKey="datos" id="tabs-usuario" className="mb-3" justify>
-                                                <Tab eventKey="datos" title="Datos personales">
+                                                <Tab eventKey="datos" title={Traducir("modal.titulo.tab.datosPersonales")}>
                                                         <label htmlFor='nombre'>{Traducir("modal.titulo.nombre")}:</label>
                                                         <input required className='form-control' name="nombre" id='nombre' type="text" onChange={formik.handleChange} value={formik.values.nombre}/>
                                                         <br></br>
@@ -194,7 +194,7 @@ const Usuarios = () => {
                                                         </Col>
                                                         </Row>
                                                 </Tab>
-                                                <Tab eventKey="direccion" title="Dirección">
+                                                <Tab eventKey="direccion" title={Traducir("modal.titulo.tab.direccion")}>
                                                     <Row>
                                                         <Col>
                                                         <label htmlFor='calle'>{Traducir("modal.titulo.calle")}:</label>

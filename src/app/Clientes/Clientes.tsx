@@ -4,7 +4,7 @@ import Base from '@oxtron/componentes/base/Base';
 import {classNames, ValidarImg, ValidarStatus} from '@iikno/clases/Utils';
 import { Button, Col, Modal, Row, Table, ButtonGroup, Card, Tabs, Tab} from 'react-bootstrap';
 
-import { buscarEnClientes, EliminarCliente, FormularioCliente, handleEdit, LimpiarCampos, ObtenerClientes, SuspenderCliente, valoresIniciales  } from './ClientesService';
+import { buscarEnClientes, EliminarCliente, FormularioCliente, ObtenerDetallesCliente, LimpiarCampos, ObtenerClientes, SuspenderCliente, valoresIniciales  } from './ClientesService';
 import { Espera } from '@oxtron/componentes/base/Espera';
 import { Container } from 'rsuite';
 import { useFormik } from 'formik';
@@ -53,7 +53,7 @@ const Clientes = () => {
 
     function editar(row){
         setEdit(true);
-        handleEdit(row.IdCliente).then(() => {
+        ObtenerDetallesCliente(row.IdCliente).then(() => {
             formik.initialValues = valoresIniciales;
             setImg(ValidarImg(formik.initialValues.foto));
             setShow(true);   
@@ -71,7 +71,7 @@ const Clientes = () => {
         inputFile.current.click();
     }
     
-    const handleOnKeyUpBuscar = (e: any) => {
+    const BuscarEnTabla = (e: any) => {
         if(e.target.value != "" || e.target.value != undefined){
             setClientesMostrar(buscarEnClientes(e.target.value, clientes))
         }else{
@@ -93,8 +93,8 @@ const Clientes = () => {
                     <Col align="left">
                             <input type="text" 
                                 className="form-control" 
-                                onChange={handleOnKeyUpBuscar}
-                                placeholder="Buscar"
+                                onChange={BuscarEnTabla}
+                                placeholder= "Buscar"
                             />                            
                         </Col>
                         <Col align="right">
@@ -172,7 +172,7 @@ const Clientes = () => {
                                         </Col>
                                         <Col md={7}>
                                             <Tabs defaultActiveKey="datos" id="tabs-cliente" className="mb-3" justify>
-                                                <Tab eventKey="datos" title="Datos personales">
+                                                <Tab eventKey="datos" title={Traducir("modal.titulo.tab.datosPersonales")}>
                                                         <label htmlFor='nombre'>{Traducir("modal.titulo.nombre")}:</label>
                                                         <input required className='form-control' name="nombre" id='nombre' type="text" onChange={formik.handleChange} value={formik.values.nombre}/>
                                                         <br></br>
@@ -210,7 +210,7 @@ const Clientes = () => {
                                                             </Col>
                                                         </Row>
                                                 </Tab>
-                                                <Tab eventKey="direccion" title="Dirección">
+                                                <Tab eventKey="direccion" title={Traducir("modal.titulo.tab.direccion")}>
                                                     <Row>
                                                         <Col>
                                                         <label htmlFor='calle'>{Traducir("modal.titulo.calle")}:</label>

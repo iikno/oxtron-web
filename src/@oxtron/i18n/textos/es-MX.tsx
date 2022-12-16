@@ -24,6 +24,8 @@ export default{
         'boton.cancelar': "Cancelar",
         'boton.guardar': "Guardar",
 
+        'buscar.titulo': "Buscar",
+
         'dashboard.titulo': "Panel central",
         'dashboard.periodoTiempo': "Periodo de tiempo",
         'dashboard.cliente': "Cliente",
@@ -57,6 +59,8 @@ export default{
         'modal.titulo.empresa': "Empresa",
         'modal.titulo.sucursal': "Sucursal",
         'modal.titulo.tamañoCompañia': "Tamaño de compañia",
+        'modal.titulo.tab.datosPersonales': "Información personal",
+        'modal.titulo.tab.direccion': "Dirección",
 
 
         'usuarios.titulo': "Usuarios",
