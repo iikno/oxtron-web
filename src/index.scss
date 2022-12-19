@@ -3,3 +3,60 @@
 h1,h2,h3,h4,h5,h6,.titulo{
     font-family: "titulo";
 }
+
+.label-input {
+    color: #BBB;
+}
+
+.without-borders{
+    border: 0 !important;
+}
+
+.without-borders:focus-visible{
+    outline: 0 !important;
+}
+
+.modal-input-text{
+    width: 100%;
+}
+
+.modal-input-select{
+    width: 100%;
+    height: 100%;
+}
+
+.modal-form-btn{
+    width: 100%;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.pill-btn{
+    padding: 0.5rem 1rem !important;
+    font-weight: 600;
+}
+
+.modal-input-money{
+    padding-left: 1rem;
+}
+
+.box-shadow-none{
+    box-shadow: none !important;
+}
+
+.btn-primary-rs {
+    color: #fff;
+    background-color: var(--bs-primary) !important;    
+}
+
+.btn-primary-rs:focus, .btn-primary-rs:hover {
+    background-color: var(--bs-primary) !important;
+    filter: brightness(120%)
+}
+
+.error-message{
+    color: #dc3545;
+    font-size: 0.85rem;
+}

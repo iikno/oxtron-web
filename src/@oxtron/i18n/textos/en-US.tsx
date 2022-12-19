@@ -44,5 +44,22 @@ export default{
         'recetario.titulo.Emision': "CO2",
         'recetario.barraBusqueda': "Search",
         'recetario.nuevaReceta': "New Recipe",
+        'recetario.detallesReceta': "Recipe Details",
+        'recetario.opciones': "Options",
+        'recetario.formFoto': "Image",
+        'recetario.formCarbon': "Carbon Emission",
+        'recetario.formNombre': "Name",
+        'recetario.formPrecio': "Price",
+        'recetario.formDescripcion': "Description",
+        'recetario.formIngredientes': "Ingredients",
+        'recetario.formAlergenos': "Allergens",
+        'recetario.formAgregar': "Add",
+
+        'recetario.modal.btnGuardar': "Save",
+        'recetario.modal.btnImprimir': "Print",
+        'recetario.modal.btnEliminar': "Discard",
+        'recetario.modal.form.placeholder.descripcion': "Recipe Description",
+        'recetario.modal.form.placeholder.nombre': "Recipe Name",
+        'recetario.modal.form.placeholder.precio': "Recipe Price",
     }    
 }

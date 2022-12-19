@@ -1,4 +1,6 @@
 export interface RecetarioInterface{
+    IdReceta: string
+    IdUsuarioCliente: string
     Nombre: string
     Foto: string
     Precio: number

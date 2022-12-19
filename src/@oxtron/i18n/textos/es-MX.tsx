@@ -44,6 +44,24 @@ export default{
         'recetario.titulo.Emision': "Emisión",
         'recetario.barraBusqueda': "Buscar",
         'recetario.nuevaReceta': "Nueva Receta",
+        'recetario.detallesReceta': "Detalles de Receta",
+        'recetario.opciones': "Opciones",
+        'recetario.formFoto': "Imagen",
+        'recetario.formCarbon': "Emision de Carbono",
+        'recetario.formNombre': "Nombre",
+        'recetario.formPrecio': "Precio",
+        'recetario.formDescripcion': "Descripcion",
+        'recetario.formIngredientes': "Ingredientes",
+        'recetario.formAlergenos': "Alergenos",
+        'recetario.formAgregar': "Añadir",
+
+        'recetario.modal.btnGuardar': "Guardar",
+        'recetario.modal.btnImprimir': "Imprimir",
+        'recetario.modal.btnEliminar': "Eliminar",
+        'recetario.modal.form.placeholder.descripcion': "Descripcion del Platillo",
+        'recetario.modal.form.placeholder.nombre': "Nombre del Platillo",
+        'recetario.modal.form.placeholder.precio': "Precio del Platillo",
+
 
     }    
 }
