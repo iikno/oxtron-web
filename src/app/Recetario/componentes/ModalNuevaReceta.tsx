@@ -15,9 +15,14 @@ import { ObtenerIngredientes, ObtenerAlergenos, EliminarReceta, AltaReceta, Modi
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 
 const ModalNuevaReceta = (
-    {recetaModal, setRecetaModal, ingredientesModal, setIngredientesModal, alergenosModal, setAlergenosModal, editarReceta, show, setShow, setActualizar}:
-    {recetaModal: any, setRecetaModal: any, ingredientesModal: any[], setIngredientesModal: any, alergenosModal: any[], setAlergenosModal: any, editarReceta?: string, show: boolean, setShow: any, setActualizar?: any}
+    {recetaDetalles, ingredientesDetalles, alergenosDetalles, editarReceta, show, setShow, setActualizar}:
+    {show: boolean, setShow: any, recetaDetalles?: any, ingredientesDetalles?: any[], alergenosDetalles?: any[], editarReceta?: string, setActualizar?: any}
 ) => {
+    const [ingredientesModal, setIngredientesModal] = React.useState(ingredientesDetalles ?? []);
+    const [alergenosModal, setAlergenosModal] = React.useState(alergenosDetalles ?? []);
+    const [recetaModal, setRecetaModal] = React.useState(recetaDetalles ?? {
+        IdReceta: "", IdUsuarioCliente: "", Nombre: "", Descripcion: "", Precio: 0.00, EmisionCarbono: 0, Vegano: false, Foto: "", FechaRegistro: ""
+    });
     const [validadores, setValidadores] = useState({Nombre: true, Precio: true, Ingredientes: true})
     const [cargando, setCargando] = useState(false);
     const [img, setImg] = useState($noFoto);
@@ -33,16 +38,26 @@ const ModalNuevaReceta = (
     const modalRef = useRef(null)
 
     useEffect(() => {
+        setRecetaModal(recetaDetalles ?? {
+            IdReceta: "", IdUsuarioCliente: "", Nombre: "", Descripcion: "", Precio: 0.00, EmisionCarbono: 0, Vegano: false, Foto: "", FechaRegistro: ""
+        });
+        setIngredientesModal(ingredientesDetalles ?? []);
+        setAlergenosModal(alergenosDetalles ?? [])
+    }, [recetaDetalles, ingredientesDetalles, alergenosDetalles])
+
+    useEffect(() => {
+        const URL_IMAGEN = (recetaModal.Foto && recetaModal.Foto !== "no-image.png") ? ($baseS3 + recetaModal.Foto) : $noFoto;
+        setImg(URL_IMAGEN)
+    }, [recetaModal])
+
+    useEffect(() => {
         ObtenerIngredientes(false).then((respuesta:any) => {
             setIngredientes(respuesta);
         })
         ObtenerAlergenos(false).then((respuesta:any) => {
             setAlergenos(respuesta);
         })
-
-        const URL_IMAGEN = (recetaModal.Foto && recetaModal.Foto !== "no-image.png") ? ($baseS3 + recetaModal.Foto) : $noFoto;
-        setImg(URL_IMAGEN)
-    }, [recetaModal])
+    }, [])
 
     const tableIngredientsColumns = [
         {
@@ -210,7 +225,7 @@ const ModalNuevaReceta = (
 
         setCargando(true);
         let exito = false;
-        if(editarReceta===""){
+        if(!editarReceta || editarReceta===""){
             await AltaReceta(recetaModal, ingredientesModal, alergenosModal, imgBuff).then((resultado) => {
                 exito = resultado;
             })
@@ -223,7 +238,8 @@ const ModalNuevaReceta = (
         setCargando(false)
         if(!exito)
             return
-        setActualizar(true)
+        if(setActualizar)
+            setActualizar(true)
         ocultarModal();
     }
     const eliminarReceta = (idReceta: string) => {
@@ -281,7 +297,7 @@ const ModalNuevaReceta = (
                                     <h6 className='text-uppercase label-input mt-4'>{Traducir("recetario.formPrecio")}</h6>
                                     <InputGroup inside className='without-borders box-shadow-none'>
                                         <InputGroup.Addon>$</InputGroup.Addon>
-                                        <InputNumber placeholder='Precio del platillo' className='without-borders modal-input-money box-shadow-none' id='precio' value={recetaModal.Precio} onChange={cambioCampoPrecio}/>
+                                        <InputNumber placeholder={'Precio del platillo'} className='without-borders modal-input-money box-shadow-none' id='precio' value={recetaModal.Precio} onChange={cambioCampoPrecio}/>
                                     </InputGroup>
                                     {!validadores.Precio &&
                                         <p className='error-message'>El precio es obligatorio</p>
@@ -390,11 +406,11 @@ const ModalNuevaReceta = (
                         <Row>
                             <Col align="left">
                                 <ButtonToolbar >
-                                    {editarReceta !== "" &&
+                                    {editarReceta && editarReceta !== "" &&
                                         <Button type='button' color="red" appearance="primary" onClick={() => eliminarReceta(editarReceta)}>
                                             <BsTrash /> {Traducir('recetario.modal.btnEliminar')}
                                         </Button>}
-                                    {editarReceta !== "" &&
+                                    {editarReceta && editarReceta !== "" &&
                                         <Button type='button' color="cyan" appearance="primary" onClick={imprimirReceta}>
                                             <BsPrinter /> {Traducir('recetario.modal.btnImprimir')}
                                         </Button>}

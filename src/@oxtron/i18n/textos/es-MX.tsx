@@ -107,6 +107,15 @@ export default{
         'recetario.modal.form.placeholder.nombre': "Nombre del Platillo",
         'recetario.modal.form.placeholder.precio': "Precio del Platillo",
 
-
+        'planificador.titulo': "Planificador",
+        'planificador.periodoTiempo': "Periodo de Tiempo",
+        'planificador.cliente': "Cliente",
+        'planificador.dia.0': "Lunes",
+        'planificador.dia.1': "Martes",
+        'planificador.dia.2': "Miércoles",
+        'planificador.dia.3': "Jueves",
+        'planificador.dia.4': "Viernes",
+        'planificador.dia.5': "Sábado",
+        'planificador.dia.6': "Domingo",  
     }    
 }

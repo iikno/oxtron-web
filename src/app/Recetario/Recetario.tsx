@@ -205,15 +205,12 @@ const Recetario = () => {
                     </Row>
 
                     <ModalNuevaReceta 
-                        recetaModal={recetaModal}
-                        setRecetaModal={setRecetaModal}
-                        ingredientesModal={ingredientesModal}
-                        setIngredientesModal={setIngredientesModal}
-                        alergenosModal={alergenosModal}
-                        setAlergenosModal={setAlergenosModal}
-                        editarReceta={editarReceta}
                         show={show}
                         setShow={setShow}
+                        recetaDetalles={recetaModal}
+                        ingredientesDetalles={ingredientesModal}
+                        alergenosDetalles={alergenosModal}
+                        editarReceta={editarReceta}
                         setActualizar={setActualizar}
                     />
                 </>

@@ -103,5 +103,16 @@ export default{
         'recetario.modal.form.placeholder.descripcion': "Recipe Description",
         'recetario.modal.form.placeholder.nombre': "Recipe Name",
         'recetario.modal.form.placeholder.precio': "Recipe Price",
+
+        'planificador.titulo': "Week Menu",
+        'planificador.periodoTiempo': "Time period",
+        'planificador.cliente': "Customer",
+        'planificador.dia.0': "Monday",
+        'planificador.dia.1': "Tuesday",
+        'planificador.dia.2': "Wednesday",
+        'planificador.dia.3': "Thursday",
+        'planificador.dia.4': "Friday",
+        'planificador.dia.5': "Saturday",
+        'planificador.dia.6': "Sunday",        
     }    
 }
