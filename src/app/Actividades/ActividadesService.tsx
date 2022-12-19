@@ -44,10 +44,10 @@ export const LimpiarCampos = () => {
 }
 
 
-export const ObtenerUsuarios = async(REFRESH:boolean) => {
+export const ObtenerClientes = async(REFRESH:boolean) => {
     const sesion = ObtenerSesion();
 
-    return await Peticion.get("/Usuarios/ObtenerUsuarios", {
+    return await Peticion.get("/Clientes/ObtenerClientes", {
         headers: {Authorization: 'Bearer '+sesion.token},
         params: {
             USUARIO: sesion.Correo,
@@ -58,93 +58,7 @@ export const ObtenerUsuarios = async(REFRESH:boolean) => {
     })
 }
 
-export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean, imagen:any, usuarios:any) => {
-    console.log(valores);
-    
-    const sesion = ObtenerSesion();
 
-    const config = {
-        headers: {
-            Authorization: 'Bearer '+sesion.token
-        }
-    }
-
-    if(!edit){
-        if((valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
-            SubirArchivo(imagen, valores.idUsuario+"/"+valores.foto);
-        }
-
-        const Data = {
-            USUARIO:sesion.Correo,
-            USUARIO_NUEVO:{
-                Nombre: valores.nombre,
-                ApellidoPaterno: valores.apellidoPaterno,
-                ApellidoMaterno: valores.apellidoMaterno,
-                Correo: valores.correo,
-                Telefono: valores.telefono,
-                Foto: (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)?valores.idUsuario+"/"+valores.foto:""
-            },
-            DIRECCION: {
-                Calle: valores.calle,
-                NoExterior: valores.noExterior,
-                NoInterior: valores.noInterior,
-                Colonia: valores.colonia,
-                CodigoPostal: valores.codigoPostal,
-                Municipio: valores.municipio,
-                Estado: valores.estado,
-                Pais: valores.pais
-            }}        
-        return await Peticion.post('/Usuarios/AltaUsuario',
-        Data,
-        config
-        ).then((resultado:any) => {
-            Alterta_Exito();
-            usuarios = ObtenerUsuarios(false);
-            return usuarios;
-        }).catch((error) => {
-            Alerta_Error();
-            Error(error);
-            return usuarios;
-        })
-    }else{
-        const direccion = valores.idUsuario+"/Fotos/"+valores.foto;
-        if( (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
-            SubirArchivo(imagen, direccion, true);
-        }      
-        
-        const Data = {
-            USUARIO:sesion.Correo,
-            USUARIO_MODIFICADO:{
-                IdUsuario: valores.idUsuario,
-                Nombre: valores.nombre,
-                ApellidoPaterno: valores.apellidoPaterno,
-                ApellidoMaterno: valores.apellidoMaterno,
-                Correo: valores.correo,
-                Telefono: valores.telefono,
-                Foto: direccion
-            },
-            DIRECCION: {
-                Calle: valores.calle,
-                NoExterior: valores.noExterior,
-                NoInterior: valores.noInterior,
-                Colonia: valores.colonia,
-                CodigoPostal: valores.codigoPostal,
-                Municipio: valores.municipio,
-                Estado: valores.estado,
-                Pais: valores.pais
-            }}
-        await Peticion.put('/Usuarios/ModificarUsuario',
-        Data,
-        config
-        ).then((resultado:any) => {
-            Alterta_Exito();
-        }).catch((error) => {
-            Alerta_Error();
-            Error(error);
-        })
-    }
-    
-}
 
 export const handleEdit = ((IdUsuario:string) =>{ 
     const sesion = ObtenerSesion();

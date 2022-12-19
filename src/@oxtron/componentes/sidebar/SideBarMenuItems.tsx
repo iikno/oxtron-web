@@ -1,5 +1,5 @@
 import { SideBarMenuItem } from "@oxtron/Interfaces/SideBar/SideBarMenuItem.d";
-import { CiCalendar, CiForkAndKnife, CiGrid32, CiUser, CiViewList, CiWavePulse1 } from "react-icons/ci";
+import { CiCalendar, CiForkAndKnife, CiGrid32, CiShop, CiUser, CiViewList, CiWavePulse1 } from "react-icons/ci";
 
 export const SideBarMenuItems:SideBarMenuItem[] = [
     {
@@ -29,6 +29,11 @@ export const SideBarMenuItems:SideBarMenuItem[] = [
         url: "/usuarios"
     },{
         id: "6",
+        label: "general.menu.customers",
+        icon: CiShop,
+        url: "/clientes"
+    },{
+        id: "7",
         label: "general.menu.reports",
         icon: CiViewList,
         url: "/reportes"
