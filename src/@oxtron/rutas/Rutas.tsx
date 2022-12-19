@@ -5,6 +5,9 @@ import { SesionAtom } from '../atomos/SesionAtom';
 import Dashboard from '../../app/Dashboard/Dashboard';
 import Login from '../../app/Login/Login';
 import Usuarios from 'app/Usuarios/Usuarios';
+import Clientes from 'app/Clientes/Clientes';
+import Actividades from 'app/Actividades/Actividades';
+import Recetario from 'app/Recetario/Recetario';
 
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
