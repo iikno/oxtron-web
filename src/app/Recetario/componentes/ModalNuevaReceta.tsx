@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 import DataTable from 'react-data-table-component';
 import html2canvas from 'html2canvas';
 import { Col, Row, Container } from 'react-bootstrap';
@@ -18,6 +19,7 @@ const ModalNuevaReceta = (
     {recetaDetalles, ingredientesDetalles, alergenosDetalles, editarReceta, show, setShow, setActualizar}:
     {show: boolean, setShow: any, recetaDetalles?: any, ingredientesDetalles?: any[], alergenosDetalles?: any[], editarReceta?: string, setActualizar?: any}
 ) => {
+    const intl = useIntl();
     const [ingredientesModal, setIngredientesModal] = React.useState(ingredientesDetalles ?? []);
     const [alergenosModal, setAlergenosModal] = React.useState(alergenosDetalles ?? []);
     const [recetaModal, setRecetaModal] = React.useState(recetaDetalles ?? {
@@ -226,12 +228,12 @@ const ModalNuevaReceta = (
         setCargando(true);
         let exito = false;
         if(!editarReceta || editarReceta===""){
-            await AltaReceta(recetaModal, ingredientesModal, alergenosModal, imgBuff).then((resultado) => {
+            await AltaReceta(intl, recetaModal, ingredientesModal, alergenosModal, imgBuff).then((resultado) => {
                 exito = resultado;
             })
         }
         else{
-            await ModificarReceta(recetaModal, ingredientesModal, alergenosModal, imgBuff).then((resultado) => {
+            await ModificarReceta(intl, recetaModal, ingredientesModal, alergenosModal, imgBuff).then((resultado) => {
                 exito = resultado;
             })
         }
@@ -243,16 +245,15 @@ const ModalNuevaReceta = (
         ocultarModal();
     }
     const eliminarReceta = (idReceta: string) => {
-        ConfirmarEliminar().then((result) => {
+        ConfirmarEliminar(intl).then((result) => {
             if(result.isConfirmed){
-                EliminarReceta(idReceta).then(() => {
+                EliminarReceta(intl, idReceta).then(() => {
                     setActualizar(true)
                     ocultarModal();
                 })
             }
         })
     }
-
 
     const ocultarModal = () => {
         setTimeout(() => {
@@ -280,27 +281,25 @@ const ModalNuevaReceta = (
                             <Col md={12} lg={8}>
                                 <label htmlFor="nombre" className='modal-input-text'>
                                     <h6 className='text-uppercase label-input'>{Traducir("recetario.formNombre")}</h6>
-                                    <h3 className='principal-title fw-bold'>
-                                        <input type='text' placeholder='Nombre del platillo' className='modal-input-text without-borders' name='nombre' id='nombre' value={recetaModal.Nombre} onChange={cambioCampoNombre}/>
-                                    </h3>
+                                    <input type='text' placeholder={intl.formatMessage({id: 'recetario.modal.form.placeholder.nombre'})} className='modal-input-text without-borders input-receta-nombre fw-bold' name='nombre' id='nombre' value={recetaModal.Nombre} onChange={cambioCampoNombre}/>
                                     {!validadores.Nombre &&
-                                        <p className='error-message' >El nombre es obligatorio</p>
+                                        <p className='error-message'>{Traducir('recetario.modal.form.error.nombre')}</p>
                                     }
                                 </label>
 
                                 <label htmlFor="descripcion" className='modal-input-text'>
                                     <h6 className='text-uppercase label-input mt-4'>{Traducir("recetario.formDescripcion")}</h6>
-                                    <textarea placeholder='Descripción del platillo' className='modal-input-text without-borders' name="descripcion" id='descripcion' rows={4} value={recetaModal.Descripcion} onChange={cambioCampoDescripcion}/>
+                                    <textarea placeholder={intl.formatMessage({id: 'recetario.modal.form.placeholder.descripcion'})} className='modal-input-text without-borders' name="descripcion" id='descripcion' rows={4} value={recetaModal.Descripcion} onChange={cambioCampoDescripcion}/>
                                 </label>
 
                                 <label htmlFor="precio" className='modal-input-text'>
                                     <h6 className='text-uppercase label-input mt-4'>{Traducir("recetario.formPrecio")}</h6>
                                     <InputGroup inside className='without-borders box-shadow-none'>
                                         <InputGroup.Addon>$</InputGroup.Addon>
-                                        <InputNumber placeholder={'Precio del platillo'} className='without-borders modal-input-money box-shadow-none' id='precio' value={recetaModal.Precio} onChange={cambioCampoPrecio}/>
+                                        <InputNumber placeholder={intl.formatMessage({id: 'recetario.modal.form.placeholder.precio'})} className='without-borders modal-input-money box-shadow-none' id='precio' value={recetaModal.Precio} onChange={cambioCampoPrecio}/>
                                     </InputGroup>
                                     {!validadores.Precio &&
-                                        <p className='error-message'>El precio es obligatorio</p>
+                                        <p className='error-message'>{Traducir('recetario.modal.form.error.precio')}</p>
                                     }
                                 </label>
 
@@ -343,7 +342,7 @@ const ModalNuevaReceta = (
                                     </Col>
                                 </Row>
                                 {!validadores.Ingredientes &&
-                                    <p className='error-message mt-2'>Se debe de incluir al menos un ingrediente</p>
+                                    <p className='error-message mt-2'>{Traducir('recetario.modal.form.error.ingredientes')}</p>
                                 }
 
                                 <h6 className='text-uppercase label-input mt-4'>{Traducir("recetario.formAlergenos")}</h6>
@@ -394,7 +393,7 @@ const ModalNuevaReceta = (
 
                                         <label className='mt-3' htmlFor='vegano'>
                                             <input className='me-2' type="checkbox" name="vegano" id="vegano" checked={recetaModal.Vegano} onChange={() => setRecetaModal({...recetaModal, Vegano: !recetaModal.Vegano})}/>
-                                            <span>Es un platillo vegano</span>
+                                            <span>{Traducir('recetario.modal.form.placeholder.vegan')}</span>
                                         </label>
                                     </Col>
                                 </Row>

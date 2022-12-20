@@ -80,6 +80,7 @@ export default{
         'clientes.modal.titulo': "Customer",
 
         'recetario.titulo': "Recipe Book",
+        'recetario.vegan': "Vegan",
         'recetario.titulo.Nombre': "Name",
         'recetario.titulo.Descripcion': "Description",
         'recetario.titulo.Tipo': "Type",
@@ -100,9 +101,13 @@ export default{
         'recetario.modal.btnGuardar': "Save",
         'recetario.modal.btnImprimir': "Print",
         'recetario.modal.btnEliminar': "Discard",
+        'recetario.modal.form.placeholder.vegan': "Is vegan",
         'recetario.modal.form.placeholder.descripcion': "Recipe Description",
         'recetario.modal.form.placeholder.nombre': "Recipe Name",
         'recetario.modal.form.placeholder.precio': "Recipe Price",
+        'recetario.modal.form.error.nombre': "Recipe Name is required",
+        'recetario.modal.form.error.precio': "Please, enter a value",
+        'recetario.modal.form.error.ingredientes': "Please, add an ingredient",
 
         'planificador.titulo': "Week Menu",
         'planificador.periodoTiempo': "Time period",
@@ -113,6 +118,20 @@ export default{
         'planificador.dia.3': "Thursday",
         'planificador.dia.4': "Friday",
         'planificador.dia.5': "Saturday",
-        'planificador.dia.6': "Sunday",        
+        'planificador.dia.6': "Sunday",
+        'planificador.modal.titulo': "Assign Recipe",
+        'planificador.modal.label.Descripcion': "Selected Date",
+        'planificador.modal.label.Receta': "Recipe",
+        'planificador.modal.label.Unidades': "Units",
+
+        'alertas.error.title': "Error",
+        'alertas.error.body': "Something went wrong!",
+        'alertas.exito.title': "Success",
+        'alertas.exito.body': "The action has been completed successfully",
+        'alertas.confirmacion.title': "The record will be deleted",
+        'alertas.confirmacion.body': "Are you sure you want to delete this record?",
+        'alertas.confirmacion.boton.aceptar': "Delete",
+        'alertas.confirmacion.boton.cancelar': "Cancel",
+
     }    
 }

@@ -6,6 +6,7 @@ import { RecetarioInterface } from "@oxtron/Interfaces/RecetarioInterface.d";
 import { FormatoFechaServidor } from "@iikno/componentes/Formatos";
 import { AlertaExito, AlertaError } from '../../@oxtron/componentes/alerts/alertas';
 import { SubirArchivo } from "@iikno/clases/S3";
+import { IntlShape } from 'react-intl';
 
 export const valoresIniciales:RecetarioInterface = {
     IdReceta: "",
@@ -117,7 +118,7 @@ export const buscarEnRecetas = (texto, recipes) => {
     return recipes
 }
 
-export const AltaReceta = (receta:RecetarioInterface, ingredientes:IngredienteInterface[], alergenos:AlergenoInterface[], imagen:Buffer) => {
+export const AltaReceta = (intl: IntlShape, receta:RecetarioInterface, ingredientes:IngredienteInterface[], alergenos:AlergenoInterface[], imagen:Buffer) => {
     // console.log(receta);
     // console.log(ingredientes);
     // console.log(alergenos);
@@ -154,16 +155,16 @@ export const AltaReceta = (receta:RecetarioInterface, ingredientes:IngredienteIn
             if(receta.Foto && receta.Foto !== "" && imagen){
                 SubirArchivo(imagen, sesion.IdUsuario+"/Recetario/"+receta.Foto, true);
             }
-            await AlertaExito()
+            await AlertaExito(intl)
             return true;
         }).catch(async (error) => {
             // Error(error)
-            await AlertaError();
+            await AlertaError(intl);
             return false
         })
 }
 
-export const ModificarReceta = (receta:RecetarioInterface, ingredientes:IngredienteInterface[], alergenos:AlergenoInterface[], imagen:Buffer) => {
+export const ModificarReceta = (intl:IntlShape, receta:RecetarioInterface, ingredientes:IngredienteInterface[], alergenos:AlergenoInterface[], imagen:Buffer) => {
     // console.log(receta);
     // console.log(ingredientes);
     // console.log(alergenos);
@@ -198,16 +199,16 @@ export const ModificarReceta = (receta:RecetarioInterface, ingredientes:Ingredie
             if(receta.Foto && receta.Foto !== "" && imagen){
                 SubirArchivo(imagen, receta.IdUsuarioCliente+"/Recetario/"+receta.Foto, true);
             }
-            await AlertaExito()
+            await AlertaExito(intl)
             return true;
         }).catch(async (error) => {
             // Error(error)
-            await AlertaError();
+            await AlertaError(intl);
             return false
         })
 }
 
-export const EliminarReceta = (idReceta:string) => {
+export const EliminarReceta = (intl: IntlShape, idReceta:string) => {
     const sesion = ObtenerSesion();
 
     return Peticion.delete("/Recetario/EliminarReceta", {
@@ -217,9 +218,9 @@ export const EliminarReceta = (idReceta:string) => {
         },
         headers: {Authorization: 'Bearer '+sesion.token}
     }).then(async (respuesta:any) => {
-        await AlertaExito();
+        await AlertaExito(intl);
     }).catch(async () => {
-        await AlertaError();
+        await AlertaError(intl);
     })
 }
 

@@ -1,17 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Traducir from '@oxtron/i18n/Traducir';
 import Base from '@oxtron/componentes/base/Base';
 import { Col, Row, Card, Container, Table } from 'react-bootstrap';
 import { SelectPicker, Button, IconButton, ButtonToolbar } from 'rsuite';
-import { CiGrid41, CiViewList, CiWheat, CiTrash, CiEdit} from "react-icons/ci";
+import { CiGrid41, CiViewList, CiTrash, CiEdit} from "react-icons/ci";
+import { TbLeaf } from "react-icons/tb";
+import { useIntl } from 'react-intl';
 
 import ModalNuevaReceta from './componentes/ModalNuevaReceta';
-import { ObtenerRecetas, valoresIniciales, buscarEnRecetas, ObtenerDetallesReceta, ObtenerClientes, EliminarReceta } from './RecetarioService';
+import { ObtenerRecetas, buscarEnRecetas, ObtenerDetallesReceta, ObtenerClientes, EliminarReceta } from './RecetarioService';
 import { Espera } from '@oxtron/componentes/base/Espera';
 import { ConfirmarEliminar } from '../../@oxtron/componentes/alerts/alertas';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 
 const Recetario = () => {
+    const intl = useIntl()
     const [editarReceta, setEditarReceta] = useState("");
     const [show, setShow] = useState(false);
     const [viewTable, setViewTable] = useState(true);
@@ -92,9 +95,9 @@ const Recetario = () => {
     }
 
     const eliminarReceta = (idReceta: string, ocultar:boolean = false) => {
-        ConfirmarEliminar().then((result) => {
+        ConfirmarEliminar(intl).then((result) => {
             if(result.isConfirmed){
-                EliminarReceta(idReceta).then(() => {
+                EliminarReceta(intl, idReceta).then(() => {
                     ObtenerRecetas(false).then((respuesta:any) => {
                         setRecetas(respuesta);
                         setRecetasShow(respuesta);
@@ -124,6 +127,7 @@ const Recetario = () => {
                                 data={data}                                
                                 defaultValue={selectCliente}
                                 onChange={cambioEnSelectClientes}
+                                cleanable={false}
                                 block
                                 size="md"
                             />
@@ -132,7 +136,7 @@ const Recetario = () => {
                             <input type="text" 
                                 className="form-control" 
                                 onChange={buscar}
-                                placeholder="Buscar"
+                                placeholder={intl.formatMessage({id:'recetario.barraBusqueda'})}
                             />                            
                         </Col>
                         <Col align="right">
@@ -182,15 +186,16 @@ const Recetario = () => {
                                     <Row xs={1} sm={2} md={4}>
                                         {recetasShow.map((item) => (
                                         <Col key={item.IdReceta} className="mb-3">
-                                            <Card style={{height: "100%"}} className="cursor-pointer" onClick={() => { setEditarReceta(item.IdReceta) }}>
-                                                <Card.Img variant="top" src={(!item.Foto || item.Foto === "no-image.png") ? $noFoto : ($baseS3+item.Foto)} />
+                                            <Card style={{height: "100%"}} className="cursor-pointer card-recetario" onClick={() => { setEditarReceta(item.IdReceta) }}>
+                                                {/* <Card.Img variant="top" src={(!item.Foto || item.Foto === "no-image.png") ? $noFoto : ($baseS3+item.Foto)} /> */}
                                                 <Card.Body>
-                                                    <Card.Title>{item.Nombre}</Card.Title>
+                                                    <img className='rounded img-fluid' src={(!item.Foto || item.Foto === "no-image.png") ? $noFoto : ($baseS3+item.Foto)} alt="recipe" />
+                                                    <Card.Title className='mt-3'>{item.Nombre}</Card.Title>
                                                     <Card.Text>
                                                     </Card.Text>
                                                     {item.Vegano &&
                                                         <Row>
-                                                            <Col align="right"><CiWheat size="24px" /></Col>
+                                                            <Col align="right"><TbLeaf size="24px" /> <span>{Traducir('recetario.vegan')}</span></Col>
                                                         </Row>
                                                     }
                                                 </Card.Body>

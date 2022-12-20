@@ -60,3 +60,32 @@ h1,h2,h3,h4,h5,h6,.titulo{
     color: #dc3545;
     font-size: 0.85rem;
 }
+
+.vegan-text{
+    color: #4BB543;
+}
+
+.card-recetario{
+    border-radius: 1rem !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.card-recetario:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.card-recetario img{
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.rs-modal-body {
+    position: relative;
+    margin-top: 0 !important;
+    padding: 20px 0 !important;
+}
+
+.input-receta-nombre{
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    font-family: "titulo";
+}

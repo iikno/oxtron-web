@@ -5,6 +5,9 @@ import Traducir from "@oxtron/i18n/Traducir";
 import moment from "moment";
 import { getRecoil } from "recoil-nexus";
 import { DateRange } from 'rsuite/DateRangePicker';
+import { RecetarioInterface } from "@oxtron/Interfaces/RecetarioInterface.d";
+import { AlertaExito, AlertaError } from '../../@oxtron/componentes/alerts/alertas';
+import { IntlShape } from "react-intl";
 
 export const ObtenerFechasSemanaActual = ():DateRange => {
     const today = new Date()
@@ -59,36 +62,66 @@ export const ObtenerPlanificador = async (CLIENTE:string, FECHAS:Date[], REFRESH
     }    
 }
 
-// export const ObtenerDashboard = async(CLIENTE:string, FECHAS:Date[], REFRESH = true) => {
-//     const sesion = ObtenerSesion();
+export const AltaPlanificador = (intl: IntlShape, receta:RecetarioInterface, fecha: string, unidades: number) => {
+    const sesion = ObtenerSesion();
 
-//     if(CLIENTE !== "TODOS"){
-//         return await Peticion.get("/Platillos/DatosDashboardUsuario",{
-//             params:{
-//                 USUARIO: sesion.Correo,
-//                 REFRESH: REFRESH,
-//                 ID_USUARIO: CLIENTE,
-//                 FECHA_INICIO: moment(FECHAS[0]).format('MM/DD/YYYY'),
-//                 FECHA_FIN: moment(FECHAS[1]).format('MM/DD/YYYY'),
-//             },
-//             headers: {Authorization: 'Bearer '+sesion.token}
-//         }).then((respuesta:any) => {
-//             return respuesta.data[0];
-//         })
-//     }else{
-//         return await Peticion.get("/Platillos/DatosDashboard",{
-//             params:{
-//                 USUARIO: sesion.Correo,
-//                 REFRESH: REFRESH,
-//                 FECHA_INICIO: moment(FECHAS[0]).format('MM/DD/YYYY'),
-//                 FECHA_FIN: moment(FECHAS[1]).format('MM/DD/YYYY'),
-//             },
-//             headers: {Authorization: 'Bearer '+sesion.token}
-//         }).then((respuesta:any) => {
-//             return respuesta.data[0];
-//         })
-//     }    
-// }
+    const config = {
+        headers: {
+            Authorization: 'Bearer '+sesion.token
+        }
+    }
+
+    const body = {
+        USUARIO: sesion.Correo,
+        PLANIFICADOR:{
+            IdUsuarioCliente: sesion.IdUsuario,
+            IdReceta: receta.IdReceta,
+            Unidades: unidades,
+            EmisionCarbono: receta.EmisionCarbono * unidades,
+            Fecha: fecha
+        }
+    }        
+    return Peticion.post('/Planificador/AltaPlanificador',
+        body,
+        config
+        ).then(async (resultado:any) => {
+            await AlertaExito(intl)
+            return true;
+        }).catch(async (error) => {
+            // Error(error)
+            await AlertaError(intl);
+            return false
+        })
+}
+
+export const ObtenerRecetas = async(CLIENTE:string = "TODOS", REFRESH = true) => {
+    const sesion = ObtenerSesion();
+
+    if(CLIENTE === "TODOS"){
+        return await Peticion.get("/Recetario/ObtenerRecetas", {
+            params: {
+                USUARIO: sesion.Correo,
+                REFRESH: REFRESH
+            },
+            headers: {Authorization: 'Bearer '+sesion.token}
+        }).then((respuesta:any) => {
+            return respuesta.data;
+        })
+    }
+    else{
+        return await Peticion.get("/Recetario/ObtenerRecetasUsuarioCliente", {
+            params: {
+                USUARIO: sesion.Correo,
+                ID_USUARIO_CLIENTE: CLIENTE,
+                REFRESH: REFRESH
+            },
+            headers: {Authorization: 'Bearer '+sesion.token}
+        }).then((respuesta:any) => {
+            return respuesta.data;
+        })
+    }
+
+}
 
 export const FormatearColumnasPorSemana = (planificador:any[], fechaInicio: Date) => {
     const columnas = []
@@ -97,6 +130,8 @@ export const FormatearColumnasPorSemana = (planificador:any[], fechaInicio: Date
         columnas.push({
             Nombre: Traducir(`planificador.dia.${i}`),
             Fecha: fecha.format("DD/MM"),            
+            FechaCompletaMostrar: fecha.format("DD/MM/YYYY"),            
+            FechaCompleta: fecha.format("YYYY/MM/DD"),            
             Elementos: planificador.filter(item => {
                 return moment(item.Fecha).day() === fecha.day();
             }),

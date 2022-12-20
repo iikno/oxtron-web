@@ -1,3 +1,4 @@
+import { IntlShape } from "react-intl";
 import Swal from "sweetalert2";
 
 export const Alerta_Error = () =>{
@@ -18,32 +19,32 @@ export const Alterta_Exito = () =>{
   })
 }
 
-export const ConfirmarEliminar = () =>{
+export const ConfirmarEliminar = (intl: IntlShape) =>{
   return Swal.fire({
-    title: "Se eliminará el registro",
-    text: "¿Estas seguro de borrar el registro seleccionado?",
+    title: intl.formatMessage({id:'alertas.confirmacion.title'}),
+    text: intl.formatMessage({id:'alertas.confirmacion.body'}),
     icon: 'warning',
     iconColor: '#d33',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Eliminar',
-    cancelButtonText: 'Cancelar'
+    confirmButtonText: intl.formatMessage({id: 'alertas.confirmacion.boton.aceptar'}),
+    cancelButtonText: intl.formatMessage({id: 'alertas.confirmacion.boton.cancelar'})
   })
 }
 
-export const AlertaExito = () =>{
+export const AlertaExito = (intl: IntlShape) =>{
   return Swal.fire({
     icon: 'success',
-    title: 'Operación completada',
-    text: 'La acción se ha completado exitosamente',
+    title: intl.formatMessage({id:'alertas.exito.title'}),
+    text: intl.formatMessage({id:'alertas.exito.body'})
   })
 }
 
-export const AlertaError = () =>{
+export const AlertaError = (intl: IntlShape) =>{
   return Swal.fire({
     icon: 'error',
-    title: 'Oops...',
-    text: 'Algo salio mal, inténtalo mas tarde'
+    title: intl.formatMessage({id:'alertas.error.title'}),
+    text: intl.formatMessage({id:'alertas.error.body'})
   })
 }
