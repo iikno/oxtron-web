@@ -1,7 +1,7 @@
 import { ObtenerSesion} from "@iikno/clases/LocalSession";
-import { SubirArchivo } from "@iikno/clases/S3";
+import { EliminarArchivo, SubirArchivo } from "@iikno/clases/S3";
 import { ValidarImg } from "@iikno/clases/Utils";
-import { Alerta_Error, Alterta_Exito } from "@oxtron/componentes/alerts/alertas";
+import { Alerta_Error, Alerta_Exito } from "@iikno/clases/Alertas";
 import { Peticion } from "@oxtron/configs/Peticion";
 import { ClientesInterface } from "@oxtron/Interfaces/ClientesInterface";
 import Swal from "sweetalert2";
@@ -63,7 +63,33 @@ export const ObtenerClientes = async(REFRESH:boolean) => {
     })
 }
 
-export const FormularioCliente = async (valores:ClientesInterface, edit:boolean, imagen:any, clientes:any) => {    
+export const validarCampos = (valores, intl:any) => {
+    let valor = false;
+    if(valores.nombre === "")
+        valor = true;
+    if(valores.apellidoPaterno === "")
+        valor = true;
+    if(valores.apellidoMaterno === "")
+        valor = true;
+    if(valores.correo === "")
+        valor = true;
+    
+    if(valor){
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: intl.formatMessage({id: "alerta.error.campos"})
+          })
+    }
+    return valor;
+}
+
+export const FormularioCliente = async (valores:ClientesInterface, edit:boolean, imagen:any, clientes:any, intl:any) => {    
+    let valido = true;
+    if(validarCampos(valores, intl)){
+        return valido = false;
+    }
+
     const sesion = ObtenerSesion();
 
     const config = {
@@ -73,10 +99,6 @@ export const FormularioCliente = async (valores:ClientesInterface, edit:boolean,
     }
 
     if(!edit){
-        if((valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
-            SubirArchivo(imagen, valores.idCliente+"/"+valores.foto);
-        }
-
         const Data = {
             USUARIO:sesion.Correo,
             CLIENTE:{
@@ -104,19 +126,29 @@ export const FormularioCliente = async (valores:ClientesInterface, edit:boolean,
         Data,
         config
         ).then((resultado:any) => {
-            Alterta_Exito();
+            if((valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
+                SubirArchivo(imagen, resultado.idCliente+"/"+valores.foto);
+            }
+            Alerta_Exito(intl);
             clientes = ObtenerClientes(false);
             return clientes;
         }).catch((error) => {
-            Alerta_Error();
+            Alerta_Error(intl);
             Error(error);
             return clientes;
         })
     }else{
-        const direccion = valores.idCliente+"/Fotos/"+valores.foto;
-        if( (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
-            SubirArchivo(imagen, direccion, true);
-        }      
+        let direccion = "";
+        try{
+            direccion = valores.idCliente+"/Fotos/"+imagen.name;
+            if(direccion !== imagen.name || (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
+                EliminarArchivo(valores.foto);
+                SubirArchivo(imagen, direccion, true);
+            }   
+        }catch(e){
+            direccion = valores.foto;
+        }
+           
         
         const Data = {
             USUARIO:sesion.Correo,
@@ -146,16 +178,16 @@ export const FormularioCliente = async (valores:ClientesInterface, edit:boolean,
         Data,
         config
         ).then((resultado:any) => {
-            Alterta_Exito();
+            Alerta_Exito(intl);
         }).catch((error) => {
-            Alerta_Error();
+            Alerta_Error(intl);
             Error(error);
         })
     }
     
 }
 
-export const ObtenerDetallesCliente = ((IdCliente:string) =>{ 
+export const ObtenerDetallesCliente = ((IdCliente:string, intl:any) =>{ 
     const sesion = ObtenerSesion();
     return Peticion.get('/Clientes/ObtenerDetallesCliente',
     {
@@ -189,22 +221,23 @@ export const ObtenerDetallesCliente = ((IdCliente:string) =>{
         valoresIniciales.sucursal = row.Sucursal;
         valoresIniciales.tamañoCompañia = row.TamanioCompania;
     }).catch((error) => {
-        Alerta_Error()
+        Alerta_Error(intl)
         Error(error)
     })          
 })
 
-export const SuspenderCliente = (IdCliente:string) => {
+export const SuspenderCliente = (IdCliente:string, intl:any) => {
     const sesion = ObtenerSesion();
     
     return Swal.fire({
-        title: '¿Quiere continuar?',
-        text: "Esta por cambiar el status del cliente",
+        title: intl.formatMessage({id: 'alerta.cotinuar'}),
+        text: intl.formatMessage({id: 'alerta.suspender.texto'}),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Continuar'
+        confirmButtonText: intl.formatMessage({id: 'boton.cotinuar'}),
+        cancelButtonText: intl.formatMessage({id: 'boton.cancelar'})
       }).then((result) => {
         if (result.isConfirmed) {
             return Peticion.put('/Clientes/SuspenderCliente',
@@ -218,26 +251,27 @@ export const SuspenderCliente = (IdCliente:string) => {
                 }
             }
             ).then(() => {
-                Alterta_Exito();
+                Alerta_Exito(intl);
             }).catch((error) => {
                 Error(error)
-                Alerta_Error();
+                Alerta_Error(intl);
             })         
         }
       })    
 }
 
-export const EliminarCliente = async(IdCliente:string) =>{
+export const EliminarCliente = async(IdCliente:string, intl:any) =>{
     const sesion = ObtenerSesion();
 
     return Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: intl.formatMessage({id: 'alerta.continuar'}),
+        text: intl.formatMessage({id: 'alerta.eliminar.texto'}),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: intl.formatMessage({id: "boton.eliminar.confirmar"}),
+        cancelButtonText: intl.formatMessage({id: 'boton.cancelar'})
       }).then((result) => {
         if (result.isConfirmed) {
             return Peticion.delete('/Clientes/EliminarCliente',
@@ -251,9 +285,9 @@ export const EliminarCliente = async(IdCliente:string) =>{
                 }
             }
             ).then(() => {
-                Alterta_Exito()
+                Alerta_Exito(intl)
             }).catch((error) => {
-                Alerta_Error()
+                Alerta_Error(intl)
                 Error(error)
 
             })         
