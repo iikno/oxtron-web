@@ -15,6 +15,14 @@ export default{
         'general.menuSuperior.recetario': "Add recipe",
         'general.menuSuperior.perfil': "Profile",
         'general.menuSuperior.salir': "Sign Out",
+
+        'alerta.continuar': "Do you want cotinue?",
+        'alerta.eliminar.texto': "You won't be able to revert this!",
+        'alerta.suspender.texto': "Is about to change user state",
+        'alerta.error.texto': "Something went wrong, try again later",
+        'alerta.error.campos': "Something went wrong, there are fields to fill in",
+        'alerta.exito.titulo': "Operation completed",
+        'alerta.exito.texto': "Your action has been completed successfully",
         
         'opciones.titulo': "Options",
         'opciones.titulo.editar': "Edit",
@@ -23,8 +31,15 @@ export default{
 
         'boton.cancelar': "Cancel",
         'boton.guardar': "Save",
+        'boton.continuar': "Continue",
+        'boton.eliminar.confirmar': "Yes, delete it!",
+        'boton.obtener': "Get",
+        'boton.alta': "High",
+        'boton.modificar': "Modify",
+        'boton.eliminar': "Delete",
 
         'buscar.titulo': "Search",
+        'buscar.periodoTiempo': "Time period",
 
         'dashboard.titulo': "Dashboard",
         'dashboard.periodoTiempo': "Time period",
@@ -61,6 +76,14 @@ export default{
         'modal.titulo.tamañoCompañia': "Company size",
         'modal.titulo.tab.datosPersonales': "Personal information",
         'modal.titulo.tab.direccion': "Address",
+        'modal.titulo.detallesActividad': "Activity details",
+        'modal.titulo.idActividad': "Activity id",
+        'modal.titulo.accion': "Action",
+        'modal.titulo.usuario': "User",
+        'modal.titulo.fecha': "Date",
+        'modal.titulo.idObjeto': "Object id",
+        'modal.titulo.modulo': "Module",
+        'modal.titulo.tabla': "Table",
 
 
         'usuarios.titulo': "Users",

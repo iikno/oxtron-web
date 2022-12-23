@@ -9,6 +9,7 @@ import { Espera } from '@oxtron/componentes/base/Espera';
 import { Container } from 'rsuite';
 import { useFormik } from 'formik';
 import { $noFoto } from '@oxtron/configs/Env';
+import {useIntl} from 'react-intl';
 
 
 const Clientes = () => {
@@ -20,11 +21,12 @@ const Clientes = () => {
     const [clientesMostrar, setClientesMostrar] = useState([]);
     const inputFile = useRef(null);
 
+    const intl = useIntl();
+
     const fileHandler = (e) => {
         try{
             setImg(URL.createObjectURL(e.target.files[0]));
             setImgBuff(e.target.files[0]);
-            formik.values.foto = e.target.files[0].name;
         }catch(e){
         }        
     }  
@@ -45,15 +47,18 @@ const Clientes = () => {
         initialValues: valoresIniciales,
         enableReinitialize: true,
         onSubmit: (values) =>{
-            FormularioCliente(values, edit, imgBuff, clientes).then(() =>{
-                obtenerClientes(false);
+            FormularioCliente(values, edit, imgBuff, clientes, intl).then((valido) =>{
+                if(valido){
+                    obtenerClientes(false);
+                }
+                
             });
         },
     })
 
     function editar(row){
         setEdit(true);
-        ObtenerDetallesCliente(row.IdCliente).then(() => {
+        ObtenerDetallesCliente(row.IdCliente, intl).then(() => {
             formik.initialValues = valoresIniciales;
             setImg(ValidarImg(formik.initialValues.foto));
             setShow(true);   
@@ -94,7 +99,7 @@ const Clientes = () => {
                             <input type="text" 
                                 className="form-control" 
                                 onChange={BuscarEnTabla}
-                                placeholder= "Buscar"
+                                placeholder= {intl.formatMessage({id: "buscar.titulo"})}
                             />                            
                         </Col>
                         <Col align="right">
@@ -129,17 +134,17 @@ const Clientes = () => {
                                                     <td>{item.Correo}</td>
                                                     <td className={classNames("text-center", ValidarStatus(item.Status))}>{item.Status.toLowerCase()}</td>
                                                     <td className="text-center">
-                                                            <Button variant='outline-info' onClick={() => editar(item)} title="Edit">
+                                                            <Button variant='outline-info' onClick={() => editar(item)} title={intl.formatMessage({id: "opciones.titulo.editar"})}>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-lines-fill" viewBox="0 0 16 16">
                                                                 <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
                                                                 </svg>
                                                             </Button>
-                                                            <Button variant='outline-warning' onClick={() => {SuspenderCliente(item.IdCliente).then(()=> obtenerClientes(false))}} title="Suspend">
+                                                            <Button variant='outline-warning' onClick={() => {SuspenderCliente(item.IdCliente, intl).then(()=> obtenerClientes(false))}} title={intl.formatMessage({id: "opciones.titulo.suspender"})}>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-lock" viewBox="0 0 16 16">
                                                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 5.996V14H3s-1 0-1-1 1-4 6-4c.564 0 1.077.038 1.544.107a4.524 4.524 0 0 0-.803.918A10.46 10.46 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h5ZM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
                                                                 </svg>
                                                             </Button>
-                                                            <Button variant='outline-danger' onClick={() => {EliminarCliente(item.IdCliente).then(()=>obtenerClientes(false)) }} title="Delete">
+                                                            <Button variant='outline-danger' onClick={() => {EliminarCliente(item.IdCliente, intl).then(()=>obtenerClientes(false)) }} title={intl.formatMessage({id: "opciones.titulo.eliminar"})}>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -199,7 +204,7 @@ const Clientes = () => {
                                                             </Col>
                                                             <Col>
                                                                 <label htmlFor='tamañoCompañia'>{Traducir("modal.titulo.tamañoCompañia")}:</label>
-                                                                <input className='form-control' id='tamañoCompañia' type="text" onChange={formik.handleChange} value={formik.values.tamañoCompañia}/>
+                                                                <input className='form-control' id='tamañoCompañia' type="number" onChange={formik.handleChange} value={formik.values.tamañoCompañia}/>
                                                             </Col>
                                                             
                                                         </Row>
@@ -229,7 +234,7 @@ const Clientes = () => {
                                                         </Col>
                                                         <Col >
                                                         <label htmlFor='codigoPostal'>{Traducir("modal.titulo.codigoPostal")}:</label>
-                                                        <input className='form-control' id='codigoPostal' type="text" onChange={formik.handleChange} value={formik.values.codigoPostal}/>
+                                                        <input className='form-control' id='codigoPostal' type="number" onChange={formik.handleChange} value={formik.values.codigoPostal}/>
                                                         </Col>
                                                         
                                                     </Row>

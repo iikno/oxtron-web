@@ -1,7 +1,6 @@
 import { ObtenerSesion} from "@iikno/clases/LocalSession";
-import { SubirArchivo } from "@iikno/clases/S3";
-import { ValidarImg } from "@iikno/clases/Utils";
-import { Alerta_Error, Alterta_Exito } from "@oxtron/componentes/alerts/alertas";
+import { SubirArchivo, EliminarArchivo } from "@iikno/clases/S3";
+import { Alerta_Error, Alerta_Exito } from "@iikno/clases/Alertas";
 import { Peticion } from "@oxtron/configs/Peticion";
 import { UsuariosInterface } from "@oxtron/Interfaces/UsuariosInterface";
 import Swal from "sweetalert2";
@@ -58,8 +57,32 @@ export const ObtenerUsuarios = async(REFRESH:boolean) => {
     })
 }
 
-export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean, imagen:any, usuarios:any) => {
-    console.log(valores);
+export const validarCampos = (valores, intl:any) => {
+    let valor = false;
+    if(valores.nombre === "")
+        valor = true;
+    if(valores.apellidoPaterno === "")
+        valor = true;
+    if(valores.apellidoMaterno === "")
+        valor = true;
+    if(valores.correo === "")
+        valor = true;
+    
+    if(valor){
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: intl.formatMessage({id: "alerta.error.campos"})
+          })
+    }
+    return valor;
+}
+
+export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean, imagen:any, usuarios:any, intl:any) => {
+    let valido = true;
+    if(validarCampos(valores, intl)){
+        return valido = false;
+    }
     
     const sesion = ObtenerSesion();
 
@@ -70,9 +93,10 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean,
     }
 
     if(!edit){
-        if((valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
-            SubirArchivo(imagen, valores.idUsuario+"/"+valores.foto);
-        }
+        let direccion = "";
+        try{
+            direccion = imagen.name;
+        }catch{}  
 
         const Data = {
             USUARIO:sesion.Correo,
@@ -82,7 +106,7 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean,
                 ApellidoMaterno: valores.apellidoMaterno,
                 Correo: valores.correo,
                 Telefono: valores.telefono,
-                Foto: (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)?valores.idUsuario+"/"+valores.foto:""
+                Foto: (direccion !== "")?direccion:""
             },
             DIRECCION: {
                 Calle: valores.calle,
@@ -98,19 +122,29 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean,
         Data,
         config
         ).then((resultado:any) => {
-            Alterta_Exito();
+            if(direccion !== ""){
+                SubirArchivo(imagen, resultado.data.IdUsuario+"/"+valores.foto, true);
+            }
+            
+            Alerta_Exito(intl);
             usuarios = ObtenerUsuarios(false);
             return usuarios;
         }).catch((error) => {
-            Alerta_Error();
+            Alerta_Error(intl);
             Error(error);
             return usuarios;
         })
     }else{
-        const direccion = valores.idUsuario+"/Fotos/"+valores.foto;
-        if( (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
-            SubirArchivo(imagen, direccion, true);
-        }      
+        let direccion = "";
+        try{
+            direccion = valores.idUsuario+"/Fotos/"+imagen.name;
+            if(direccion !== imagen.name || (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
+                EliminarArchivo(valores.foto);
+                SubirArchivo(imagen, direccion, true);
+            }
+        }catch(e){
+            direccion = valores.foto;
+        }           
         
         const Data = {
             USUARIO:sesion.Correo,
@@ -137,16 +171,16 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean,
         Data,
         config
         ).then((resultado:any) => {
-            Alterta_Exito();
+            Alerta_Exito(intl);
         }).catch((error) => {
-            Alerta_Error();
+            Alerta_Error(intl);
             Error(error);
         })
     }
     
 }
 
-export const handleEdit = ((IdUsuario:string) =>{ 
+export const handleEdit = ((IdUsuario:string, intl:any) =>{ 
     const sesion = ObtenerSesion();
     return Peticion.get('/Usuarios/ObtenerDetallesUsuario',
     {
@@ -177,22 +211,23 @@ export const handleEdit = ((IdUsuario:string) =>{
         valoresIniciales.estado = row.Estado;
         valoresIniciales.pais = row.Pais;
     }).catch((error) => {
-        Alerta_Error()
+        Alerta_Error(intl)
         Error(error)
     })          
 })
 
-export const SuspenderUsuario = (IdUsuario:string) => {
+export const SuspenderUsuario = (IdUsuario:string, intl:any) => {
     const sesion = ObtenerSesion();
     
     return Swal.fire({
-        title: '¿Quiere continuar?',
-        text: "Esta por cambiar el status del usuario",
+        title: intl.formatMessage({id: 'alerta.continuar'}),
+        text: intl.formatMessage({id: 'alerta.suspender.texto'}),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Continuar'
+        confirmButtonText: intl.formatMessage({id: 'boton.continuar'}),
+        cancelButtonText: intl.formatMessage({id: 'boton.cancelar'})
       }).then((result) => {
         if (result.isConfirmed) {
             return Peticion.put('/Usuarios/SuspenderUsuario',
@@ -206,26 +241,27 @@ export const SuspenderUsuario = (IdUsuario:string) => {
                 }
             }
             ).then(() => {
-                Alterta_Exito();
+                Alerta_Exito(intl);
             }).catch((error) => {
                 Error(error)
-                Alerta_Error();
+                Alerta_Error(intl);
             })         
         }
       })    
 }
 
-export const EliminarUsuario = async(IdUsuario:string) =>{
+export const EliminarUsuario = async(IdUsuario:string, intl:any) =>{
     const sesion = ObtenerSesion();
 
     return Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: intl.formatMessage({id: 'alerta.continuar'}),
+        text: intl.formatMessage({id: 'alerta.eliminar.texto'}),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: intl.formatMessage({id: "boton.eliminar.confirmar"}),
+        cancelButtonText: intl.formatMessage({id: 'boton.cancelar'})
       }).then((result) => {
         if (result.isConfirmed) {
             return Peticion.delete('/Usuarios/EliminarUsuario',
@@ -239,9 +275,9 @@ export const EliminarUsuario = async(IdUsuario:string) =>{
                 }
             }
             ).then(() => {
-                Alterta_Exito()
+                Alerta_Exito(intl)
             }).catch((error) => {
-                Alerta_Error()
+                Alerta_Error(intl)
                 Error(error)
 
             })         

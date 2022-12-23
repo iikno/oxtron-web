@@ -16,6 +16,14 @@ export default{
         'general.menuSuperior.perfil': "Perfil",
         'general.menuSuperior.salir': "Cerrar sesión",
 
+        'alerta.continuar': "¿Quieres continuar?",
+        'alerta.eliminar.texto': "No podrás revertir esto",
+        'alerta.suspender.texto': "Está a punto de cambiar el estado del usuario",
+        'alerta.error.texto': "Algo salió mal, inténtalo de nuevo más tarde",
+        'alerta.error.campos': "Algo salió mal, faltan campos por llenar",
+        'alerta.exito.titulo': "Operación completada",
+        'alerta.exito.texto': "Su acción se ha completado con éxito",
+        
         'opciones.titulo': "Opciones",
         'opciones.titulo.editar': "Editar",
         'opciones.titulo.suspender': "Suspender",
@@ -23,8 +31,15 @@ export default{
 
         'boton.cancelar': "Cancelar",
         'boton.guardar': "Guardar",
+        'boton.continuar': "Continuar",
+        'boton.eliminar.confirmar': "Si, eliminalo",
+        'boton.obtener': "Obtener",
+        'boton.alta': "Alta",
+        'boton.modificar': "Modificar",
+        'boton.eliminar': "Eliminar",
 
         'buscar.titulo': "Buscar",
+        'buscar.periodoTiempo': "Periodo de tiempo",
 
         'dashboard.titulo': "Panel central",
         'dashboard.periodoTiempo': "Periodo de tiempo",
@@ -61,6 +76,13 @@ export default{
         'modal.titulo.tamañoCompañia': "Tamaño de compañia",
         'modal.titulo.tab.datosPersonales': "Información personal",
         'modal.titulo.tab.direccion': "Dirección",
+        'modal.titulo.detallesActividad': "Detalles de actividad",
+        'modal.titulo.accion': "Acción",
+        'modal.titulo.usuario': "Usuario",
+        'modal.titulo.fecha': "Fecha",
+        'modal.titulo.idObjeto': "Id de objeto",
+        'modal.titulo.modulo': "Módulo",
+        'modal.titulo.tabla': "Tabla",    
 
 
         'usuarios.titulo': "Usuarios",
