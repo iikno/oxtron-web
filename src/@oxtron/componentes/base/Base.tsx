@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import './Base.scss'
 
 import { Navigate } from 'react-router-dom';
@@ -19,10 +19,12 @@ import { Col, Row } from 'react-bootstrap';
 import Traducir from '@oxtron/i18n/Traducir';
 import { useEffect } from 'react';
 import { LocaleAtom } from '@oxtron/atomos/LocaleAtom';
+import ModalNuevaReceta from 'app/Recetario/componentes/ModalNuevaReceta';
 
 const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
     const sesion = ObtenerSesion();
     const isOpen = useRecoilValue(MenuAtom);
+    const [mostrarModal, setMostrarModal] = useState(false);
     const [locale, setLocale] = useRecoilState(LocaleAtom);
 
     useEffect(() => {
@@ -75,7 +77,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                             {Traducir('general.menuSuperior.recetario')}
                                         </Tooltip>
                                     }>
-                                        <Button appearance='subtle'>
+                                        <Button appearance='subtle' onClick={() =>  setMostrarModal(true)}>
                                             <CiFries size={"2em"}/>
                                         </Button>
                                     </Whisper>
@@ -96,6 +98,11 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                         <Footer/>
                     </Container>
                 </Container>
+
+                <ModalNuevaReceta 
+                    show={mostrarModal}
+                    setShow={setMostrarModal}
+                />
         </>);
      else 
         return (<Navigate to={"/"}/>)

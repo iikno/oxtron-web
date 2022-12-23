@@ -20,6 +20,10 @@ export const FormatoFecha = (fecha : Date) => {
     return moment(fecha).format("DD/MM/YYYY")
 }
 
+export const FormatoFechaServidor = (fecha : Date) => {
+    return moment(fecha).format("YYYY/MM/DD")
+}
+
 export const FormatoMoneda = (cantidad : any) => {
     let num = Number.parseFloat(cantidad)
 

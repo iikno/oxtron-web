@@ -7,6 +7,8 @@ import Login from '../../app/Login/Login';
 import Usuarios from 'app/Usuarios/Usuarios';
 import Clientes from 'app/Clientes/Clientes';
 import Actividades from 'app/Actividades/Actividades';
+import Recetario from 'app/Recetario/Recetario';
+import Planificador from '../../app/Planificador/Planificador';
 
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
@@ -24,10 +26,12 @@ const Rutas = () => {
                     
                     <Route path='/*' element={
                         <Routes>
-                            <Route index path='dashboard' element={<Dashboard/>}/>
-                            <Route index path='actividades' element={<Actividades/>}/>
-                            <Route index path='usuarios' element={<Usuarios/>}/>
-                            <Route index path='clientes' element={<Clientes/>}/>
+                            <Route path='dashboard' element={<Dashboard/>}/>
+                            <Route path='actividades' element={<Actividades/>}/>
+                            <Route path='usuarios' element={<Usuarios/>}/>
+                            <Route path='clientes' element={<Clientes/>}/>
+                            <Route path='recetario' element={<Recetario/>}/>
+                            <Route path='planificador' element={<Planificador/>}/>
                             <Route path='*' element={<>404</>}/>
                         </Routes>
                     }/>

@@ -176,7 +176,7 @@ const Clientes = () => {
                                             </button>  
                                         </Col>
                                         <Col md={7}>
-                                            <Tabs defaultActiveKey="datos" id="tabs-cliente" className="mb-3" justify>
+                                            <Tabs defaultActiveKey="datos" id="tabs-cliente" className="mb-3" >
                                                 <Tab eventKey="datos" title={Traducir("modal.titulo.tab.datosPersonales")}>
                                                         <label htmlFor='nombre'>{Traducir("modal.titulo.nombre")}:</label>
                                                         <input required className='form-control' name="nombre" id='nombre' type="text" onChange={formik.handleChange} value={formik.values.nombre}/>
