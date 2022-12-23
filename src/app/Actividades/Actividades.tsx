@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Actividades.scss';
 import Traducir from '@oxtron/i18n/Traducir';
 import Base from '@oxtron/componentes/base/Base';
-import { Button, Col, Modal, Row, Table, ButtonGroup, Card, Tabs, Tab, ListGroup, CardGroup} from 'react-bootstrap';
+import { Col, Modal, Row, Card} from 'react-bootstrap';
 
 import { Espera } from '@oxtron/componentes/base/Espera';
 import { DateRangePicker, Pagination, SelectPicker } from 'rsuite';

@@ -76,13 +76,3 @@ export const ObtenerActividadesCliente = async(IdCliente:string, pagina:number, 
     })
 }
 
-export const FiltrarActividades = ((metodo, actividades) =>{
-    metodo = metodo.toLocaleLowerCase().trim();
-    
-    actividades = actividades.filter((actividad) => {
-        return actividad.Accion.toLocaleLowerCase().includes(metodo)
-    })
-
-    return actividades;
-
-})
