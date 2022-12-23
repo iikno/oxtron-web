@@ -5,7 +5,7 @@ import moment from "moment";
 import { Peticion } from "@oxtron/configs/Peticion"
 import { ObtenerSesion} from "@iikno/clases/LocalSession";
 import { RecetarioInterface } from "@oxtron/Interfaces/RecetarioInterface.d";
-import { AlertaExito, AlertaError } from '../../@oxtron/componentes/alerts/alertas';
+import { AlertaExito, AlertaError } from '../../@iikno/clases/Alertas';
 import { PlanificadorInterface } from '../../@oxtron/Interfaces/PlanificadorInterface.d';
 import Traducir from "@oxtron/i18n/Traducir";
 

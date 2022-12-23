@@ -9,7 +9,7 @@ import { BiSave } from "react-icons/bi";
 
 import Traducir from '@oxtron/i18n/Traducir';
 import Medidor from '@oxtron/componentes/general/Medidor';
-import { ConfirmarEliminar } from '@oxtron/componentes/alerts/alertas';
+import { ConfirmarEliminar } from '@iikno/clases/Alertas';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 import { ObtenerDetallesReceta } from '../../Recetario/RecetarioService';
 import { PlanificadorInterface } from '@oxtron/Interfaces/PlanificadorInterface.d';

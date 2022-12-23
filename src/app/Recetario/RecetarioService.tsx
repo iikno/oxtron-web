@@ -4,7 +4,7 @@ import { IngredienteInterface } from "@oxtron/Interfaces/IngredienteInterface.d"
 import { AlergenoInterface } from "@oxtron/Interfaces/AlergenoInterface.d";
 import { RecetarioInterface } from "@oxtron/Interfaces/RecetarioInterface.d";
 import { FormatoFechaServidor } from "@iikno/componentes/Formatos";
-import { AlertaExito, AlertaError } from '../../@oxtron/componentes/alerts/alertas';
+import { AlertaExito, AlertaError } from '../../@iikno/clases/Alertas';
 import { SubirArchivo } from "@iikno/clases/S3";
 import { IntlShape } from 'react-intl';
 import { EliminarArchivo } from '../../@iikno/clases/S3';

@@ -10,7 +10,7 @@ import { useIntl } from 'react-intl';
 import ModalNuevaReceta from './componentes/ModalNuevaReceta';
 import { ObtenerRecetas, buscarEnRecetas, ObtenerDetallesReceta, ObtenerClientes, EliminarReceta } from './RecetarioService';
 import { Espera } from '@oxtron/componentes/base/Espera';
-import { ConfirmarEliminar } from '../../@oxtron/componentes/alerts/alertas';
+import { ConfirmarEliminar } from '@iikno/clases/Alertas';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 import { ObtenerSesion } from '../../@iikno/clases/LocalSession';
 

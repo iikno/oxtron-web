@@ -11,7 +11,7 @@ import { MdClose } from "react-icons/md";
 
 import Traducir from '@oxtron/i18n/Traducir';
 import Medidor from '@oxtron/componentes/general/Medidor';
-import { ConfirmarEliminar } from '@oxtron/componentes/alerts/alertas';
+import { ConfirmarEliminar } from '@iikno/clases/Alertas';
 import { ObtenerIngredientes, ObtenerAlergenos, EliminarReceta, AltaReceta, ModificarReceta, optionType } from '../RecetarioService';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 
