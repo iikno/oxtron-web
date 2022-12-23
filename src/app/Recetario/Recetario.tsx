@@ -12,15 +12,17 @@ import { ObtenerRecetas, buscarEnRecetas, ObtenerDetallesReceta, ObtenerClientes
 import { Espera } from '@oxtron/componentes/base/Espera';
 import { ConfirmarEliminar } from '../../@oxtron/componentes/alerts/alertas';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
+import { ObtenerSesion } from '../../@iikno/clases/LocalSession';
 
 const Recetario = () => {
+    const sesion = ObtenerSesion();
     const intl = useIntl()
     const [editarReceta, setEditarReceta] = useState("");
     const [show, setShow] = useState(false);
+    const [cargando, setCargando] = useState(false);
     const [viewTable, setViewTable] = useState(true);
-    const [actualizar, setActualizar] = useState(false);
     const [clientes, setClientes] = useState([]);
-    const [selectCliente, setSelectCliente] = useState("");
+    const [cliente, setCliente] = useState(sesion.EsUsuario ? "TODOS" : sesion.IdUsuario);
     const [recetas, setRecetas] = useState([]);
     const [recetasShow, setRecetasShow] = useState([]);
     const [ingredientesModal, setIngredientesModal] = React.useState([]);
@@ -30,24 +32,24 @@ const Recetario = () => {
     });
 
     useEffect(() => {
-        ObtenerRecetas(false).then((respuesta:any) => {
-            setRecetas(respuesta);
-            setRecetasShow(respuesta);
-        })
-        ObtenerClientes(false).then((respuesta:any) => {
-            setClientes(respuesta);
-        })
-    }, [])
+        if(sesion.EsUsuario){
+            ObtenerClientes(false).then((respuesta:any) => {
+                respuesta.unshift({NombreCompleto: intl.formatMessage({id: 'planificador.select.todos'}), IdCliente:"TODOS"});
+                setClientes(respuesta.map(
+                    (item:any) => ({ label: item.NombreCompleto, value: item.IdCliente })
+                ));
+            });
+        }
+    }, [intl, sesion.EsUsuario])
 
     useEffect(() => {
-        if(!actualizar)
-            return
-        ObtenerRecetas(false).then((respuesta:any) => {
+        setCargando(true)
+        ObtenerRecetas(cliente, false).then((respuesta:any) => {
             setRecetas(respuesta);
             setRecetasShow(respuesta);
+            setCargando(false)
         })
-        setActualizar(false)
-    }, [actualizar])
+    }, [cliente])
 
     useEffect(() => {
         if(editarReceta === "")
@@ -73,35 +75,15 @@ const Recetario = () => {
         }, 500)
     }, [show])
 
-    const data = [{label:"Todos", value: ""}].concat(clientes.map(
-        item => ({ label: item.NombreCompleto, value: item.IdCliente })
-    ));
-
     const buscar = (e: any) => {
         setRecetasShow(buscarEnRecetas(e.target.value, recetas))
     }    
-
-    const cambioEnSelectClientes = (value) => {
-        let recetasMostrar = []
-        if(!value || value === ""){
-            recetasMostrar = recetas;
-            value = "";
-        }
-        else{
-            recetasMostrar = recetas.filter(receta => receta.IdUsuarioCliente === value)
-        }
-        setSelectCliente(value)
-        setRecetasShow(recetasMostrar)        
-    }
 
     const eliminarReceta = (idReceta: string, ocultar:boolean = false) => {
         ConfirmarEliminar(intl).then((result) => {
             if(result.isConfirmed){
                 EliminarReceta(intl, idReceta).then(() => {
-                    ObtenerRecetas(false).then((respuesta:any) => {
-                        setRecetas(respuesta);
-                        setRecetasShow(respuesta);
-                    })
+                    actualizar();
                     if(ocultar)
                         setShow(false);
                 })
@@ -109,46 +91,57 @@ const Recetario = () => {
         })
     }
 
+    const actualizar = () => {
+        setCargando(true)
+        ObtenerRecetas(cliente, false).then((respuesta:any) => {
+            setRecetas(respuesta);
+            setRecetasShow(respuesta);
+            setCargando(false)
+        })
+    }
 
     return (
         <Base titulo={Traducir("recetario.titulo")}>
             <Container>
+            <Row className='mb-3'>
+                {
+                    sesion.EsUsuario &&
+                    <Col>
+                        <SelectPicker
+                            key={cliente}
+                            data={clientes}                                
+                            defaultValue={cliente}
+                            onChange={setCliente}
+                            cleanable={false}
+                            block
+                            size="md"
+                        />
+                    </Col>
+                }
+                <Col align="center">
+                    <input type="text" 
+                        className="form-control" 
+                        onChange={buscar}
+                        placeholder={intl.formatMessage({id:'recetario.barraBusqueda'})}
+                    />                            
+                </Col>
+                <Col align="right">
+                    <ButtonToolbar>
+                        <IconButton icon={<CiViewList size="24px"/>} onClick={() => setViewTable(true)} active={viewTable}/>
+                        <IconButton icon={<CiGrid41 size="24px"/>} onClick={() => setViewTable(false)} active={!viewTable}/>
+                        <Button className='ms-3 btn-primary-rs' appearance="primary" onClick={() => setShow(true)}>
+                            {Traducir("recetario.nuevaReceta")}
+                        </Button>
+                    </ButtonToolbar>
+                </Col>
+            </Row>
             {
-                (recetas === null || recetas.length === 0) &&
+                (recetas === null || recetas.length === 0 || cargando) &&
                 <Espera/>
             }
             {
-                (recetas !== null && recetas.length > 0) &&
-                <>
-                    <Row className='mb-3'>
-                        <Col>
-                            <SelectPicker
-                                key={selectCliente}
-                                data={data}                                
-                                defaultValue={selectCliente}
-                                onChange={cambioEnSelectClientes}
-                                cleanable={false}
-                                block
-                                size="md"
-                            />
-                        </Col>
-                        <Col align="center">
-                            <input type="text" 
-                                className="form-control" 
-                                onChange={buscar}
-                                placeholder={intl.formatMessage({id:'recetario.barraBusqueda'})}
-                            />                            
-                        </Col>
-                        <Col align="right">
-                            <ButtonToolbar>
-                                <IconButton icon={<CiViewList size="24px"/>} onClick={() => setViewTable(true)} active={viewTable}/>
-                                <IconButton icon={<CiGrid41 size="24px"/>} onClick={() => setViewTable(false)} active={!viewTable}/>
-                                <Button className='ms-3 btn-primary-rs' appearance="primary" onClick={() => setShow(true)}>
-                                    {Traducir("recetario.nuevaReceta")}
-                                </Button>
-                            </ButtonToolbar>
-                        </Col>
-                    </Row>
+                (recetas !== null && recetas.length > 0 && !cargando) &&
+                <>                    
                     <Row className='mb-3'>
                         <Col>
                             <Card>
@@ -187,7 +180,6 @@ const Recetario = () => {
                                         {recetasShow.map((item) => (
                                         <Col key={item.IdReceta} className="mb-3">
                                             <Card style={{height: "100%"}} className="cursor-pointer card-recetario" onClick={() => { setEditarReceta(item.IdReceta) }}>
-                                                {/* <Card.Img variant="top" src={(!item.Foto || item.Foto === "no-image.png") ? $noFoto : ($baseS3+item.Foto)} /> */}
                                                 <Card.Body>
                                                     <img className='rounded img-fluid' src={(!item.Foto || item.Foto === "no-image.png") ? $noFoto : ($baseS3+item.Foto)} alt="recipe" />
                                                     <Card.Title className='mt-3'>{item.Nombre}</Card.Title>
@@ -216,7 +208,7 @@ const Recetario = () => {
                         ingredientesDetalles={ingredientesModal}
                         alergenosDetalles={alergenosModal}
                         editarReceta={editarReceta}
-                        setActualizar={setActualizar}
+                        setActualizar={actualizar}
                     />
                 </>
             }

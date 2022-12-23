@@ -30,7 +30,9 @@ export const SesionAtom = atom<SesionInterface>({
         IdUltimaActividad:"IdUltimaActividad",
         Status:"ACTIVO",
         NombreCompletoRol:"NombreCompletoRol",
-        token: "jwt"
+        NombreCompleto:"NombreCompleto",
+        token: "jwt",
+        EsUsuario: false
     },
     effects_UNSTABLE: [persistAtom],
 })

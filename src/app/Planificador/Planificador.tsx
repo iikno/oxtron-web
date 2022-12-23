@@ -1,112 +1,142 @@
-import React, { useEffect, useState } from 'react';
-import Traducir from '@oxtron/i18n/Traducir';
-import Base from '@oxtron/componentes/base/Base';
-import { Card, Col, Row, Spinner } from 'react-bootstrap';
-import { SelectPicker, DateRangePicker, Stack, Modal, IconButton, ButtonToolbar } from 'rsuite';
+import React, { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import html2canvas from 'html2canvas';
+import { Col, Row } from 'react-bootstrap';
+import { SelectPicker, DateRangePicker, Stack, IconButton, ButtonToolbar, Whisper, Tooltip } from 'rsuite';
 import { DateRange } from "rsuite/DateRangePicker";
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { GrAddCircle, GrPrint } from "react-icons/gr";
+import { TbLeaf } from "react-icons/tb";
 
-import { ObtenerClientes, ObtenerPlanificador, ObtenerFechasSemanaActual, FormatearColumnasPorSemana } from './PlanificadorService';
+import { ObtenerClientes, ObtenerPlanificador, ObtenerFechasSemanaActual, FormatearColumnasPorSemana, ModificarFechaPlanificador } from './PlanificadorService';
 import { ObtenerSesion } from '@iikno/clases/LocalSession';
 import { Espera } from '@oxtron/componentes/base/Espera';
 import { PlanificadorInterface } from '@oxtron/Interfaces/PlanificadorInterface.d';
 
-import './Planificador.scss';
+import Base from '@oxtron/componentes/base/Base';
+import Traducir from '@oxtron/i18n/Traducir';
 import Medidor from '@oxtron/componentes/general/Medidor';
 import ModalNuevaPlanificador from './componentes/ModalNuevaPlanificador';
+import ModalDetallesRecetaPlanificador from './componentes/ModalDetallesRecetaPlanificador';
+import './Planificador.scss';
+import moment, { Moment } from 'moment';
 
 const Planificador = () => {
+    const intl = useIntl();
     const sesion = ObtenerSesion();
     const [mostrarModalNuevo, setMostrarModalNuevo] = useState(false);
-    const [fechaModalNuevo, setFechaModalNuevo] = useState("");
-    const [fechaEnviarModalNuevo, setFechaEnviarModalNuevo] = useState("");
+    const [mostrarModalDetalles, setMostrarModalDetalles] = useState(false);
+    const [planificadorMostrarDetalles, setPlanificadorMostrarDetalles] = useState<PlanificadorInterface>(null)
+    const [fechaModalNuevo, setFechaModalNuevo] = useState<Moment>(moment(new Date()));
     const [clientes, setClientes] = useState([]);
     const [columnas, setColumnas] = useState([]);
     const [planificador, setPlanificador] = useState<PlanificadorInterface[]>(null);
-    const [cliente, setCliente] = useState(sesion.IdUsuario);
-    const [actualizar, setActualizar] = useState(false);
+    const [cargando, setCargando] = useState(false);
+    const [cliente, setCliente] = useState(sesion.EsUsuario ? "TODOS" : sesion.IdUsuario);
     const [fechas, setFechas] = useState<DateRange>(ObtenerFechasSemanaActual());
+    const columnsRef = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)]
 
     useEffect(() => {
-        ObtenerClientes(false).then((respuesta:any) => {
-            respuesta.unshift({NombreCompleto: "TODOS", value:"TODOS"});
-            setClientes(respuesta.map(
-                (item:any) => ({ label: item.NombreCompleto, value: item.IdCliente })
-            ));
-        });    
-    }, [])
+        if(sesion.EsUsuario){
+            ObtenerClientes(false).then((respuesta:any) => {
+                respuesta.unshift({NombreCompleto: intl.formatMessage({id: 'planificador.select.todos'}), IdCliente:"TODOS"});
+                setClientes(respuesta.map(
+                    (item:any) => ({ label: item.NombreCompleto, value: item.IdCliente })
+                ));
+            });
+        }
+    }, [intl, sesion.EsUsuario])
 
-    // useEffect(() => {
-    //     if(!actualizar)
-    //         return        
-    //     ObtenerPlanificador("TODOS", fechas).then((respuesta: any) => {
-    //         setColumnas(FormatearColumnasPorSemana(respuesta, fechas[0]));
-    //         // console.log(columnas)
-    //         setPlanificador(respuesta)            
-    //     })
-    // }, [actualizar])
-    useEffect(() => {
-        console.log("Col",columnas)
-    },[columnas])
-
-    useEffect(() => {    
-        ObtenerPlanificador("TODOS", fechas).then((respuesta: any) => {
-            const colum = FormatearColumnasPorSemana(respuesta, fechas[0]);
-            setColumnas(colum);
-            console.log("HOla", colum)
-            setPlanificador(respuesta)            
+    useEffect(() => {        
+        setCargando(true)
+        ObtenerPlanificador(cliente, fechas).then((respuesta: any) => {
+            setColumnas(FormatearColumnasPorSemana(respuesta, fechas[0]));
+            setPlanificador(respuesta)
+            setCargando(false)
         })
-    }, [fechas])
+    }, [fechas, cliente])
+
 
     const moverDeFecha = (result) => {
         if(!result.destination)
             return
-        console.log(result)
-        console.log(result.draggableId)
-        console.log(result.destination.droppableId.substr(result.destination.droppableId.indexOf('*-*') + 3))
-        console.log(result.source.droppableId.substr(result.destination.droppableId.indexOf('*-*') + 3))
         const id = result.draggableId;
         const fechaDestino = result.destination.droppableId.substr(result.destination.droppableId.indexOf('*-*') + 3)
         const fechaOrigen = result.source.droppableId.substr(result.destination.droppableId.indexOf('*-*') + 3);
         if(fechaOrigen === fechaDestino)
             return
+
         const nuevaColumnas = columnas.filter(item => true)
         const origen = nuevaColumnas.find(item => item.FechaCompleta === fechaOrigen)
         const destino = nuevaColumnas.find(item => item.FechaCompleta === fechaDestino)
-        console.log(origen)
-        console.log(destino)
         origen.Elementos = origen.Elementos.filter(item => item.IdPlanificador !== id)
         destino.Elementos.push(planificador.find(item => item.IdPlanificador === id))
         setColumnas(nuevaColumnas)
+
+        ModificarFechaPlanificador(id, fechaDestino).then(() =>{
+            actualizar();
+        })
     }
 
-    const nuevaRecetaEnPlanificador = (fecha:string, fechaEnviar: string) => {
+    const imprimirDia = async (fecha:string, i:number) => {
+        const element = columnsRef[i].current;
+        const canvas = await html2canvas(element, {useCORS: true, onclone(document, element) {
+            const cards = element.querySelectorAll(".card-planificador")
+            cards.forEach(card => {                                
+                (card as HTMLElement).style.boxShadow = "none";
+                (card as HTMLElement).style.border = "1px solid #CCC"
+            });            
+        },});
+    
+        const data = canvas.toDataURL('image/jpg');
+        const link = document.createElement('a');
+    
+        if (typeof link.download === "string") {
+            link.href = data;
+            link.download = fecha.replaceAll("/", "-") + ".jpg";
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            window.open(data);
+        }
+    }
+
+    const nuevaRecetaEnPlanificador = (fecha:Moment) => {
         setFechaModalNuevo(fecha);
-        setFechaEnviarModalNuevo(fechaEnviar);
         setMostrarModalNuevo(true)
+    }
+
+    const mostrarDetallesReceta = (plan:PlanificadorInterface) => {
+        setPlanificadorMostrarDetalles(plan)
+        setMostrarModalDetalles(true)
+    }
+
+    const actualizar = () => { 
+        setCargando(true)
+        ObtenerPlanificador(cliente, fechas).then((respuesta: any) => {
+            setColumnas(FormatearColumnasPorSemana(respuesta, fechas[0]));
+            setPlanificador(respuesta)
+            setCargando(false)
+        })
     }
 
     return (
         <Base titulo={Traducir("planificador.titulo")}>
             <Row className='mb-3'>
-                {clientes &&
+                {sesion.EsUsuario && clientes &&
                     <Col>
                         <Stack spacing={6} alignItems={"center"}>
                             {Traducir('planificador.cliente')}
-                            <SelectPicker cleanable={false} data={clientes} onChange={setCliente}/>
+                            <SelectPicker 
+                                cleanable={false} 
+                                data={clientes} 
+                                defaultValue={cliente} 
+                                onChange={(value) => {setCliente(value)}}/>
                         </Stack>
                     </Col>
                 }
-                {/* {
-                    sesion.TipoPersona === "Administrador" &&
-                    <Col>
-                        <Stack spacing={6} alignItems={"center"}>
-                            {Traducir('planificador.cliente')}
-                            <SelectPicker cleanable={false} data={clientes} onChange={setCliente}/>
-                        </Stack>
-                    </Col>
-                } */}
                 <Col>
                     <Stack spacing={6} alignItems={"center"} justifyContent={"flex-end"}>
                         {Traducir('planificador.periodoTiempo')}
@@ -116,40 +146,54 @@ const Planificador = () => {
                                         hoverRange="week" 
                                         ranges={[]}
                                         value={fechas} 
-                                        onChange={setFechas} 
+                                        onChange={(value) => {setFechas(value)}} 
                                         format={"dd/MM/yyyy"}/>
                     </Stack>
                 </Col>
             </Row>
             {
-                planificador === null &&
+                (columnas === null || columnas.length < 1 || cargando) &&
                 <Espera/>
             }
-            {planificador !== null &&
+            {((columnas !== null && columnas.length > 0) &&
+                !cargando) &&
                 <div>
-                    <DragDropContext onDragEnd={moverDeFecha}>
-                        <Row className="main-row">
-                            {columnas.length > 0 && Object.entries(columnas).map(([id, columna]) => (
-                                <Col key={id} className="column-board" xs={12} sm={3}>
+                    <Row className="main-row">
+                        <DragDropContext onDragEnd={moverDeFecha}>
+                            {columnas.length > 0 && Object.entries(columnas).map(([id, columna], indice) => (
+                                <Col key={id} className="column-board" xs={12} sm={3} ref={columnsRef[indice]}>
                                     <Row className='column-board-header'>
                                         <Col>
-                                            <Row>
-                                                <Col xs={12}>
-                                                    <b>{columna.Nombre}</b>
-                                                </Col>
-                                                <Col xs={12}>
-                                                    <small>{columna.Fecha}</small>
-                                                </Col>
-                                            </Row>
+                                            <span className='nombre-dia'>{columna.Nombre}</span>
+                                            <small>{columna.Fecha.format("DD/MM")}</small>
                                         </Col>
                                         <Col align={"right"}>
                                             <ButtonToolbar>
-                                                <IconButton icon={<GrPrint size="18px"/>} circle appearance="subtle" size="sm"/>
-                                                <IconButton icon={<GrAddCircle size="18px"/>} circle appearance="subtle" size="sm" onClick={() => nuevaRecetaEnPlanificador(columna.FechaCompletaMostrar, columna.FechaCompleta)}/>
+                                                <Whisper trigger={"hover"} 
+                                                        speaker={
+                                                    <Tooltip placement='topEnd' arrow={false}>
+                                                        {Traducir('planificador.tooltip.boton.imprimir')}
+                                                    </Tooltip>
+                                                }>
+                                                    <IconButton 
+                                                        icon={<GrPrint size="18px"/>} 
+                                                        circle 
+                                                        appearance="subtle" 
+                                                        size="sm"
+                                                        onClick={() => imprimirDia(columna.Fecha.format("DD/MM/YYYY"), indice)}/>
+                                                </Whisper>
+                                                <Whisper trigger={"hover"} 
+                                                        speaker={
+                                                    <Tooltip placement='topEnd' arrow={false}>
+                                                        {Traducir('planificador.tooltip.boton.nuevo')}
+                                                    </Tooltip>
+                                                }>
+                                                    <IconButton icon={<GrAddCircle size="18px"/>} circle appearance="subtle" size="sm" onClick={() => nuevaRecetaEnPlanificador(columna.Fecha)}/>
+                                                </Whisper>
                                             </ButtonToolbar>
                                         </Col>
                                     </Row>
-                                    <Droppable id={id + '*-*' + columna.FechaCompleta} droppableId={id + '*-*' + columna.FechaCompleta} >
+                                    <Droppable droppableId={id + '*-*' + columna.Fecha.format("DD/MM/YYYY")} key={id}>
                                         {(provided, snapshot) => (
                                             <div className={`dropping-container ${snapshot.isDraggingOver ? 'dragging-over' : ''}`} 
                                                 {...provided.droppableProps} 
@@ -157,13 +201,23 @@ const Planificador = () => {
                                                     {columna.Elementos.map((itemPlan, index) => (
                                                         <Draggable key={itemPlan.IdPlanificador} draggableId={itemPlan.IdPlanificador} index={index}>
                                                             {(provided, snapshot) => (
-                                                                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className='card-planificador'>
+                                                                <div 
+                                                                    ref={provided.innerRef} 
+                                                                    className={`card-planificador ${snapshot.isDragging ? 'dragging': ''}`}
+                                                                    {...provided.draggableProps} 
+                                                                    {...provided.dragHandleProps}
+                                                                    onClick={() => mostrarDetallesReceta(itemPlan)}> 
                                                                     <Row>
-                                                                        <Col xs={6}>
+                                                                        <Col xs={6} className="d-flex flex-column justify-content-between">
                                                                             <Row>
                                                                                 <Col xs={12}><b>{itemPlan.Nombre}</b></Col>
-                                                                                <Col xs={12}><small>{itemPlan.Unidades}</small></Col>
+                                                                                <Col xs={12}><small>{itemPlan.Unidades} {Traducir('planificador.unidades')}</small></Col>
                                                                             </Row>
+                                                                            {itemPlan.Vegano &&
+                                                                                <Row>
+                                                                                    <Col><TbLeaf size="18px" /> <small>{Traducir('recetario.vegan')}</small></Col>
+                                                                                </Row>
+                                                                            }
                                                                         </Col>
                                                                         <Col xs={6} className='text-center'>
                                                                             <Medidor id={itemPlan.IdPlanificador} co2={itemPlan.EmisionCarbono}/>
@@ -179,8 +233,8 @@ const Planificador = () => {
                                     </Droppable>
                                 </Col>                                
                             ))}
-                        </Row>
-                    </DragDropContext>
+                        </DragDropContext>
+                    </Row>
                 </div>
             }
 
@@ -188,8 +242,14 @@ const Planificador = () => {
                 mostrar={mostrarModalNuevo} 
                 setMostrar={setMostrarModalNuevo}
                 fecha={fechaModalNuevo}
-                fechaEnviar={fechaEnviarModalNuevo}
-                setActualizar={setActualizar}/>
+                cliente={cliente}
+                setActualizar={actualizar}/>
+
+            <ModalDetallesRecetaPlanificador 
+                mostrarDetalles={mostrarModalDetalles}
+                setMostrarDetalles={setMostrarModalDetalles}
+                planificador={planificadorMostrarDetalles}
+                setActualizar={actualizar}/>
         </Base>
     );
 };

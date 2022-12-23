@@ -5,10 +5,15 @@
 }
 
 .card-planificador{
-    border-radius: 0.25rem;
+    background: white;
+    border-radius: 1rem;
     margin-bottom: 0.5rem;
-    padding: 0.5rem;
+    padding: 1rem;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.card-planificador.dragging{
+    opacity: 0.9;
 }
 
 .column-board-header{
@@ -37,12 +42,8 @@
     padding: 1rem;
 }
 
-/* The heart of the matter */
-// .board-planificador > .row {
-//     display: block;
-//     overflow-x: auto;
-//     white-space: nowrap;
-// }
-// .board-planificador > .row > .col {
-//     display: inline-block;
-// }
+.nombre-dia{
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding-right: 0.5rem;
+}

@@ -1,15 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Col, Row, Container } from 'react-bootstrap';
-import { Button, ButtonToolbar, InputNumber, InputGroup, SelectPicker, Modal, Input } from 'rsuite';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { Col, Row } from 'react-bootstrap';
+import { Button, ButtonToolbar, InputNumber, SelectPicker, Modal } from 'rsuite';
 import { BiSave } from "react-icons/bi";
 
-import Traducir from '@oxtron/i18n/Traducir';
 import { ObtenerRecetas, AltaPlanificador } from '../PlanificadorService';
 import { RecetarioInterface } from '@oxtron/Interfaces/RecetarioInterface.d';
-import { useIntl } from 'react-intl';
+import Traducir from '@oxtron/i18n/Traducir';
+import { Moment } from 'moment';
 
 const ModalNuevaPlanificador = (
-    {mostrar, setMostrar, fecha, fechaEnviar, setActualizar}:{mostrar: boolean, setMostrar: any, fecha:string, fechaEnviar:string, setActualizar?: any}
+    {mostrar, setMostrar, fecha, cliente, setActualizar}:
+    {mostrar: boolean, setMostrar: any, fecha:Moment, cliente?:string, setActualizar?: any}
 ) => {
     const intl = useIntl();
     const [cargando, setCargando] = useState(false)
@@ -18,10 +20,12 @@ const ModalNuevaPlanificador = (
     const [recetaSeleccionada, setRecetaSeleccionada] = useState("")
 
     useEffect(() => {
-        ObtenerRecetas().then((resultados) => {
+        if(!mostrar)
+            return
+        ObtenerRecetas(cliente).then((resultados) => {
             setRecetas(resultados)
         })
-    }, [])
+    }, [cliente, mostrar])
 
     const cambioCampoUnidades = (value) => {
         if(Number.isNaN(value))
@@ -36,14 +40,14 @@ const ModalNuevaPlanificador = (
         let exito = false;
         setCargando(true);
         const receta: RecetarioInterface = recetas.find(item => item.IdReceta === recetaSeleccionada);
-        await AltaPlanificador(intl, receta, fechaEnviar, unidades).then((resultado) => {
+        await AltaPlanificador(intl, receta, fecha.format("YYYY/MM/DD"), unidades).then((resultado) => {
             exito = resultado;
         })
         setCargando(false)
         if(!exito)
             return
         if(setActualizar)
-            setActualizar(true)
+            setActualizar()
         ocultarModal();
     }
 
@@ -66,7 +70,7 @@ const ModalNuevaPlanificador = (
                         <Col xs={12}>
                             <h6 className='text-uppercase label-input mt-4'>{Traducir("planificador.modal.label.Descripcion")}</h6>
                             <h3 className='principal-title fw-bold'>
-                                <input className='modal-input-text without-borders' id='fechaNuevoPlanificador' value={fecha} readOnly/>
+                                <input className='modal-input-text without-borders' id='fechaNuevoPlanificador' value={fecha.format("DD/MM/YYYY")} readOnly/>
                             </h3>                            
                         </Col>
                         <Col xs={12}>
