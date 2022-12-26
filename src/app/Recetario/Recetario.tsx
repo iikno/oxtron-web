@@ -80,6 +80,7 @@ const Recetario = () => {
     }    
 
     const eliminarReceta = (idReceta: string, ocultar:boolean = false) => {
+        /*
         ConfirmarEliminar(intl).then((result) => {
             if(result.isConfirmed){
                 EliminarReceta(intl, idReceta).then(() => {
@@ -89,6 +90,7 @@ const Recetario = () => {
                 })
             }
         })
+        */
     }
 
     const actualizar = () => {

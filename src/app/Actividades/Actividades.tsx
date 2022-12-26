@@ -5,10 +5,11 @@ import Base from '@oxtron/componentes/base/Base';
 import { Col, Modal, Row, Card} from 'react-bootstrap';
 
 import { Espera } from '@oxtron/componentes/base/Espera';
-import { DateRangePicker, Pagination, SelectPicker } from 'rsuite';
-import { ObtenerActividadesCliente, ObtenerClientes } from './ActividadesService';
+import { DateRangePicker, Pagination, Panel, SelectPicker } from 'rsuite';
+import { jsonStyle, ObtenerActividadesCliente, ObtenerClientes, validarJSON } from './ActividadesService';
 import { Indicador3 } from './Indicadores/Indicador3';
 import {useIntl} from 'react-intl';
+import JsonFormatter from 'react-json-formatter';
 
 
 const Actividades = () => {
@@ -73,6 +74,8 @@ const Actividades = () => {
     useEffect(() => {
         obtenerClientes(true);
     }, []);
+
+    
 
     return (
         <Base titulo={Traducir("actividades.titulo")}>
@@ -186,9 +189,9 @@ const Actividades = () => {
                                             <Row><label htmlFor=''><strong>{Traducir("modal.titulo.tabla")}: </strong> <br></br> {Actividad.Tabla}</label></Row><br></br>
                                         </Col>
                                         <Col>
-                                            <Row>
-                                                <textarea readOnly style={{width: "100%",height: "500px", resize: "none"}} value={JSON.stringify(Actividad.Detalles)} ></textarea>
-                                            </Row>
+                                                <Panel className="jsonPanel" shaded bordered>
+                                                <JsonFormatter json={validarJSON(Actividad.Detalles)} tabWith={4} jsonStyle={jsonStyle}></JsonFormatter>
+                                                </Panel>
                                         </Col>
                                     </Row>
                                 </Modal.Body>
