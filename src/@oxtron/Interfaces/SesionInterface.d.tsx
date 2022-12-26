@@ -22,5 +22,7 @@ export interface SesionInterface {
     IdUltimaActividad:string
     Status:string
     NombreCompletoRol:string
+    NombreCompleto:string
     token: string
+    EsUsuario: boolean
 }

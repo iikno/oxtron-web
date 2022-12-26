@@ -11,7 +11,7 @@ import { MdClose } from "react-icons/md";
 
 import Traducir from '@oxtron/i18n/Traducir';
 import Medidor from '@oxtron/componentes/general/Medidor';
-import { ConfirmarEliminar } from '@oxtron/componentes/alerts/alertas';
+import { ConfirmarEliminar } from '@iikno/clases/Alertas';
 import { ObtenerIngredientes, ObtenerAlergenos, EliminarReceta, AltaReceta, ModificarReceta, optionType } from '../RecetarioService';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 
@@ -27,6 +27,7 @@ const ModalNuevaReceta = (
     });
     const [validadores, setValidadores] = useState({Nombre: true, Precio: true, Ingredientes: true})
     const [cargando, setCargando] = useState(false);
+    const [imgOriginal, setImgOriginal] = useState("");
     const [img, setImg] = useState($noFoto);
     const [imgBuff, setImgBuff] = useState(null);
     const [ingredientes, setIngredientes] = useState([]);
@@ -50,6 +51,7 @@ const ModalNuevaReceta = (
     useEffect(() => {
         const URL_IMAGEN = (recetaModal.Foto && recetaModal.Foto !== "no-image.png") ? ($baseS3 + recetaModal.Foto) : $noFoto;
         setImg(URL_IMAGEN)
+        setImgOriginal((recetaModal.Foto && recetaModal.Foto !== "no-image.png") ? (recetaModal.Foto) : "")
     }, [recetaModal])
 
     useEffect(() => {
@@ -63,12 +65,12 @@ const ModalNuevaReceta = (
 
     const tableIngredientsColumns = [
         {
-            name: 'Ingrediente',
+            name: intl.formatMessage({id: 'recetario.modal.form.tabla.ingrediente'}),
             selector: row => row.Nombre,
             sortable: true,
         },
         {
-            name: 'Medida',
+            name: intl.formatMessage({id: 'recetario.modal.form.tabla.medida'}),
             selector: row => (row.Medida + " " + row.UnidadMedida),
             sortable: true,
         },
@@ -149,7 +151,6 @@ const ModalNuevaReceta = (
         setRecetaModal({...recetaModal, EmisionCarbono: recetaModal.EmisionCarbono + nuevoIngrediente.HuellaCarbono})
     }
 
-
     const cambioCampoNombre = (e) => {
         setValidadores({...validadores, Nombre: (e.target.value !== "")})
         setRecetaModal({
@@ -210,7 +211,6 @@ const ModalNuevaReceta = (
         }
     }
 
-
     const validarCampos = () => {
         const val = {
             Nombre: (recetaModal.Nombre !== ""),
@@ -233,7 +233,7 @@ const ModalNuevaReceta = (
             })
         }
         else{
-            await ModificarReceta(intl, recetaModal, ingredientesModal, alergenosModal, imgBuff).then((resultado) => {
+            await ModificarReceta(intl, recetaModal, ingredientesModal, alergenosModal, imgBuff, imgOriginal).then((resultado) => {
                 exito = resultado;
             })
         }
@@ -241,14 +241,15 @@ const ModalNuevaReceta = (
         if(!exito)
             return
         if(setActualizar)
-            setActualizar(true)
+            setActualizar()
         ocultarModal();
     }
     const eliminarReceta = (idReceta: string) => {
         ConfirmarEliminar(intl).then((result) => {
             if(result.isConfirmed){
                 EliminarReceta(intl, idReceta).then(() => {
-                    setActualizar(true)
+                    if(setActualizar)
+                        setActualizar()
                     ocultarModal();
                 })
             }

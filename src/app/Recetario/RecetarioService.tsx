@@ -4,9 +4,10 @@ import { IngredienteInterface } from "@oxtron/Interfaces/IngredienteInterface.d"
 import { AlergenoInterface } from "@oxtron/Interfaces/AlergenoInterface.d";
 import { RecetarioInterface } from "@oxtron/Interfaces/RecetarioInterface.d";
 import { FormatoFechaServidor } from "@iikno/componentes/Formatos";
-import { AlertaExito, AlertaError } from '../../@oxtron/componentes/alerts/alertas';
+import { AlertaExito, AlertaError } from '../../@iikno/clases/Alertas';
 import { SubirArchivo } from "@iikno/clases/S3";
 import { IntlShape } from 'react-intl';
+import { EliminarArchivo } from '../../@iikno/clases/S3';
 
 export const valoresIniciales:RecetarioInterface = {
     IdReceta: "",
@@ -74,19 +75,47 @@ export const ObtenerAlergenos = async(REFRESH = true) => {
     })
 }
 
-export const ObtenerRecetas = async(REFRESH = true) => {
+// export const ObtenerRecetas = async(REFRESH = true) => {
+//     const sesion = ObtenerSesion();
+
+//     return await Peticion.get("/Recetario/ObtenerRecetas", {
+//         params: {
+//             USUARIO: sesion.Correo,
+//             REFRESH: REFRESH
+//         },
+//         headers: {Authorization: 'Bearer '+sesion.token}
+//     }).then((respuesta:any) => {
+//         // console.log(respuesta);
+//         return respuesta.data;
+//     })
+// }
+
+export const ObtenerRecetas = async(CLIENTE:string = "TODOS", REFRESH = true) => {
     const sesion = ObtenerSesion();
 
-    return await Peticion.get("/Recetario/ObtenerRecetas", {
-        params: {
-            USUARIO: sesion.Correo,
-            REFRESH: REFRESH
-        },
-        headers: {Authorization: 'Bearer '+sesion.token}
-    }).then((respuesta:any) => {
-        // console.log(respuesta);
-        return respuesta.data;
-    })
+    if(CLIENTE === "TODOS"){
+        return await Peticion.get("/Recetario/ObtenerRecetas", {
+            params: {
+                USUARIO: sesion.Correo,
+                REFRESH: REFRESH
+            },
+            headers: {Authorization: 'Bearer '+sesion.token}
+        }).then((respuesta:any) => {
+            return respuesta.data;
+        })
+    }
+    else{
+        return await Peticion.get("/Recetario/ObtenerRecetasUsuarioCliente", {
+            params: {
+                USUARIO: sesion.Correo,
+                ID_USUARIO_CLIENTE: CLIENTE,
+                REFRESH: REFRESH
+            },
+            headers: {Authorization: 'Bearer '+sesion.token}
+        }).then((respuesta:any) => {
+            return respuesta.data;
+        })
+    }
 }
 
 export const ObtenerDetallesReceta = async(idReceta:string, REFRESH = true) => {
@@ -119,9 +148,6 @@ export const buscarEnRecetas = (texto, recipes) => {
 }
 
 export const AltaReceta = (intl: IntlShape, receta:RecetarioInterface, ingredientes:IngredienteInterface[], alergenos:AlergenoInterface[], imagen:Buffer) => {
-    // console.log(receta);
-    // console.log(ingredientes);
-    // console.log(alergenos);
     const sesion = ObtenerSesion();
 
     const config = {
@@ -136,7 +162,6 @@ export const AltaReceta = (intl: IntlShape, receta:RecetarioInterface, ingredien
     const body = {
         USUARIO: sesion.Correo,
         RECETA:{
-            IdUsuarioCliente: sesion.IdUsuario,
             Nombre: receta.Nombre,
             Foto: (receta.Foto !== "") ? sesion.IdUsuario+"/Recetario/"+receta.Foto : "",
             Precio: receta.Precio,
@@ -164,10 +189,7 @@ export const AltaReceta = (intl: IntlShape, receta:RecetarioInterface, ingredien
         })
 }
 
-export const ModificarReceta = (intl:IntlShape, receta:RecetarioInterface, ingredientes:IngredienteInterface[], alergenos:AlergenoInterface[], imagen:Buffer) => {
-    // console.log(receta);
-    // console.log(ingredientes);
-    // console.log(alergenos);
+export const ModificarReceta = (intl:IntlShape, receta:RecetarioInterface, ingredientes:IngredienteInterface[], alergenos:AlergenoInterface[], imagen:Buffer, imgOriginal:string) => {
     const sesion = ObtenerSesion();
 
     const config = {
@@ -180,7 +202,6 @@ export const ModificarReceta = (intl:IntlShape, receta:RecetarioInterface, ingre
         USUARIO:sesion.Correo,
         RECETA:{
             IdReceta: receta.IdReceta,
-            IdUsuarioCliente: receta.IdUsuarioCliente,
             Nombre: receta.Nombre,
             Foto: (imagen) ? receta.IdUsuarioCliente+"/Recetario/"+receta.Foto : receta.Foto,
             Precio: receta.Precio,
@@ -198,6 +219,9 @@ export const ModificarReceta = (intl:IntlShape, receta:RecetarioInterface, ingre
         ).then(async (resultado:any) => {            
             if(receta.Foto && receta.Foto !== "" && imagen){
                 SubirArchivo(imagen, receta.IdUsuarioCliente+"/Recetario/"+receta.Foto, true);
+                if(receta.IdUsuarioCliente+"/Recetario/"+receta.Foto !== imgOriginal){
+                    EliminarArchivo(imgOriginal)
+                }
             }
             await AlertaExito(intl)
             return true;
