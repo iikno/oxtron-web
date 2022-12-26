@@ -76,3 +76,18 @@ export const ObtenerActividadesCliente = async(IdCliente:string, pagina:number, 
     })
 }
 
+export const jsonStyle = {
+    propertyStyle: { color: 'red' },
+    stringStyle: { color: 'dark' },
+    numberStyle: { color: 'blue' }
+  }
+
+export const validarJSON = (json:any) =>{
+    try{
+        const obj = JSON.parse(json);
+
+        return json;
+    }catch(e){
+        return JSON.stringify(json);
+    }
+}

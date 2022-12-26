@@ -34,7 +34,7 @@ export default{
         'boton.continuar': "Continue",
         'boton.eliminar.confirmar': "Yes, delete it!",
         'boton.obtener': "Get",
-        'boton.alta': "High",
+        'boton.alta': "Insert",
         'boton.modificar': "Modify",
         'boton.eliminar': "Delete",
 

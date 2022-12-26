@@ -10,7 +10,7 @@ import { useIntl } from 'react-intl';
 import ModalNuevaReceta from './componentes/ModalNuevaReceta';
 import { ObtenerRecetas, buscarEnRecetas, ObtenerDetallesReceta, ObtenerClientes, EliminarReceta } from './RecetarioService';
 import { Espera } from '@oxtron/componentes/base/Espera';
-import { ConfirmarEliminar } from '../../@oxtron/componentes/alerts/alertas';
+//import { ConfirmarEliminar } from '../../@oxtron/componentes/alerts/alertas';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 
 const Recetario = () => {
@@ -95,6 +95,7 @@ const Recetario = () => {
     }
 
     const eliminarReceta = (idReceta: string, ocultar:boolean = false) => {
+        /*
         ConfirmarEliminar(intl).then((result) => {
             if(result.isConfirmed){
                 EliminarReceta(intl, idReceta).then(() => {
@@ -107,6 +108,7 @@ const Recetario = () => {
                 })
             }
         })
+        */
     }
 
 

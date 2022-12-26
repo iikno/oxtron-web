@@ -1,2 +1,6 @@
 @use "@oxtron/configs/variables.scss";
 
+.jsonPanel {
+    height: 500px;
+    overflow-y: scroll;
+}
