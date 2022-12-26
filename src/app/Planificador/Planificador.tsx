@@ -67,14 +67,14 @@ const Planificador = () => {
             return
 
         const nuevaColumnas = columnas.filter(item => true)
-        const origen = nuevaColumnas.find(item => item.FechaCompleta === fechaOrigen)
-        const destino = nuevaColumnas.find(item => item.FechaCompleta === fechaDestino)
+        const origen = nuevaColumnas.find(item => item.Fecha.format("YYYY/MM/DD") === fechaOrigen)        
+        const destino = nuevaColumnas.find(item => item.Fecha.format("YYYY/MM/DD") === fechaDestino)
         origen.Elementos = origen.Elementos.filter(item => item.IdPlanificador !== id)
         destino.Elementos.push(planificador.find(item => item.IdPlanificador === id))
         setColumnas(nuevaColumnas)
 
         ModificarFechaPlanificador(id, fechaDestino).then(() =>{
-            actualizar();
+            actualizar(false);
         })
     }
 
@@ -113,8 +113,8 @@ const Planificador = () => {
         setMostrarModalDetalles(true)
     }
 
-    const actualizar = () => { 
-        setCargando(true)
+    const actualizar = (refresh = true) => { 
+        setCargando(refresh)
         ObtenerPlanificador(cliente, fechas).then((respuesta: any) => {
             setColumnas(FormatearColumnasPorSemana(respuesta, fechas[0]));
             setPlanificador(respuesta)
@@ -193,7 +193,7 @@ const Planificador = () => {
                                             </ButtonToolbar>
                                         </Col>
                                     </Row>
-                                    <Droppable droppableId={id + '*-*' + columna.Fecha.format("DD/MM/YYYY")} key={id}>
+                                    <Droppable droppableId={id + '*-*' + columna.Fecha.format("YYYY/MM/DD")} key={id}>
                                         {(provided, snapshot) => (
                                             <div className={`dropping-container ${snapshot.isDraggingOver ? 'dragging-over' : ''}`} 
                                                 {...provided.droppableProps} 
