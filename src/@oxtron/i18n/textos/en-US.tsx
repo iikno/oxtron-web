@@ -52,6 +52,7 @@ export default{
         'dashboard.TCO.subtitle': 'Total mesured on',
         'dashboard.meal.highImpact': 'Highest impact meal',
         'dashboard.meal.lowImpact': 'Lowest impact meal',
+        'dashboard.meal.name': 'No saucer',
 
         'actividades.titulo': "Activities",
         'actividades.periodoTiempo': "Time period",
