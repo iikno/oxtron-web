@@ -20,11 +20,15 @@ import Traducir from '@oxtron/i18n/Traducir';
 import { useEffect } from 'react';
 import { LocaleAtom } from '@oxtron/atomos/LocaleAtom';
 import ModalNuevaReceta from 'app/Recetario/componentes/ModalNuevaReceta';
+import ModalNuevaPlanificador from 'app/Planificador/componentes/ModalNuevaPlanificador';
+import moment from 'moment';
 
 const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
     const sesion = ObtenerSesion();
     const isOpen = useRecoilValue(MenuAtom);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [mostrarModalPlanificador, setMostrarModalPlanificador] = useState(false);
+    const [fecha, setFecha] = useState<moment.Moment>(moment(new Date()))
     const [locale, setLocale] = useRecoilState(LocaleAtom);
 
     useEffect(() => {
@@ -67,7 +71,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                             {Traducir('general.menuSuperior.planificador')}
                                         </Tooltip>
                                     }>
-                                        <Button appearance='subtle'>
+                                        <Button appearance='subtle' onClick={() =>  setMostrarModalPlanificador(true)}>
                                             <CiCalendarDate size={"2em"}/>
                                         </Button>
                                     </Whisper>
@@ -103,6 +107,12 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                     show={mostrarModal}
                     setShow={setMostrarModal}
                 />
+
+                <ModalNuevaPlanificador 
+                    mostrar={mostrarModalPlanificador}
+                    setMostrar={setMostrarModalPlanificador}
+                    fecha={fecha}
+                    cliente={(!sesion.EsUsuario ? sesion.IdUsuario : undefined)}/>
         </>);
      else 
         return (<Navigate to={"/"}/>)
