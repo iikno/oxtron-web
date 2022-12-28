@@ -52,6 +52,8 @@ export default{
         'dashboard.TCO.subtitle': 'Total calculado en',
         'dashboard.meal.highImpact': 'Platillo con mayor impacto',
         'dashboard.meal.lowImpact': 'Platillo con menor impacto',
+        'dashboard.meal.name': 'Sin platillo',
+        
 
         'actividades.titulo': "Actividades",
         'actividades.periodoTiempo': "Periodo de tiempo",

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Traducir from '@oxtron/i18n/Traducir';
 import Base from '@oxtron/componentes/base/Base';
-import { Col, Row, Spinner } from 'react-bootstrap';
+import { Card, Col, Row, Spinner } from 'react-bootstrap';
 import { SelectPicker, DateRangePicker, Stack } from 'rsuite';
 import { DateRange } from "rsuite/DateRangePicker";
 import { Indicador1 } from './Indicadores/Indicador1';
@@ -12,14 +12,22 @@ import { ObtenerClientes, ObtenerDashboard } from './DashboardService';
 import { ObtenerSesion } from '@iikno/clases/LocalSession';
 import { Espera } from '@oxtron/componentes/base/Espera';
 import { DashboardInterface } from '@oxtron/Interfaces/DashboardInterface.d';
+import Chart from "react-apexcharts";
+import ReactApexChart from 'react-apexcharts';
 
 const Dashboard = () => {
     const sesion = ObtenerSesion();
 
     const [clientes, setClientes] = useState([]);
-    const [dashboard, setDashboard] = useState<DashboardInterface>(null);
+    const [dashboard, setDashboard] = useState(null);
     const [cliente, setCliente] = useState(sesion.IdUsuario);
     const [fechas, setFechas] = useState<DateRange>([new Date(), new Date()]);
+    
+
+    const [general, setGeneral] = useState([]);
+    const [veganos, setVeganos] = useState([]);
+    const [noVeganos, setNoVeganos] = useState([]);
+    const [rango, setRango] = useState([]);
 
     const [ACF, setACF] = useState(0.0)
     const [MS, setMS] = useState(0.0);
@@ -29,25 +37,54 @@ const Dashboard = () => {
         ObtenerClientes(false).then((respuesta:any) => {
             respuesta.unshift({NombreCompletoRol: "TODOS", value:"TODOS"});
             setClientes(respuesta.map(
-                (item:any) => ({ label: item.NombreCompletoRol, value: item.IdUsuario })
+                (item:any) =>({ label: item.NombreCompletoRol, value: item.IdUsuario })
             ));
         })
     }, [])
 
     useEffect(() => {
-        ObtenerDashboard(cliente, fechas, false).then((respuesta:DashboardInterface) => {
+        ObtenerDashboard(cliente, fechas, false).then((respuesta:any) => {
             setDashboard(respuesta);
             console.log(respuesta);
-            let acf = 0;
-            respuesta.CO2Diario.map((co2Dia, index) => {
-                acf += co2Dia.sumaCO2;
-            })
-
-            setACF(acf/respuesta.CO2Diario.length | 0);
-            setMS(respuesta.PlatillosSemanales.length | 0);
-            setTCO(acf/1000 | 0);
+            setGeneral(respuesta.EmisionesCarbono.GENERAL.map((item:any) =>({x: item.Fecha, y: item.Valor.toFixed(2)})));
+            setVeganos(respuesta.EmisionesCarbono.VEGANO.map((item:any) => ({x: item.Fecha, y: item.Valor.toFixed(2)})));
+            setNoVeganos(respuesta.EmisionesCarbono.NO_VEGANO.map((item:any) =>({x: item.Fecha, y: item.Valor.toFixed(2)})));
+            setACF(respuesta.Generales.PromedioEmision);
+            setMS(respuesta.Generales.Platillos | 0);
+            setTCO(respuesta.Generales.Toneladas);
         })
     },[fechas, cliente])
+
+    const series = [
+        {
+            name: "General",
+            data: general
+        },
+        {
+            name: "Vegano",
+            data: veganos
+        },
+        {
+            name: "No vegano",
+            data: noVeganos
+        }
+    ];
+
+    const options = {
+        title: {
+            text: "Grafica",
+            style: {
+                fontSize: '20px'
+            }
+        },
+        chart: {
+            stacked: true
+        }
+    }
+
+    function validarPlatillo(EmisionCarbono: any): Number {
+        throw new Error('Function not implemented.');
+    }
 
     return (
         <Base titulo={Traducir("dashboard.titulo")}>
@@ -74,6 +111,7 @@ const Dashboard = () => {
                     </Stack>
                 </Col>
             </Row>
+            
             {
                 dashboard === null &&
                 <Espera/>
@@ -115,15 +153,33 @@ const Dashboard = () => {
                     </Row>
                     <Row>
                         <Col className='mb-3'>
-                        Gráfica
+                            <Card>
+                                <Card.Body>
+                                    <div>
+                                        <ReactApexChart
+                                        options={options} 
+                                        series={series} 
+                                        stroke='smooth'
+                                        type="area" 
+                                        width='100%' 
+                                        height={320} />
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs="12" sm="6" className='mb-3'>
-                            <Indicador2 data={dashboard.MayorMenorCO2General[0].PlatilloMayorCO2.EmisionCarbono || 0} title={dashboard.MayorMenorCO2General[0].PlatilloMayorCO2.Nombre || ""} subtitle={Traducir('dashboard.meal.highImpact')}/>
+                            <Indicador2 
+                            data={dashboard.Platillos.MayorEmision !== null? dashboard.Platillos.MayorEmision.EmisionCarbono: 0} 
+                            title={dashboard.Platillos.MayorEmision !== null? dashboard.Platillos.MayorEmision.Nombre : Traducir('dashboard.meal.name')} 
+                            subtitle={Traducir('dashboard.meal.highImpact')}/>
                         </Col>
                         <Col xs="12" sm="6" className='mb-3'>
-                            <Indicador2 data={dashboard.MayorMenorCO2General[0].PlatilloMenorCO2.EmisionCarbono || 0} title={dashboard.MayorMenorCO2General[0].PlatilloMenorCO2.Nombre || ""} subtitle={Traducir('dashboard.meal.lowImpact')}/>
+                            <Indicador2 
+                            data={dashboard.Platillos.MenorEmision !== null ? dashboard.Platillos.MenorEmision.EmisionCarbono : 0} 
+                            title={dashboard.Platillos.MenorEmision !== null? dashboard.Platillos.MenorEmision.Nombre : Traducir('dashboard.meal.name')} 
+                            subtitle={Traducir('dashboard.meal.lowImpact')}/>
                         </Col>
                     </Row>
                 </>
