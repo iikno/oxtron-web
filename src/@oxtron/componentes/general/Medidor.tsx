@@ -5,10 +5,6 @@ interface ComponentProps {
     id: string;
     co2: number;
 }
-  
-interface MyRef {
-    ref: void;
-}
 
 const Medidor = React.forwardRef<SVGSVGElement, ComponentProps>((props, ref) => {
     let valor = 0

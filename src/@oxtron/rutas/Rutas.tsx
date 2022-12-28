@@ -9,6 +9,7 @@ import Clientes from 'app/Clientes/Clientes';
 import Actividades from 'app/Actividades/Actividades';
 import Recetario from 'app/Recetario/Recetario';
 import Planificador from '../../app/Planificador/Planificador';
+import Reportes from '../../app/Reportes/Reportes';
 
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
@@ -32,6 +33,7 @@ const Rutas = () => {
                             <Route path='clientes' element={<Clientes/>}/>
                             <Route path='recetario' element={<Recetario/>}/>
                             <Route path='planificador' element={<Planificador/>}/>
+                            <Route path='reportes' element={<Reportes/>}/>
                             <Route path='*' element={<>404</>}/>
                         </Routes>
                     }/>
