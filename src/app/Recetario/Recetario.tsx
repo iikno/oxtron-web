@@ -79,8 +79,7 @@ const Recetario = () => {
         setRecetasShow(buscarEnRecetas(e.target.value, recetas))
     }    
 
-    const eliminarReceta = (idReceta: string, ocultar:boolean = false) => {
-        /*
+    const eliminarReceta = (idReceta: string, ocultar:boolean = false) => {        
         ConfirmarEliminar(intl).then((result) => {
             if(result.isConfirmed){
                 EliminarReceta(intl, idReceta).then(() => {
@@ -89,8 +88,7 @@ const Recetario = () => {
                         setShow(false);
                 })
             }
-        })
-        */
+        })        
     }
 
     const actualizar = () => {
