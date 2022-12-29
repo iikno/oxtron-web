@@ -11,12 +11,12 @@ import { Indicador2 } from './Indicadores/Indicador2';
 import { ObtenerClientes, ObtenerDashboard } from './DashboardService';
 import { ObtenerSesion } from '@iikno/clases/LocalSession';
 import { Espera } from '@oxtron/componentes/base/Espera';
-import { DashboardInterface } from '@oxtron/Interfaces/DashboardInterface.d';
-import Chart from "react-apexcharts";
 import ReactApexChart from 'react-apexcharts';
+import {useIntl} from 'react-intl';
 
 const Dashboard = () => {
     const sesion = ObtenerSesion();
+    const intl = useIntl();
 
     const [clientes, setClientes] = useState([]);
     const [dashboard, setDashboard] = useState(null);
@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     const options = {
         title: {
-            text: "Grafica",
+            text: intl.formatMessage({id: "dashboard.grafica"}),
             style: {
                 fontSize: '20px'
             }
@@ -80,10 +80,6 @@ const Dashboard = () => {
         chart: {
             stacked: true
         }
-    }
-
-    function validarPlatillo(EmisionCarbono: any): Number {
-        throw new Error('Function not implemented.');
     }
 
     return (

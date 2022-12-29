@@ -47,25 +47,26 @@ const Usuarios = () => {
         initialValues: valoresIniciales,
         enableReinitialize: true,
         onSubmit: (values) =>{
-                FormularioUsuario(values, edit, imgBuff, usuarios, intl).then((valido) =>{
-                    if(valido)
+                FormularioUsuario(values, edit, imgBuff, usuarios, intl).then(() =>{
                         obtenerUsuarios(false);
                 });
-            
         },
     })
 
     function editar(row){
         setEdit(true);
+        formik.resetForm();
         handleEdit(row.IdUsuario, intl).then(() => {
             formik.initialValues = valoresIniciales;
             setImg(ValidarImg(formik.initialValues.foto));
             setShow(true);   
-        })
+        });
     }
     
     const limpiarModal = () => {
-        setShow(false); 
+        setShow(false);
+        setEdit(false); 
+        formik.resetForm();
         LimpiarCampos(); 
         formik.initialValues= valoresIniciales; 
         setImg($noFoto);
@@ -102,7 +103,7 @@ const Usuarios = () => {
                             />                            
                         </Col>
                         <Col align="right">
-                            <Button variant="primary" onClick={()=>setShow(true)}>
+                            <Button variant="primary" onClick={()=>{setEdit(false); setShow(true)}}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
                                 <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
@@ -175,10 +176,10 @@ const Usuarios = () => {
                                             </button>  
                                         </Col>
                                         <Col md={7}>
-                                            <Tabs defaultActiveKey="datos" id="tabs-usuario" className="mb-3" >
+                                            <Tabs defaultActiveKey="datos" id="tabs-usuario" className="mb-3">
                                                 <Tab eventKey="datos" title={Traducir("modal.titulo.tab.datosPersonales")}>
                                                         <label htmlFor='nombre'>{Traducir("modal.titulo.nombre")}:</label>
-                                                        <input  className='form-control' name="nombre" id='nombre' type="text" onChange={formik.handleChange} value={formik.values.nombre} onBlur={formik.validateOnBlur.valueOf}/>
+                                                        <input  className='form-control' name="nombre" id='nombre' type="text" onChange={formik.handleChange} value={formik.values.nombre}/>
                                                         <br></br>
                                                         <label htmlFor='apellidoPaterno'>{Traducir("modal.titulo.apellidoPaterno")}:</label>
                                                         <input  className='form-control' id='apellidoPaterno' type="text" onChange={formik.handleChange} value={formik.values.apellidoPaterno}/>

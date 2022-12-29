@@ -39,7 +39,6 @@ export const LimpiarCampos = () => {
     valoresIniciales.municipio= "";
     valoresIniciales.estado= "";
     valoresIniciales.pais= "";
-
 }
 
 
@@ -123,16 +122,15 @@ export const FormularioUsuario = async (valores:UsuariosInterface, edit:boolean,
         config
         ).then((resultado:any) => {
             if(direccion !== ""){
-                SubirArchivo(imagen, resultado.data.IdUsuario+"/"+valores.foto, true);
+                SubirArchivo(imagen, resultado.data.Objeto.IdUsuario+"/"+valores.foto, true);
             }
             
             Alerta_Exito(intl);
-            usuarios = ObtenerUsuarios(false);
-            return usuarios;
+            return valido;
         }).catch((error) => {
             Alerta_Error(intl);
             Error(error);
-            return usuarios;
+            return valido = false;
         })
     }else{
         let direccion = "";

@@ -47,17 +47,15 @@ const Clientes = () => {
         initialValues: valoresIniciales,
         enableReinitialize: true,
         onSubmit: (values) =>{
-            FormularioCliente(values, edit, imgBuff, clientes, intl).then((valido) =>{
-                if(valido){
-                    obtenerClientes(false);
-                }
-                
+            FormularioCliente(values, edit, imgBuff, clientes, intl).then(() =>{
+                    obtenerClientes(false);                
             });
         },
     })
 
     function editar(row){
         setEdit(true);
+        formik.resetForm();
         ObtenerDetallesCliente(row.IdCliente, intl).then(() => {
             formik.initialValues = valoresIniciales;
             setImg(ValidarImg(formik.initialValues.foto));
@@ -67,6 +65,7 @@ const Clientes = () => {
     
     const limpiarModal = () => {
         setShow(false); 
+        formik.resetForm();
         LimpiarCampos(); 
         formik.initialValues= valoresIniciales; 
         setImg($noFoto);

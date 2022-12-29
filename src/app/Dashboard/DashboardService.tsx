@@ -47,7 +47,6 @@ export const ObtenerDashboard = async(CLIENTE:string, FECHAS:Date[], REFRESH = t
             },
             headers: {Authorization: 'Bearer '+sesion.token}
         }).then((respuesta:any) => {
-            console.log(respuesta);
             return respuesta.data;
         })
     }    

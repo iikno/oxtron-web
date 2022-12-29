@@ -22,15 +22,15 @@ export const Alerta_Error = (intl:any) =>{
     Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: intl({id: 'alerta.exito.texto'})
+        text: intl.formatMessage({id: 'alerta.error.texto'})
       })
     }
     
 export const Alerta_Exito = (intl:any) =>{
     Swal.fire({
         icon: 'success',
-        title: intl({id: 'alerta.exito.titulo'}),
-        text: intl({id: 'alerta.exito.texto'}),
+        title: intl.formatMessage({id: 'alerta.exito.titulo'}),
+        text: intl.formatMessage({id: 'alerta.exito.texto'}),
         showConfirmButton: false,
         timer: 1500
     })
