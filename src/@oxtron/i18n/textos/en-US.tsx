@@ -53,6 +53,7 @@ export default{
         'dashboard.meal.highImpact': 'Highest impact meal',
         'dashboard.meal.lowImpact': 'Lowest impact meal',
         'dashboard.meal.name': 'No saucer',
+        'dashboard.grafica': 'Graph',
 
         'actividades.titulo': "Activities",
         'actividades.periodoTiempo': "Time period",

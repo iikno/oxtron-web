@@ -53,6 +53,7 @@ export default{
         'dashboard.meal.highImpact': 'Platillo con mayor impacto',
         'dashboard.meal.lowImpact': 'Platillo con menor impacto',
         'dashboard.meal.name': 'Sin platillo',
+        'dashboard.grafica': 'Gráfica',
         
 
         'actividades.titulo': "Actividades",

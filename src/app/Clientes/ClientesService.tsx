@@ -99,6 +99,11 @@ export const FormularioCliente = async (valores:ClientesInterface, edit:boolean,
     }
 
     if(!edit){
+        let direccion = "";
+        try{
+            direccion = imagen.name;
+        }catch{}
+
         const Data = {
             USUARIO:sesion.Correo,
             CLIENTE:{
@@ -107,7 +112,7 @@ export const FormularioCliente = async (valores:ClientesInterface, edit:boolean,
                 ApellidoMaterno: valores.apellidoMaterno,
                 Correo: valores.correo,
                 Telefono: valores.telefono,
-                Foto: (valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)?valores.idCliente+"/"+valores.foto:"",
+                Foto: (direccion !== "") ? direccion: "",
                 Empresa: valores.empresa,
                 Sucursal: valores.sucursal,
                 TamanioCompania: valores.tamañoCompañia
@@ -126,8 +131,8 @@ export const FormularioCliente = async (valores:ClientesInterface, edit:boolean,
         Data,
         config
         ).then((resultado:any) => {
-            if((valores.foto !== null || valores.foto !== "" || valores.foto !== undefined)){
-                SubirArchivo(imagen, resultado.idCliente+"/"+valores.foto);
+            if(direccion !== ""){
+                SubirArchivo(imagen, resultado.data.Objeto.IdCliente+"/"+valores.foto, true);
             }
             Alerta_Exito(intl);
             clientes = ObtenerClientes(false);
@@ -230,13 +235,13 @@ export const SuspenderCliente = (IdCliente:string, intl:any) => {
     const sesion = ObtenerSesion();
     
     return Swal.fire({
-        title: intl.formatMessage({id: 'alerta.cotinuar'}),
+        title: intl.formatMessage({id: 'alerta.continuar'}),
         text: intl.formatMessage({id: 'alerta.suspender.texto'}),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: intl.formatMessage({id: 'boton.cotinuar'}),
+        confirmButtonText: intl.formatMessage({id: 'boton.continuar'}),
         cancelButtonText: intl.formatMessage({id: 'boton.cancelar'})
       }).then((result) => {
         if (result.isConfirmed) {
