@@ -85,7 +85,8 @@ export default{
         'modal.titulo.fecha': "Fecha",
         'modal.titulo.idObjeto': "Id de objeto",
         'modal.titulo.modulo': "Módulo",
-        'modal.titulo.tabla': "Tabla",    
+        'modal.titulo.tabla': "Tabla",   
+        'modal.titulo.idActividad': "Id de actividad", 
 
 
         'usuarios.titulo': "Usuarios",
