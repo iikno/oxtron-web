@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import './Base.scss'
 
 import { Navigate } from 'react-router-dom';
-import { ObtenerSesion } from '@iikno/clases/LocalSession';
+import { CerrarSesion, ObtenerSesion } from '@iikno/clases/LocalSession';
 import { Container, Content, Grid, Header, FlexboxGrid, Dropdown, Divider, Avatar, Whisper, Tooltip, Button  } from 'rsuite';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -89,7 +89,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                     <Dropdown renderToggle={renderIconButton} trigger={"hover"} placement="bottomEnd">
                                         <Dropdown.Item>{Traducir("general.menuSuperior.perfil")}</Dropdown.Item>
                                         <Dropdown.Item divider/>
-                                        <Dropdown.Item>{Traducir("general.menuSuperior.salir")}</Dropdown.Item>
+                                        <Dropdown.Item onClick={CerrarSesion}>{Traducir("general.menuSuperior.salir")}</Dropdown.Item>
                                     </Dropdown>
                                 </Col>
                             </Row>

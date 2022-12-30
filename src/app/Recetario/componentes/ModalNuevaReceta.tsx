@@ -194,7 +194,13 @@ const ModalNuevaReceta = (
     const imprimirReceta = async () => {
         const element = modalRef.current;
         console.log(element)
-        const canvas = await html2canvas(element, {useCORS: true});
+        const canvas = await html2canvas(element, {useCORS: true, onclone(document, element) {
+            const textarea = element.querySelector("#descripcion") as HTMLElement
+            const div = document.createElement('div')
+            div.innerText = (textarea as HTMLInputElement).value
+            textarea.style.display = 'none'
+            textarea.parentElement.append(div)
+        },});
     
         const data = canvas.toDataURL('image/jpg');
         const link = document.createElement('a');
