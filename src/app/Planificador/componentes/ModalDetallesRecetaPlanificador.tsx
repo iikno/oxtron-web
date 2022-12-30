@@ -86,7 +86,13 @@ const ModalDetallesRecetaPlanificador = (
 
     const imprimirReceta = async () => {
         const element = modalRef.current;
-        const canvas = await html2canvas(element, {useCORS: true});
+        const canvas = await html2canvas(element, {useCORS: true, onclone(document, element) {
+            const textarea = element.querySelector("textarea") as HTMLElement
+            const div = document.createElement('div')
+            div.innerText = (textarea as HTMLInputElement).value
+            textarea.style.display = 'none'
+            textarea.parentElement.append(div)
+        },});
     
         const data = canvas.toDataURL('image/jpg');
         const link = document.createElement('a');
@@ -174,9 +180,10 @@ const ModalDetallesRecetaPlanificador = (
                             <Col md={12} lg={8}>
                                 <h6 className='text-uppercase label-input'>{Traducir("recetario.formNombre")}</h6>
                                 <input type='text' placeholder={intl.formatMessage({id: 'recetario.modal.form.placeholder.nombre'})} className='modal-input-text without-borders input-receta-nombre fw-bold' value={recetaModal.Nombre} readOnly/>                                
-                                
-                                <h6 className='text-uppercase label-input mt-4'>{Traducir("recetario.formDescripcion")}</h6>
-                                <textarea placeholder={intl.formatMessage({id: 'recetario.modal.form.placeholder.descripcion'})} className='modal-input-text without-borders' rows={4} value={recetaModal.Descripcion} readOnly/>
+                                <div>
+                                    <h6 className='text-uppercase label-input mt-4'>{Traducir("recetario.formDescripcion")}</h6>
+                                    <textarea placeholder={intl.formatMessage({id: 'recetario.modal.form.placeholder.descripcion'})} className='modal-input-text without-borders' rows={4} value={recetaModal.Descripcion} readOnly/>
+                                </div>
 
                                 <h6 className='text-uppercase label-input mt-4'>{Traducir("recetario.formPrecio")}</h6>
                                 <InputGroup inside className='without-borders box-shadow-none'>
