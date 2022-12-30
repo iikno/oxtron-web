@@ -96,7 +96,7 @@ const Dashboard = () => {
                 }
                 <Col>
                     <Stack spacing={6} alignItems={"center"} justifyContent={"flex-end"}>
-                        {Traducir('dashboard.periodoTiempo')}
+                    {Traducir('dashboard.periodoTiempo')}
                         <DateRangePicker isoWeek placement="bottomEnd"
                                         oneTap showOneCalendar
                                         hoverRange="week" 
@@ -105,6 +105,7 @@ const Dashboard = () => {
                                         onChange={setFechas} 
                                         format={"dd/MM/yyyy"}/>
                     </Stack>
+                    
                 </Col>
             </Row>
             
@@ -151,7 +152,7 @@ const Dashboard = () => {
                         <Col className='mb-3'>
                             <Card>
                                 <Card.Body>
-                                    <div>
+                                    
                                         <ReactApexChart
                                         options={options} 
                                         series={series} 
@@ -159,7 +160,7 @@ const Dashboard = () => {
                                         type="area" 
                                         width='100%' 
                                         height={320} />
-                                    </div>
+                                    
                                 </Card.Body>
                             </Card>
                         </Col>
