@@ -16,6 +16,13 @@ const Rutas = () => {
 
     return (
         <Routes>
+            <Route index element={<></>}/>
+            <Route path="*" element={<></>}/>
+        </Routes>
+    );
+
+    /*return (
+        <Routes>
             {
                 sesion.IdUsuario === "IdUsuario" &&
                 <Route index element={<Login/>}/>
@@ -40,7 +47,7 @@ const Rutas = () => {
                 </>
             }
         </Routes>
-    );
+    );*/
 };
 
 export default Rutas;
