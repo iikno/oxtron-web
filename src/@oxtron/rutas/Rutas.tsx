@@ -14,14 +14,14 @@ import Reportes from '../../app/Reportes/Reportes';
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
 
-    return (
+    /*return (
         <Routes>
             <Route index element={<></>}/>
             <Route path="*" element={<></>}/>
         </Routes>
-    );
+    );*/
 
-    /*return (
+    return (
         <Routes>
             {
                 sesion.IdUsuario === "IdUsuario" &&
@@ -47,7 +47,7 @@ const Rutas = () => {
                 </>
             }
         </Routes>
-    );*/
+    );
 };
 
 export default Rutas;
