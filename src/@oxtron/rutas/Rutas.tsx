@@ -37,12 +37,12 @@ const Rutas = () => {
                         <Routes>
                             <Route path='perfil' element={<Perfil/>}/>
                             <Route path='dashboard' element={<Dashboard/>}/>
-                            <Route path='actividades' element={<Actividades/>}/>
-                            <Route path='usuarios' element={<Usuarios/>}/>
-                            <Route path='clientes' element={<Clientes/>}/>
                             <Route path='recetario' element={<Recetario/>}/>
                             <Route path='planificador' element={<Planificador/>}/>
                             <Route path='reportes' element={<Reportes/>}/>
+                            <Route path='actividades' element={(sesion.EsUsuario) ? <Actividades/> : <Navigate to={"/dashboard"} />}/>
+                            <Route path='clientes' element={(sesion.EsUsuario) ? <Clientes/> : <Navigate to={"/dashboard"} />}/>
+                            <Route path='usuarios' element={(sesion.EsUsuario) ? <Usuarios/> : <Navigate to={"/dashboard"} />}/>
                             <Route path='*' element={<>404</>}/>
                         </Routes>
                     }/>
