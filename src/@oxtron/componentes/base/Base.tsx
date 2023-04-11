@@ -7,7 +7,7 @@ import { Container, Content, Grid, Header, FlexboxGrid, Dropdown, Divider, Avata
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { SideBarMenu } from '../sidebar/SideBarMenu';
-import { classNames } from '@iikno/clases/Utils';
+import { ValidarImg, classNames } from '@iikno/clases/Utils';
 import { MenuAtom } from '@oxtron/atomos/MenuAtom';
 import { LOCALES } from '../../i18n/Locales';
 import { enUS } from 'rsuite/esm/locales';
@@ -49,7 +49,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
         return (
             <FlexboxGrid justify="center" align='middle'>
                 <span className='me-2'>{sesion.Nombre} {sesion.ApellidoPaterno}</span>
-                <Avatar circle alt="fotoPerfil" {...props} ref={ref}></Avatar>
+                <Avatar circle alt="fotoPerfil" {...props} ref={ref} src={ValidarImg(sesion.Foto)}></Avatar>
             </FlexboxGrid>
         );
     };

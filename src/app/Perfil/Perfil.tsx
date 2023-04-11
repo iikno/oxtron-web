@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import Traducir from '@oxtron/i18n/Traducir';
-import Base from '@oxtron/componentes/base/Base';
-import { Col, Container, Row } from 'react-bootstrap';
-
-import { ModificarPerfil, ObtenerPerfil, valoresInicialesUsuario } from './PerfilService';
-import { ObtenerSesion } from '@iikno/clases/LocalSession';
-import { Espera } from '@oxtron/componentes/base/Espera';
 import {useIntl} from 'react-intl';
-import { $noFoto } from '@oxtron/configs/Env';
 import { useFormik } from 'formik';
-import { PerfilInterface } from '@oxtron/Interfaces/PerfilInterface';
-
+import { Col, Container, Row } from 'react-bootstrap';
 import { Button } from 'rsuite';
 import { BiSave } from "react-icons/bi";
+import { useSetRecoilState } from 'recoil';
+import { SesionAtom } from '@oxtron/atomos/SesionAtom';
+
+import Traducir from '@oxtron/i18n/Traducir';
+import Base from '@oxtron/componentes/base/Base';
+import { ObtenerSesion } from '@iikno/clases/LocalSession';
+import { Espera } from '@oxtron/componentes/base/Espera';
+import { $noFoto } from '@oxtron/configs/Env';
+import { ModificarPerfil, ObtenerPerfil, valoresInicialesUsuario } from './PerfilService';
+import { PerfilInterface } from '@oxtron/Interfaces/PerfilInterface';
 import { ValidarImg } from '@iikno/clases/Utils';
 
+import './Perfil.scss'
+
 const Perfil = () => {
+    const setSesion = useSetRecoilState(SesionAtom);
     const sesion = ObtenerSesion();
     const intl = useIntl();
     const [perfil, setPerfil] = useState<PerfilInterface>(valoresInicialesUsuario);
@@ -49,7 +53,7 @@ const Perfil = () => {
         },
         onSubmit: values => {
             setCargando(true);
-            ModificarPerfil(values, imgBuff, imagenOriginal, intl).then((respuesta) => {
+            ModificarPerfil(values, imgBuff, imagenOriginal, setSesion, intl).then((respuesta) => {
                 if(respuesta){
                     ObtenerPerfil(true).then((respuesta:any) => {
                         setPerfil(respuesta);
@@ -85,7 +89,7 @@ const Perfil = () => {
     return (
         <Base titulo={Traducir("perfil.titulo")}>
             {
-                perfil === null && perfil === valoresInicialesUsuario &&
+                (perfil === null || perfil === valoresInicialesUsuario) &&
                 <Espera/>
             }
             {
@@ -95,9 +99,9 @@ const Perfil = () => {
                         <Row>
                             <Col md={4}>
                                 <h6 className='text-uppercase label-input'>{Traducir("perfil.foto")}</h6>
-                                <label htmlFor='fotoReceta' className='pb-2'>
+                                <label htmlFor='fotoReceta' className='pb-2 d-flex justify-content-center align-items-center'>
                                     <input id='fotoReceta' style={{display: "none"}} type="file" onChange={actualizarImagen} accept="image/*"/>
-                                    <img className='rounded img-fluid cursor-pointer' src={img} alt="recipe"></img>
+                                    <img className='rounded img-fluid cursor-pointer img-max-size' src={img} alt="recipe"></img>
                                 </label>
                             </Col>
                             <Col md={8}>

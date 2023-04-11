@@ -2,8 +2,10 @@ import { AlertaError, AlertaExito } from "@iikno/clases/Alertas";
 import { ObtenerSesion} from "@iikno/clases/LocalSession";
 import { EliminarArchivo, SubirArchivo } from "@iikno/clases/S3";
 import { PerfilInterface } from "@oxtron/Interfaces/PerfilInterface";
+import { SesionInterface } from "@oxtron/Interfaces/SesionInterface.d";
 import { Peticion } from "@oxtron/configs/Peticion"
 import { IntlShape } from "react-intl";
+import { SetterOrUpdater } from "recoil";
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.3/moment.min.js"></script>
 
 export const valoresInicialesUsuario : PerfilInterface = {
@@ -46,7 +48,7 @@ export const ObtenerPerfil = async(REFRESH = true) => {
     })
 }
 
-export const ModificarPerfil = (perfil:PerfilInterface, imagen:Buffer, imgOriginal:string, intl:IntlShape) => {
+export const ModificarPerfil = (perfil:PerfilInterface, imagen:Buffer, imgOriginal:string, setSesion:SetterOrUpdater<SesionInterface>, intl:IntlShape) => {
     const sesion = ObtenerSesion();
     const URI = (sesion.EsUsuario) ? "/Usuarios/ModificarUsuario" : "/Clientes/ModificarCliente";
 
@@ -91,13 +93,19 @@ export const ModificarPerfil = (perfil:PerfilInterface, imagen:Buffer, imgOrigin
     return Peticion.put(URI,
         body,
         config
-        ).then(async (resultado:any) => {            
+        ).then(async (resultado:any) => {
+            
             if(imagen){
                 if(direccion !== imgOriginal){
                     EliminarArchivo(imgOriginal)
                 }
                 SubirArchivo(imagen, direccion, true);
             }
+
+            setTimeout(() => {
+                setSesion({...sesion, Nombre: perfil.Nombre, ApellidoPaterno: perfil.ApellidoPaterno, ApellidoMaterno: perfil.ApellidoMaterno, Foto: direccion});
+            }, 1000);
+            
             await AlertaExito(intl)
             return true;
         }).catch(async (error) => {

@@ -34,7 +34,9 @@ export const IniciarSesion = async (valores:LogInInterface, setSesion:SetterOrUp
     }).then((resultado:any) => {
         setSesion(resultado.data);
 
-        window.location.assign('/dashboard')
+        setTimeout(() => {
+            window.location.assign('/dashboard')
+        }, 500);
     }).catch((error) => {
         Error(error)
     })
