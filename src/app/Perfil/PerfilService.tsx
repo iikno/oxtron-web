@@ -89,7 +89,7 @@ export const ModificarPerfil = (perfil:PerfilInterface, imagen:Buffer, imgOrigin
         USUARIO_MODIFICADO : (sesion.EsUsuario) ? PERFIL : null,
         CLIENTE : (!sesion.EsUsuario) ? PERFIL : null
     }
-    console.log(body)
+
     return Peticion.put(URI,
         body,
         config
