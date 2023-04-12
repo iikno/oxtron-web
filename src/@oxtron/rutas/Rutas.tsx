@@ -10,9 +10,17 @@ import Actividades from 'app/Actividades/Actividades';
 import Recetario from 'app/Recetario/Recetario';
 import Planificador from '../../app/Planificador/Planificador';
 import Reportes from '../../app/Reportes/Reportes';
+import Perfil from '../../app/Perfil/Perfil';
 
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
+
+    /*return (
+        <Routes>
+            <Route index element={<></>}/>
+            <Route path="*" element={<></>}/>
+        </Routes>
+    );*/
 
     return (
         <Routes>
@@ -27,13 +35,14 @@ const Rutas = () => {
                     
                     <Route path='/*' element={
                         <Routes>
+                            <Route path='perfil' element={<Perfil/>}/>
                             <Route path='dashboard' element={<Dashboard/>}/>
-                            <Route path='actividades' element={<Actividades/>}/>
-                            <Route path='usuarios' element={<Usuarios/>}/>
-                            <Route path='clientes' element={<Clientes/>}/>
                             <Route path='recetario' element={<Recetario/>}/>
                             <Route path='planificador' element={<Planificador/>}/>
                             <Route path='reportes' element={<Reportes/>}/>
+                            <Route path='actividades' element={(sesion.EsUsuario) ? <Actividades/> : <Navigate to={"/dashboard"} />}/>
+                            <Route path='clientes' element={(sesion.EsUsuario) ? <Clientes/> : <Navigate to={"/dashboard"} />}/>
+                            <Route path='usuarios' element={(sesion.EsUsuario) ? <Usuarios/> : <Navigate to={"/dashboard"} />}/>
                             <Route path='*' element={<>404</>}/>
                         </Routes>
                     }/>

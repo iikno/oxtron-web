@@ -138,7 +138,7 @@ const Dashboard = () => {
                                     {
                                         Traducir("dashboard.TCO")
                                     }
-                                    <span> CO<sup>2</sup>e</span>
+                                    {/* <span> CO<sup>2</sup>e</span> */}
                                 </>
                             )} Subtitle={(
                                     <>

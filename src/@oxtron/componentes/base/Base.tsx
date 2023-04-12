@@ -2,12 +2,12 @@ import React, { useState, useRef } from 'react';
 import './Base.scss'
 
 import { Navigate } from 'react-router-dom';
-import { CerrarSesion, ObtenerSesion } from '@iikno/clases/LocalSession';
+import { CerrarSesion, ObtenerSesion, VerPerfil } from '@iikno/clases/LocalSession';
 import { Container, Content, Grid, Header, FlexboxGrid, Dropdown, Divider, Avatar, Whisper, Tooltip, Button  } from 'rsuite';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { SideBarMenu } from '../sidebar/SideBarMenu';
-import { classNames } from '@iikno/clases/Utils';
+import { ValidarImg, classNames } from '@iikno/clases/Utils';
 import { MenuAtom } from '@oxtron/atomos/MenuAtom';
 import { LOCALES } from '../../i18n/Locales';
 import { enUS } from 'rsuite/esm/locales';
@@ -49,7 +49,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
         return (
             <FlexboxGrid justify="center" align='middle'>
                 <span className='me-2'>{sesion.Nombre} {sesion.ApellidoPaterno}</span>
-                <Avatar circle alt="fotoPerfil" {...props} ref={ref}></Avatar>
+                <Avatar circle alt="fotoPerfil" {...props} ref={ref} src={ValidarImg(sesion.Foto)}></Avatar>
             </FlexboxGrid>
         );
     };
@@ -87,7 +87,7 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                     </Whisper>
                                     <Divider vertical/>
                                     <Dropdown renderToggle={renderIconButton} trigger={"hover"} placement="bottomEnd">
-                                        <Dropdown.Item>{Traducir("general.menuSuperior.perfil")}</Dropdown.Item>
+                                        <Dropdown.Item onClick={VerPerfil}>{Traducir("general.menuSuperior.perfil")}</Dropdown.Item>
                                         <Dropdown.Item divider/>
                                         <Dropdown.Item onClick={CerrarSesion}>{Traducir("general.menuSuperior.salir")}</Dropdown.Item>
                                     </Dropdown>

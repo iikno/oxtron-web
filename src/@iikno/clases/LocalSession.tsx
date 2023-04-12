@@ -23,3 +23,7 @@ export const CerrarSesion = () => {
     EliminarSesion();
     window.location.assign('/')
 }
+
+export const VerPerfil = () => {
+    window.location.assign('/perfil')
+}

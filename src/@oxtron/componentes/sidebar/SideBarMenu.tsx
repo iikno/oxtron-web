@@ -5,11 +5,14 @@ import { SideBarMenuItemView } from "./SideBarMenuItemView";
 
 import './SideBarMenu.scss';
 import { SideBarMenuItems } from "./SideBarMenuItems";
+import { SideBarMenuItemsClient } from "./SideBarMenuItemsClient";
+import { ObtenerSesion } from '@iikno/clases/LocalSession';
 import { useRecoilState } from "recoil";
 import { MenuAtom } from "@oxtron/atomos/MenuAtom";
 import { SideBarMenuItemDropDownView } from "./SideBarMenuItemDropDownView";
 
 export const SideBarMenu = () => {
+    const sesion = ObtenerSesion();
     const [isOpen, setIsOpen] = useRecoilState(MenuAtom);
     
     return <div className={classNames('SideBarMenu', isOpen ? 'expanded' : 'collapsed')}>
@@ -20,7 +23,12 @@ export const SideBarMenu = () => {
         </div>
         <SideBarMenuCardView isOpen={isOpen}/>
         {
+            (sesion.EsUsuario) ?
             SideBarMenuItems.map((item) => (
+                <SideBarMenuItemView key={item.id} item={item} isOpen={isOpen}/>
+            ))
+            :
+            SideBarMenuItemsClient.map((item) => (
                 <SideBarMenuItemView key={item.id} item={item} isOpen={isOpen}/>
             ))
         }
