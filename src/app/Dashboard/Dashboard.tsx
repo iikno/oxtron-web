@@ -5,7 +5,7 @@ import { Card, Col, Row, Spinner } from 'react-bootstrap';
 import { SelectPicker, DateRangePicker, Stack } from 'rsuite';
 import { DateRange } from "rsuite/DateRangePicker";
 import { Indicador1 } from './Indicadores/Indicador1';
-
+import './Dashboard.scss';
 import { BiCloud, BiArchive, BiWind } from "react-icons/bi";
 import { Indicador2 } from './Indicadores/Indicador2';
 import { ObtenerClientes, ObtenerDashboard } from './DashboardService';
@@ -13,6 +13,7 @@ import { ObtenerSesion } from '@iikno/clases/LocalSession';
 import { Espera } from '@oxtron/componentes/base/Espera';
 import ReactApexChart from 'react-apexcharts';
 import {useIntl} from 'react-intl';
+import moment from 'moment';
 
 const Dashboard = () => {
     const sesion = ObtenerSesion();
@@ -21,7 +22,7 @@ const Dashboard = () => {
     const [clientes, setClientes] = useState([]);
     const [dashboard, setDashboard] = useState(null);
     const [cliente, setCliente] = useState(sesion.IdUsuario);
-    const [fechas, setFechas] = useState<DateRange>([new Date(), new Date()]);
+    const [fechas, setFechas] = useState<DateRange>([moment().startOf('week').toDate(), moment().endOf('week').toDate()]);
     
 
     const [general, setGeneral] = useState([]);
@@ -78,7 +79,7 @@ const Dashboard = () => {
             }
         },
         chart: {
-            stacked: true
+            stacked: false
         }
     }
 
@@ -90,7 +91,7 @@ const Dashboard = () => {
                     <Col>
                         <Stack spacing={6} alignItems={"center"}>
                             {Traducir('dashboard.cliente')}
-                            <SelectPicker cleanable={false} data={clientes} onChange={setCliente}/>
+                            <SelectPicker cleanable={false} data={clientes} onChange={setCliente} style={{zIndex: '800'}}/>
                         </Stack>
                     </Col>
                 }
@@ -103,7 +104,8 @@ const Dashboard = () => {
                                         ranges={[]}
                                         value={fechas} 
                                         onChange={setFechas} 
-                                        format={"dd/MM/yyyy"}/>
+                                        format={"dd/MM/yyyy"}
+                                        menuClassName='rs-picker-menu'/>
                     </Stack>
                     
                 </Col>
@@ -152,15 +154,14 @@ const Dashboard = () => {
                         <Col className='mb-3'>
                             <Card>
                                 <Card.Body>
-                                    
                                         <ReactApexChart
                                         options={options} 
                                         series={series} 
                                         stroke='smooth'
                                         type="area" 
                                         width='100%' 
-                                        height={320} />
-                                    
+                                        height={320} 
+                                        />
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -168,13 +169,13 @@ const Dashboard = () => {
                     <Row>
                         <Col xs="12" sm="6" className='mb-3'>
                             <Indicador2 
-                            data={dashboard.Platillos.MayorEmision !== null? dashboard.Platillos.MayorEmision.EmisionCarbono: 0} 
+                            data={dashboard.Platillos.MayorEmision !== null? dashboard.Platillos.MayorEmision.EmisionCarbonoReceta: 0} 
                             title={dashboard.Platillos.MayorEmision !== null? dashboard.Platillos.MayorEmision.Nombre : Traducir('dashboard.meal.name')} 
                             subtitle={Traducir('dashboard.meal.highImpact')}/>
                         </Col>
                         <Col xs="12" sm="6" className='mb-3'>
                             <Indicador2 
-                            data={dashboard.Platillos.MenorEmision !== null ? dashboard.Platillos.MenorEmision.EmisionCarbono : 0} 
+                            data={dashboard.Platillos.MenorEmision !== null ? dashboard.Platillos.MenorEmision.EmisionCarbonoReceta : 0} 
                             title={dashboard.Platillos.MenorEmision !== null? dashboard.Platillos.MenorEmision.Nombre : Traducir('dashboard.meal.name')} 
                             subtitle={Traducir('dashboard.meal.lowImpact')}/>
                         </Col>
