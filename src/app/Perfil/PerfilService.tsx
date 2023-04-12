@@ -81,7 +81,7 @@ export const ModificarPerfil = (perfil:PerfilInterface, imagen:Buffer, imgOrigin
             NoExterior : perfil.NoExterior,
             NoInterior : perfil.NoInterior,
             Colonia : perfil.Colonia,
-            CodigoPostal : (perfil.CodigoPostal) ? perfil.CodigoPostal : null,
+            CodigoPostal : perfil.CodigoPostal,
             Municipio : perfil.Municipio,
             Estado : perfil.Estado,
             Pais : perfil.Pais,
