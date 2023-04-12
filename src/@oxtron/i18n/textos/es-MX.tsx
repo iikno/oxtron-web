@@ -242,6 +242,7 @@ export default{
         'perfil.placeholder.estado': "Escribe tu Estado",
         'perfil.placeholder.pais': "Escribe tu País",
         'perfil.boton.guardar': "Guardar",
+        'perfil.error.validacion': "Campo requerido",
 
         'activar.password': "Escribe una contraseña",
         'activar.password.repeat': "Repite la contraseña",

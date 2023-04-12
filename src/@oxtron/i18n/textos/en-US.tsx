@@ -237,6 +237,7 @@ export default{
         'perfil.placeholder.estado': "Write your State",
         'perfil.placeholder.pais': "Write your Country",
         'perfil.boton.guardar': "Save",
+        'perfil.error.validacion': "This field is required",
 
         'activar.password': "Write a Password",
         'activar.password.repeat': "Repeat the Password",

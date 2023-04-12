@@ -35,19 +35,19 @@ const Perfil = () => {
         validate: values => {
             const errors = {};
             if(!values.Nombre){
-                errors["Nombre"] = "Campo requerido";
+                errors["Nombre"] = intl.formatMessage({id: "perfil.error.validacion"});
             }
             if(!values.ApellidoPaterno){
-                errors["ApellidoPaterno"] = "Campo requerido";
+                errors["ApellidoPaterno"] = intl.formatMessage({id: "perfil.error.validacion"});
             }
             if(!values.ApellidoMaterno){
-                errors["ApellidoMaterno"] = "Campo requerido";
+                errors["ApellidoMaterno"] = intl.formatMessage({id: "perfil.error.validacion"});
             }
             if(!values.Correo){
-                errors["Correo"] = "Campo requerido";
+                errors["Correo"] = intl.formatMessage({id: "perfil.error.validacion"});
             }
             if(!values.Telefono){
-                errors["Telefono"] = "Campo requerido";
+                errors["Telefono"] = intl.formatMessage({id: "perfil.error.validacion"});
             }            
             return errors;
         },
@@ -377,7 +377,7 @@ const Perfil = () => {
                             </Col>
                         </Row>
                         {
-                            (formik.dirty && formik.isValid) &&
+                            (formik.dirty) &&
                             <Row>
                                 <Col align="right">
                                     <Button type="submit" appearance='primary' className='btn-primary-rs' loading={cargando}>
