@@ -237,5 +237,15 @@ export default{
         'perfil.placeholder.estado': "Write your State",
         'perfil.placeholder.pais': "Write your Country",
         'perfil.boton.guardar': "Save",
+
+        'activar.password': "Write a Password",
+        'activar.password.repeat': "Repeat the Password",
+        'activar.boton': "Activate",
+        'activar.aceptar': "Accept",
+        'activar.exito': "Your account has been activated successfully",
+        'activar.error': "An error has occurred, please try again later",
+        'activar.expired': "The activation link has expired",
+        'activar.titulo': "Account Activation",
+        'activar.subtitulo': "Before you can start using the platform, you must activate your account by setting a password.",
     }    
 }

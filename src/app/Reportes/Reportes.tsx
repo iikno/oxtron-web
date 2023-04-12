@@ -68,10 +68,10 @@ const Reportes = () => {
         }
     }
 
-    const colocarImagen = () => {
+    const colocarImagen = () => {        
         if(cliente === "TODOS")
-            return Logo;        
-        const foto = clientes.find(item => item.IdCliente === cliente).Foto;
+            return Logo;
+        const foto = (sesion.EsUsuario) ? clientes.find(item => item.IdCliente === cliente).Foto : sesion.Foto;
         if (foto !== "no-image.png") 
             return $baseS3 + foto 
         return $noFoto        

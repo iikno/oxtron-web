@@ -242,5 +242,15 @@ export default{
         'perfil.placeholder.estado': "Escribe tu Estado",
         'perfil.placeholder.pais': "Escribe tu País",
         'perfil.boton.guardar': "Guardar",
+
+        'activar.password': "Escribe una contraseña",
+        'activar.password.repeat': "Repite la contraseña",
+        'activar.boton': "Activar",
+        'activar.aceptar': "Aceptar",
+        'activar.exito': "Tu cuenta ha sido activada, ya puedes iniciar sesión",
+        'activar.error': "Algo salió mal, intenta más tarde",
+        'activar.expired': "El enlace ha expirado",
+        'activar.titulo': "Activar Cuenta",
+        'activar.subtitulo': "Antes de comenzar, necesitamos que actives tu cuenta creando una contraseña.",
     }    
 }

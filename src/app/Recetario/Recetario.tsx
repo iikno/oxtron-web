@@ -136,7 +136,7 @@ const Recetario = () => {
                 </Col>
             </Row>
             {
-                (recetas === null || recetas.length === 0 || cargando) &&
+                (recetas === null || cargando) &&
                 <Espera/>
             }
             {
@@ -201,16 +201,19 @@ const Recetario = () => {
                         </Col>
                     </Row>
 
-                    <ModalNuevaReceta 
-                        show={show}
-                        setShow={setShow}
-                        recetaDetalles={recetaModal}
-                        ingredientesDetalles={ingredientesModal}
-                        alergenosDetalles={alergenosModal}
-                        editarReceta={editarReceta}
-                        setActualizar={actualizar}
-                    />
                 </>
+            }
+            {
+                !cargando &&
+                <ModalNuevaReceta 
+                    show={show}
+                    setShow={setShow}
+                    recetaDetalles={recetaModal}
+                    ingredientesDetalles={ingredientesModal}
+                    alergenosDetalles={alergenosModal}
+                    editarReceta={editarReceta}
+                    setActualizar={actualizar}
+                />
             }
             </Container>
         </Base>

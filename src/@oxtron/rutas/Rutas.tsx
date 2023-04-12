@@ -11,6 +11,8 @@ import Recetario from 'app/Recetario/Recetario';
 import Planificador from '../../app/Planificador/Planificador';
 import Reportes from '../../app/Reportes/Reportes';
 import Perfil from '../../app/Perfil/Perfil';
+import Activar from 'app/Activar/Activar';
+import ActivarActivado from 'app/Activar/ActivarActivado';
 
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
@@ -24,6 +26,9 @@ const Rutas = () => {
 
     return (
         <Routes>
+            <Route path='/activar/:usuario/:id/:esUsuario/:fecha' element={<Activar />}/>
+            <Route path='/activar/activado' element={<ActivarActivado/>}/>
+
             {
                 sesion.IdUsuario === "IdUsuario" &&
                 <Route index element={<Login/>}/>
