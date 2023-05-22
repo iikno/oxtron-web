@@ -20,7 +20,7 @@ const Rutas = () => {
     return (
         <Routes>
             <Route index element={<></>}/>
-            <Route path="*" element={<></>}/>
+            <Route path="*" element={<>Sitio suspendido</>}/>
         </Routes>
     );
 
