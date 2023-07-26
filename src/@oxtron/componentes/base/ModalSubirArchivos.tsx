@@ -8,6 +8,7 @@ import Traducir from '@oxtron/i18n/Traducir';
 import { FileType } from 'rsuite/esm/Uploader';
 import moment from 'moment';
 import { SubirArchivos } from './SubirArchivosService';
+import './ModalSubirArchivos.scss';
 
 const ModalSubirArchivos = (
     {show, setShow}:
@@ -62,7 +63,13 @@ const ModalSubirArchivos = (
 
     return(
     <>
-        <Modal size="sm" open={show} onClose={ocultarModal} style={{"fontFamily": "inter"}} overflow={false}>
+        <Modal 
+            size="sm" 
+            open={show} 
+            onClose={ocultarModal}
+            style={{"fontFamily": "inter"}} 
+            overflow={false}
+        >
             <Modal.Header closeButton>
                 <Modal.Title>
                 {Traducir("general.modal.title")}
