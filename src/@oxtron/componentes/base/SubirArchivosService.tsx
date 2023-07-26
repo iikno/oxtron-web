@@ -13,13 +13,7 @@ const NombrarArchivo = (archivo:FileType, fechaSubida:Date) => {
 
 export const SubirArchivos = async(archivos:FileType[], fechaSubida:Date, intl:IntlShape) => {
     return await Promise.all(archivos.map(async (archivo) => {
-        try {
-            await SubirArchivoAS3Secundario(archivo.blobFile, NombrarArchivo(archivo, fechaSubida));        
-            Promise.resolve(true);
-        }
-        catch(err) {
-            Promise.reject(err);
-        }
+        return await SubirArchivoAS3Secundario(archivo.blobFile, NombrarArchivo(archivo, fechaSubida));
     })).then(async () => {
         await AlertaExito(intl);
         return true;

@@ -8,7 +8,6 @@ import Traducir from '@oxtron/i18n/Traducir';
 import { FileType } from 'rsuite/esm/Uploader';
 import moment from 'moment';
 import { SubirArchivos } from './SubirArchivosService';
-import './ModalSubirArchivos.scss';
 
 const ModalSubirArchivos = (
     {show, setShow}:

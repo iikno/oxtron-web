@@ -13,6 +13,6 @@ export const $S3_BUCKET_PUB = "oxtron-pub";
 export const $S3_KEY = "AKIA5H6QF3KC6GSBBQOS";
 export const $S3_SECRET = "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";
 
-export const $S3_BUCKET_SECONDARY = "oxtron-priv";
-export const $S3_KEY_SECONDARY = "AKIA5H6QF3KC6GSBBQOS";
-export const $S3_SECRET_SECONDARY = "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";
+export const $S3_BUCKET_SECONDARY = "co2spreadsheets";
+export const $S3_KEY_SECONDARY = "AKIA5TZHYV3A5M4VXAPI";
+export const $S3_SECRET_SECONDARY = "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";
