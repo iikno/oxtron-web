@@ -12,9 +12,17 @@ export default{
         'general.menu.reports': "Reportes",
 
         'general.menuSuperior.planificador': "Agregar a planificador",
+        'general.menuSuperior.upload': "Subir archivos",
         'general.menuSuperior.recetario': "Nueva receta",
         'general.menuSuperior.perfil': "Perfil",
         'general.menuSuperior.salir': "Cerrar sesión",
+
+        'general.modal.title': "Cargar archivos",
+        'general.modal.date': "Fecha seleccionada",
+        'general.modal.selectFiles': "Seleccionar archivos",
+        'general.modal.upload': "Cargar",
+        'general.modal.uploadDescription': "Arrastra y suelta archivos aquí o haz clic para seleccionar archivos",
+        'general.modal.uploadDescriptionError': "Solo se permiten archivos .xlsx y .xls",
 
         'alerta.continuar': "¿Quieres continuar?",
         'alerta.eliminar.texto': "No podrás revertir esto",

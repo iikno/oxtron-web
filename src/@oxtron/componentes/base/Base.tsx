@@ -14,7 +14,7 @@ import { enUS } from 'rsuite/esm/locales';
 import { esES } from 'rsuite/esm/locales';
 import Footer from '@iikno/componentes/Footer';
 
-import { CiCalendarDate, CiForkAndKnife, CiFries } from "react-icons/ci";
+import { CiCalendarDate, CiSaveUp2, CiFries } from "react-icons/ci";
 import { Col, Row } from 'react-bootstrap';
 import Traducir from '@oxtron/i18n/Traducir';
 import { useEffect } from 'react';
@@ -22,12 +22,14 @@ import { LocaleAtom } from '@oxtron/atomos/LocaleAtom';
 import ModalNuevaReceta from 'app/Recetario/componentes/ModalNuevaReceta';
 import ModalNuevaPlanificador from 'app/Planificador/componentes/ModalNuevaPlanificador';
 import moment from 'moment';
+import ModalSubirArchivos from './ModalSubirArchivos';
 
 const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
     const sesion = ObtenerSesion();
     const isOpen = useRecoilValue(MenuAtom);
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarModalPlanificador, setMostrarModalPlanificador] = useState(false);
+    const [mostrarModalSubirArchivos, setMostrarModalSubirArchivos] = useState(false);
     const [fecha, setFecha] = useState<moment.Moment>(moment(new Date()))
     const [locale, setLocale] = useRecoilState(LocaleAtom);
 
@@ -65,6 +67,16 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                                     <h3 className='fs-3 text-muted'>{titulo}</h3>
                                 </Col>
                                 <Col xs={12} sm={6} lg={4} className='toolbox offset-lg-4 order-first text-end mb-3 mb-sm-0'>
+                                    <Whisper trigger={"hover"} 
+                                            speaker={
+                                        <Tooltip placement='bottom' arrow={false}>
+                                            {Traducir('general.menuSuperior.upload')}
+                                        </Tooltip>
+                                    }>
+                                        <Button appearance='subtle' onClick={() =>  setMostrarModalSubirArchivos(true)}>
+                                            <CiSaveUp2 size={"2em"}/>
+                                        </Button>
+                                    </Whisper>
                                     <Whisper trigger={"hover"} 
                                             speaker={
                                         <Tooltip placement='bottom' arrow={false}>
@@ -113,6 +125,13 @@ const Base = ({children, titulo}:{children:any; titulo:JSX.Element;}) => {
                     setMostrar={setMostrarModalPlanificador}
                     fecha={fecha}
                     cliente={(!sesion.EsUsuario ? sesion.IdUsuario : undefined)}/>
+
+                <ModalSubirArchivos 
+                    show={mostrarModalSubirArchivos}
+                    setShow={setMostrarModalSubirArchivos}
+                />
+
+                
         </>);
      else 
         return (<Navigate to={"/"}/>)

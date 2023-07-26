@@ -12,9 +12,17 @@ export default{
         'general.menu.reports': "Reports",
 
         'general.menuSuperior.planificador': "Add to week menu",
+        'general.menuSuperior.upload': "Upload files",
         'general.menuSuperior.recetario': "Add recipe",
         'general.menuSuperior.perfil': "Profile",
         'general.menuSuperior.salir': "Sign Out",
+
+        'general.modal.title': "Upload files",
+        'general.modal.date': "Selected date",
+        'general.modal.selectFiles': "Select files",
+        'general.modal.upload': "Upload",
+        'general.modal.uploadDescription': "Click or Drag files to this area to upload",
+        'general.modal.uploadDescriptionError': "Only .xlsx and .xls files are allowed",
 
         'alerta.continuar': "Do you want cotinue?",
         'alerta.eliminar.texto': "You won't be able to revert this!",

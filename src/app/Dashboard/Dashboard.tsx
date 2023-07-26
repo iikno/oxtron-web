@@ -46,7 +46,7 @@ const Dashboard = () => {
     useEffect(() => {
         ObtenerDashboard(cliente, fechas, false).then((respuesta:any) => {
             setDashboard(respuesta);
-            console.log(respuesta);
+            // console.log(respuesta);
             setGeneral(respuesta.EmisionesCarbono.GENERAL.map((item:any) =>({x: item.Fecha, y: item.Valor.toFixed(2)})));
             setVeganos(respuesta.EmisionesCarbono.VEGANO.map((item:any) => ({x: item.Fecha, y: item.Valor.toFixed(2)})));
             setNoVeganos(respuesta.EmisionesCarbono.NO_VEGANO.map((item:any) =>({x: item.Fecha, y: item.Valor.toFixed(2)})));
