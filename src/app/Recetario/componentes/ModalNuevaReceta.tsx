@@ -175,11 +175,12 @@ const ModalNuevaReceta = (
             Precio: value
         })
     }
-    const cambioSelectMedidaIngrediente = (e) => {
-        let num = Number.parseInt(e.target.value)
-        if(num < 0)
-            num = 0;
-        setMedidaIngrediente(num)
+    const cambioSelectMedidaIngrediente = (value) => {
+        if(Number.isNaN(value))
+            return;
+        if(value < 0)
+            value = 0;
+        setMedidaIngrediente(value)
     }
 
 
@@ -330,7 +331,7 @@ const ModalNuevaReceta = (
                                         />
                                     </Col>
                                     <Col xs="2">
-                                        <input className='modal-input-select without-borders' type="number" value={medidaIngrediente} onChange={cambioSelectMedidaIngrediente}/>
+                                        <InputNumber className='modal-input-select without-borders' value={medidaIngrediente} onChange={cambioSelectMedidaIngrediente}/>
                                     </Col>
                                     <Col xs="3">
                                         <SelectPicker
