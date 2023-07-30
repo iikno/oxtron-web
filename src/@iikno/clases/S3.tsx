@@ -1,19 +1,11 @@
 import { S3 } from '@aws-sdk/client-s3';
-import { $AWS_REGION, $S3_BUCKET_PRIV, $S3_BUCKET_SECONDARY, $S3_KEY, $S3_KEY_SECONDARY, $S3_SECRET, $S3_SECRET_SECONDARY } from '../../@oxtron/configs/Env';
+import { $AWS_REGION, $S3_BUCKET_PRIV, $S3_KEY, $S3_SECRET } from '../../@oxtron/configs/Env';
 
 const cliente = new S3({
     region: $AWS_REGION,
     credentials: {
         accessKeyId: $S3_KEY,
         secretAccessKey: $S3_SECRET
-    }
-})
-
-const clienteSecundario = new S3({
-    region: $AWS_REGION,
-    credentials: {
-        accessKeyId: $S3_KEY_SECONDARY,
-        secretAccessKey: $S3_SECRET_SECONDARY
     }
 })
 
@@ -38,10 +30,10 @@ export const ModificarArchivo = (archivo:Buffer, nombre:string, publico = false)
 }
 
 export const SubirArchivoAS3Secundario = (archivo:any, nombre:string, publico = false) => {
-    return clienteSecundario.putObject({
+    return cliente.putObject({
         Body: archivo,
         Key: nombre,
-        Bucket: $S3_BUCKET_SECONDARY,
+        Bucket: $S3_BUCKET_PRIV,
         ACL: (publico) ? "public-read" : "private"
     })
 }
