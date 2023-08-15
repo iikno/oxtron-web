@@ -8,7 +8,7 @@ import { TbLeaf } from "react-icons/tb";
 import { useIntl } from 'react-intl';
 
 import ModalNuevaReceta from './componentes/ModalNuevaReceta';
-import { ObtenerRecetas, buscarEnRecetas, ObtenerDetallesReceta, ObtenerClientes, EliminarReceta } from './RecetarioService';
+import { ObtenerRecetas, buscarEnRecetas, ObtenerDetallesReceta, ObtenerClientes, EliminarReceta, valoresReceta } from './RecetarioService';
 import { Espera } from '@oxtron/componentes/base/Espera';
 import { ConfirmarEliminar } from '@iikno/clases/Alertas';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
@@ -27,9 +27,7 @@ const Recetario = () => {
     const [recetasShow, setRecetasShow] = useState([]);
     const [ingredientesModal, setIngredientesModal] = React.useState([]);
     const [alergenosModal, setAlergenosModal] = React.useState([]);
-    const [recetaModal, setRecetaModal] = React.useState({
-        IdReceta: "", IdUsuarioCliente: "", Nombre: "", Descripcion: "", Precio: 0.00, EmisionCarbono: 0, Vegano: false, Foto: "", FechaRegistro: ""
-    });
+    const [recetaModal, setRecetaModal] = React.useState(valoresReceta);
 
     useEffect(() => {
         if(sesion.EsUsuario){
@@ -68,9 +66,7 @@ const Recetario = () => {
         setTimeout(() => {
             setIngredientesModal([])
             setAlergenosModal([])
-            setRecetaModal({
-                IdReceta: "", IdUsuarioCliente: "", Nombre: "", Descripcion: "", Precio: 0.00, EmisionCarbono: 0, Vegano: false, Foto: "", FechaRegistro: ""
-            })
+            setRecetaModal(valoresReceta)
             setEditarReceta("")
         }, 500)
     }, [show])

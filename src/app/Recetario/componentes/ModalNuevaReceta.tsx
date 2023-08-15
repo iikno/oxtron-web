@@ -12,7 +12,7 @@ import { MdClose } from "react-icons/md";
 import Traducir from '@oxtron/i18n/Traducir';
 import Medidor from '@oxtron/componentes/general/Medidor';
 import { ConfirmarEliminar } from '@iikno/clases/Alertas';
-import { ObtenerIngredientes, ObtenerAlergenos, EliminarReceta, AltaReceta, ModificarReceta, optionType } from '../RecetarioService';
+import { ObtenerIngredientes, ObtenerAlergenos, EliminarReceta, AltaReceta, ModificarReceta, optionType, valoresReceta } from '../RecetarioService';
 import { $baseS3, $noFoto } from '@oxtron/configs/Env';
 
 const ModalNuevaReceta = (
@@ -22,9 +22,7 @@ const ModalNuevaReceta = (
     const intl = useIntl();
     const [ingredientesModal, setIngredientesModal] = React.useState(ingredientesDetalles ?? []);
     const [alergenosModal, setAlergenosModal] = React.useState(alergenosDetalles ?? []);
-    const [recetaModal, setRecetaModal] = React.useState(recetaDetalles ?? {
-        IdReceta: "", IdUsuarioCliente: "", Nombre: "", Descripcion: "", Precio: 0.00, EmisionCarbono: 0, Vegano: false, Foto: "", FechaRegistro: ""
-    });
+    const [recetaModal, setRecetaModal] = React.useState(recetaDetalles ?? valoresReceta);
     const [validadores, setValidadores] = useState({Nombre: true, Precio: true, Ingredientes: true})
     const [cargando, setCargando] = useState(false);
     const [imgOriginal, setImgOriginal] = useState("");
@@ -41,9 +39,7 @@ const ModalNuevaReceta = (
     const modalRef = useRef(null)
 
     useEffect(() => {
-        setRecetaModal(recetaDetalles ?? {
-            IdReceta: "", IdUsuarioCliente: "", Nombre: "", Descripcion: "", Precio: 0.00, EmisionCarbono: 0, Vegano: false, Foto: "", FechaRegistro: ""
-        });
+        setRecetaModal(recetaDetalles ?? valoresReceta);
         setIngredientesModal(ingredientesDetalles ?? []);
         setAlergenosModal(alergenosDetalles ?? [])
     }, [recetaDetalles, ingredientesDetalles, alergenosDetalles])
@@ -121,10 +117,10 @@ const ModalNuevaReceta = (
 
         const ingrediente = ingredientes.find(ing => ing.IdIngrediente === ingredienteSeleccionado)
         const ingredienteDT = ingredientesModal.find(ing => ing.IdIngrediente === ingredienteSeleccionado)
-
+        
         if(ingredienteDT)
-            return;
-
+        return;
+    
         const CO2PorKilo = ingrediente.HuellaCarbono;
         let CO2 = 0;
         if(unidadSeleccionada === "KG" || unidadSeleccionada === "L"){
@@ -137,6 +133,7 @@ const ModalNuevaReceta = (
             CO2 = CO2PorKilo / 1000 * 15 * medidaIngrediente;
         }
 
+        const vegano:boolean = recetaModal.Vegano && ingrediente.Vegano;
         const nuevoIngrediente = {
             IdIngrediente: ingredienteSeleccionado,
             Nombre: ingrediente.Nombre,
@@ -148,7 +145,7 @@ const ModalNuevaReceta = (
         setValidadores({...validadores, Ingredientes: true})
         setIngredienteSeleccionado("");
         setIngredientesModal([...ingredientesModal, nuevoIngrediente])
-        setRecetaModal({...recetaModal, EmisionCarbono: recetaModal.EmisionCarbono + nuevoIngrediente.HuellaCarbono})
+        setRecetaModal({...recetaModal, Vegano: vegano, EmisionCarbono: recetaModal.EmisionCarbono + nuevoIngrediente.HuellaCarbono})
     }
 
     const cambioCampoNombre = (e) => {

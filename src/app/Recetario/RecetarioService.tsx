@@ -21,6 +21,10 @@ export const valoresIniciales:RecetarioInterface = {
     Vegano: false
 }
 
+export const valoresReceta = {
+    IdReceta: "", IdUsuarioCliente: "", Nombre: "", Descripcion: "", Precio: 0.00, EmisionCarbono: 0, Vegano: true, Foto: "", FechaRegistro: ""
+}
+
 export const optionType = [
     { value: 'GR', label: 'gr' },
     { value: 'KG', label: 'Kg' },
