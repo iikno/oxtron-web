@@ -17,14 +17,14 @@ import ActivarActivado from 'app/Activar/ActivarActivado';
 const Rutas = () => {
     const sesion = useRecoilValue(SesionAtom);
 
-    /*return (
+    return (
         <Routes>
             <Route index element={<></>}/>
-            <Route path="*" element={<>Sitio suspendido</>}/>
+            <Route path="*" element={<></>}/>
         </Routes>
-    );*/
+    );
 
-    return (
+    /*return (
         <Routes>
             <Route path='/activar/:usuario/:id/:esUsuario/:fecha' element={<Activar />}/>
             <Route path='/activar/activado' element={<ActivarActivado/>}/>
@@ -54,7 +54,7 @@ const Rutas = () => {
                 </>
             }
         </Routes>
-    );
+    );*/
 };
 
 export default Rutas;
